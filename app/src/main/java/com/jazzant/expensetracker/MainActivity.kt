@@ -5,9 +5,13 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -30,9 +34,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.ui.theme.ExpenseTrackerWithBillReaderTheme
@@ -49,24 +57,61 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+const val LABEL_FRACTION = 0.4f
+const val ADD_CATEGORY = "Add New Category"
+
 @Composable
 fun MainContent(){
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
-        Column {
+    val (expense, onExpenseChange) = remember { mutableStateOf<Number>(0) }
+    val categories = listOf("Groceries", "Restaurant", "Vending Machine", ADD_CATEGORY)
+    val (category, onCategoryChange) = remember { mutableStateOf(categories[0]) }
+    val (newCategory, onNewCategoryChange) = remember { mutableStateOf("") }
+    val (tipping, onTipChange) = remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    Scaffold(
+        modifier = Modifier.fillMaxSize()
+            .padding(top = 20.dp, end = 10.dp, bottom = 20.dp, start = 10.dp)
+    ) { innerPadding ->
+        Column(
+            verticalArrangement = Arrangement.SpaceAround,
+            horizontalAlignment = Alignment.Start
+        ) {
             //Expense Input
-            val (expense, onExpenseChange) = remember { mutableStateOf<Number>(0) }
-            NumberInput(expense, onExpenseChange)
+            NumberInput(label = "Expense Amount:",
+                value = expense,
+                onValueChange = onExpenseChange,
+                modifier = Modifier.fillMaxWidth()
+            )
 
             //Category Selector
-            val categories = listOf<String>("Groceries", "Restaurant", "Vending Machine")
-            val (category, onCategoryChange) = remember { mutableStateOf(categories[0]) }
-            RadioButtons(categories,category,onCategoryChange)
+            RadioButtons(label = "Expense Category:",
+                radioOptions = categories,
+                selectedOption = category,
+                onOptionChange = onCategoryChange,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if(category == ADD_CATEGORY){
+                TextInput(label = "",
+                    value = newCategory,
+                    onValueChange = onNewCategoryChange,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
             //Tip Checkbox
-            val (tipping, onTipChange) = remember { mutableStateOf(false) }
-            CheckBoxField("Add Tip?", tipping, onTipChange)
-            SwitchField("Add Tip?", tipping, onTipChange)
+
+            SwitchField(text = "Did You Tip?",
+                state = tipping,
+                onStateChanged = onTipChange,
+                modifier = Modifier.fillMaxWidth(0.5f)
+            )
+            if(tipping){
+                CheckBoxField(text = "Is the tip already part of the expense?",
+                    state = tipping,
+                    onStateChanged = onTipChange,
+                    modifier = Modifier.fillMaxWidth(0.5f)
+                )
+            }
 
             //For Testing
             Card (
@@ -79,11 +124,11 @@ fun MainContent(){
                 Text("Tipping is $tipping")
             }
 
-            val context = LocalContext.current
             Button(
                 onClick = {
                     Toast.makeText(context,"Saved to Database", Toast.LENGTH_LONG).show()
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Save")
             }
@@ -92,52 +137,100 @@ fun MainContent(){
 }
 
 @Composable
-fun NumberInput(value: Number, onValueChange:(Number)->Unit,
+fun NumberInput(label:String, value: Number,
+                onValueChange:(Number)->Unit,
                 modifier: Modifier = Modifier){
     var temp: Number?;
-    TextField(
-        value = value.toString(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        singleLine = true,
-        onValueChange = {
-            temp = it.toDoubleOrNull()
-            if(temp == null){
-                temp = 0
-            }
-            onValueChange(temp!!)
-        }
-    )
+    Row (verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier
+    ){
+        Text(text = label,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp))
+        TextField(
+            value = value.toString(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            singleLine = true,
+            onValueChange = {
+                temp = it.toDoubleOrNull()
+                if(temp == null){
+                    temp = value
+                }
+                onValueChange(temp!!)
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 
 @Composable
-fun RadioButtons(radioOptions:List<String>, selectedOption:String, onOptionChange:(String)->Unit,
-                 modifier: Modifier = Modifier) {
-    Column(Modifier.selectableGroup()) {
-        radioOptions.forEach { text ->
-            Row (
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .selectable(
-                        selected=(text==selectedOption),
-                        onClick={onOptionChange(text)},
-                        role=Role.RadioButton
+fun TextInput(label:String, value: String,
+                onValueChange:(String)->Unit,
+                modifier: Modifier = Modifier){
+    Row (verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier
+    ){
+        Text(text = label,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp))
+        TextField(
+            value = value,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            singleLine = true,
+            onValueChange = onValueChange,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+fun RadioButtons(label:String,
+                radioOptions:List<String>,
+                selectedOption:String,
+                onOptionChange:(String)->Unit,
+                modifier: Modifier = Modifier) {
+    Row(verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier
+    ){
+        Text(text = label,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp))
+        Column(modifier = Modifier.fillMaxWidth().selectableGroup()) {
+            radioOptions.forEach { text ->
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .selectable(
+                            selected=(text==selectedOption),
+                            onClick={onOptionChange(text)},
+                            role=Role.RadioButton
+                        )
+                        .padding(bottom = 5.dp)
+                ){
+                    RadioButton(
+                        selected=(text == selectedOption),
+                        onClick=null //done by Row instead so that the text is also clickable
                     )
-            ){
-                RadioButton(
-                    selected=(text == selectedOption),
-                    onClick=null //done by Row instead
-                )
-                Text(
-                    text=text,
-                )
+                    Text(
+                        text=text,
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun CheckBoxField(text:String, state: Boolean, onStateChanged:(Boolean)->Unit,
-             modifier:Modifier=Modifier){
+fun CheckBoxField(text:String,
+                  state: Boolean,
+                  onStateChanged:(Boolean)->Unit,
+                  modifier:Modifier=Modifier){
     Row (
         verticalAlignment = Alignment.CenterVertically
     ){
@@ -147,13 +240,15 @@ fun CheckBoxField(text:String, state: Boolean, onStateChanged:(Boolean)->Unit,
 }
 
 @Composable
-fun SwitchField(text:String, state: Boolean, onStateChanged: (Boolean) -> Unit,
+fun SwitchField(text:String,
+                state: Boolean,
+                onStateChanged: (Boolean) -> Unit,
                 modifier: Modifier=Modifier){
     Row (
         verticalAlignment = Alignment.CenterVertically
     ){
         Switch(checked = state, onCheckedChange = onStateChanged)
-        Text(text)
+        Text(text, modifier=Modifier.padding(start=5.dp))
     }
 }
 
