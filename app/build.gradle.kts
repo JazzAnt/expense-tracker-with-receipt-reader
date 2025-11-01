@@ -57,4 +57,5 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation("androidx.room:room-runtime:2.8.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
 }
