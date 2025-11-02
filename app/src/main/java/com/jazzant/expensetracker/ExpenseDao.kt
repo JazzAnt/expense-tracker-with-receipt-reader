@@ -1,6 +1,6 @@
 package com.jazzant.expensetracker
 
-import androidx.lifecycle.LiveData
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -19,7 +19,7 @@ interface ExpenseDao {
     suspend fun update(expense: Expense)
 
     @Query("SELECT * FROM expense_table ORDER BY date ASC")
-    fun getAllExpenses(): LiveData<MutableList<Expense>>
+    fun getAllExpenses(): SnapshotStateList<Expense>
 
     @Query("DELETE FROM expense_table")
     suspend fun deleteAllExpenses()

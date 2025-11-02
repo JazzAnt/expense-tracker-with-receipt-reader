@@ -1,13 +1,13 @@
 package com.jazzant.expensetracker
 
 import android.app.Application
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class ExpenseViewModel(application: Application) : AndroidViewModel(application) {
-    val expenses: LiveData<MutableList<Expense>>
+    val expenses: SnapshotStateList<Expense>
     val repository: ExpenseRepository
 
     init {

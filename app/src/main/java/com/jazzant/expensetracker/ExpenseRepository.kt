@@ -1,9 +1,9 @@
 package com.jazzant.expensetracker
 
-import androidx.lifecycle.LiveData
+import androidx.compose.runtime.snapshots.SnapshotStateList
 
 class ExpenseRepository (private val expenseDao: ExpenseDao){
-    val expenses: LiveData<MutableList<Expense>> = expenseDao.getAllExpenses()
+    val expenses: SnapshotStateList<Expense> = expenseDao.getAllExpenses()
 
     suspend fun insert(expense: Expense){
         expenseDao.insert(expense)
