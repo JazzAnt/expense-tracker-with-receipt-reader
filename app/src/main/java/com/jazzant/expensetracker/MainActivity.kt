@@ -28,8 +28,10 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -43,104 +45,133 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import com.jazzant.expensetracker.ui.theme.ExpenseTrackerWithBillReaderTheme
+import java.time.LocalDate
 
+const val LABEL_FRACTION = 0.4f
+const val ADD_CATEGORY = "Add New Category"
 class MainActivity : ComponentActivity() {
+    private lateinit var expenseViewModel: ExpenseViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        expenseViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory(application)
+        )[ExpenseViewModel::class.java]
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ExpenseTrackerWithBillReaderTheme {
-                MainContent()
+                val (expense, onExpenseChange) = remember { mutableFloatStateOf(0.0f) }
+                val (name, onNameChange) = remember { mutableStateOf("") }
+                val categories = listOf("Groceries", "Restaurant", "Vending Machine", ADD_CATEGORY)
+                val (category, onCategoryChange) = remember { mutableStateOf(categories[0]) }
+                val (newCategory, onNewCategoryChange) = remember { mutableStateOf("") }
+                val (tip, onTipChange) = remember { mutableFloatStateOf(0.0f) }
+                val (tipping, onTippingChange) = remember { mutableStateOf(false) }
+                val context = LocalContext.current
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
+                        .padding(top = 20.dp, end = 10.dp, bottom = 20.dp, start = 10.dp)
+                ) { innerPadding ->
+                    Column(
+                        verticalArrangement = Arrangement.SpaceAround,
+                        horizontalAlignment = Alignment.Start,
+                        modifier = Modifier.padding(innerPadding)
+                    ) {
+                        //Expense Input
+                        NumberInput(
+                            label = "Expense Amount:",
+                            value = expense,
+                            onValueChange = onExpenseChange,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        TextInput(
+                            label = "Expense Name:",
+                            value = name,
+                            onValueChange = onNameChange,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        //Category Selector
+                        RadioButtons(
+                            label = "Expense Category:",
+                            radioOptions = categories,
+                            selectedOption = category,
+                            onOptionChange = onCategoryChange,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        if(category == ADD_CATEGORY){
+                            TextInput(
+                                label = "",
+                                value = newCategory,
+                                onValueChange = onNewCategoryChange,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        //Tip Checkbox
+
+                        CheckBoxField(
+                            text = "Add tip?",
+                            state = tipping,
+                            onStateChanged = onTippingChange,
+                            modifier = Modifier.fillMaxWidth(0.5f)
+                        )
+                        if(tipping){
+                            NumberInput(
+                                label = "Tip Amount",
+                                value = tip,
+                                onValueChange = onTipChange,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Button(
+                            onClick = {
+                                if(
+                                    expense < 0 ||
+                                    tip < 0 ||
+                                    name.isBlank() ||
+                                    (category == ADD_CATEGORY && newCategory.isBlank())
+                                ){
+                                    Toast.makeText(context,"ERROR: Invalid input values", Toast.LENGTH_LONG).show()
+                                }
+                                else {
+                                    val chosenCategory: String = if(category == ADD_CATEGORY){
+                                        newCategory.trim()
+                                    } else {
+                                        category
+                                    }
+
+                                    val newExpense: Expense = Expense(
+                                        amount = expense + tip,
+                                        category = chosenCategory,
+                                        name = name,
+                                        date = LocalDate.now()
+                                    )
+                                    expenseViewModel.addExpense(newExpense)
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Save")
+                        }
+                    }
+                }
             }
         }
     }
 }
 
-const val LABEL_FRACTION = 0.4f
-const val ADD_CATEGORY = "Add New Category"
-
 @Composable
-fun MainContent(){
-    val (expense, onExpenseChange) = remember { mutableStateOf<Number>(0) }
-    val categories = listOf("Groceries", "Restaurant", "Vending Machine", ADD_CATEGORY)
-    val (category, onCategoryChange) = remember { mutableStateOf(categories[0]) }
-    val (newCategory, onNewCategoryChange) = remember { mutableStateOf("") }
-    val (tipping, onTipChange) = remember { mutableStateOf(false) }
-    val context = LocalContext.current
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-            .padding(top = 20.dp, end = 10.dp, bottom = 20.dp, start = 10.dp)
-    ) { innerPadding ->
-        Column(
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.Start
-        ) {
-            //Expense Input
-            NumberInput(label = "Expense Amount:",
-                value = expense,
-                onValueChange = onExpenseChange,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            //Category Selector
-            RadioButtons(label = "Expense Category:",
-                radioOptions = categories,
-                selectedOption = category,
-                onOptionChange = onCategoryChange,
-                modifier = Modifier.fillMaxWidth()
-            )
-            if(category == ADD_CATEGORY){
-                TextInput(label = "",
-                    value = newCategory,
-                    onValueChange = onNewCategoryChange,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-
-            //Tip Checkbox
-
-            SwitchField(text = "Did You Tip?",
-                state = tipping,
-                onStateChanged = onTipChange,
-                modifier = Modifier.fillMaxWidth(0.5f)
-            )
-            if(tipping){
-                CheckBoxField(text = "Is the tip already part of the expense?",
-                    state = tipping,
-                    onStateChanged = onTipChange,
-                    modifier = Modifier.fillMaxWidth(0.5f)
-                )
-            }
-
-            //For Testing
-            Card (
-                modifier = Modifier.padding(innerPadding),
-                shape = RoundedCornerShape(8.dp),
-                elevation = CardDefaults.cardElevation(3.dp)
-            ) {
-                Text(expense.toDouble().toString())
-                Text(category)
-                Text("Tipping is $tipping")
-            }
-
-            Button(
-                onClick = {
-                    Toast.makeText(context,"Saved to Database", Toast.LENGTH_LONG).show()
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Save")
-            }
-        }
-    }
-}
-
-@Composable
-fun NumberInput(label:String, value: Number,
-                onValueChange:(Number)->Unit,
+fun NumberInput(label:String, value: Float,
+                onValueChange:(Float)->Unit,
                 modifier: Modifier = Modifier){
-    var temp: Number?;
+    var temp: Float?;
     Row (verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = modifier
@@ -154,8 +185,8 @@ fun NumberInput(label:String, value: Number,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true,
             onValueChange = {
-                temp = it.toDoubleOrNull()
-                if(temp == null){
+                temp = it.toFloatOrNull()
+                if(temp == null || temp!! < 0){
                     temp = value
                 }
                 onValueChange(temp!!)
@@ -256,6 +287,5 @@ fun SwitchField(text:String,
 @Composable
 fun GreetingPreview() {
     ExpenseTrackerWithBillReaderTheme {
-        MainContent()
     }
 }
