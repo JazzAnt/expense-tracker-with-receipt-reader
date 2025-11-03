@@ -3,7 +3,7 @@ package com.jazzant.expensetracker
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
 class ExpenseRepository (private val expenseDao: ExpenseDao){
-    val expenses: SnapshotStateList<Expense> = expenseDao.getAllExpenses()
+    fun getAllExpenses() = expenseDao.getAllExpenses()
 
     suspend fun insert(expense: Expense){
         expenseDao.insert(expense)
@@ -15,9 +15,5 @@ class ExpenseRepository (private val expenseDao: ExpenseDao){
 
     suspend fun update(expense: Expense){
         expenseDao.update(expense)
-    }
-
-    suspend fun deleteAll(){
-        expenseDao.deleteAllExpenses()
     }
 }

@@ -1,11 +1,11 @@
 package com.jazzant.expensetracker
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExpenseDao {
@@ -19,8 +19,5 @@ interface ExpenseDao {
     suspend fun update(expense: Expense)
 
     @Query("SELECT * FROM expense_table ORDER BY date ASC")
-    fun getAllExpenses(): SnapshotStateList<Expense>
-
-    @Query("DELETE FROM expense_table")
-    suspend fun deleteAllExpenses()
+    fun getAllExpenses(): Flow<List<Expense>>
 }

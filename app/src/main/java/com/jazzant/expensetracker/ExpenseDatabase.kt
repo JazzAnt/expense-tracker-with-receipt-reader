@@ -4,29 +4,25 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
+import java.time.LocalDate
+import java.util.Date
 
-@Database(entities = [Expense::class], version = 1, exportSchema = false)
+@Database(entities = [Expense::class], version = 1)
+@TypeConverters(DateConverters::class)
 abstract class ExpenseDatabase : RoomDatabase(){
     abstract fun expenseDao(): ExpenseDao
+}
 
-    //companion object so that it can create databases without creating a value
-    companion object {
-        private var INSTANCE: ExpenseDatabase? = null
+class DateConverters {
+    @TypeConverter
+    fun fromTimeStamp(value: Long?): LocalDate? {
+        return value?.let { LocalDate.ofEpochDay(it) }
+    }
 
-        /**
-         * If database is instantiated return the instance. Otherwise instantiate it first.
-         * Synchronized so that it won't create 2 databases if 2 threads tries to access it.
-         */
-        fun getInstance(context: Context): ExpenseDatabase{
-            return INSTANCE ?: synchronized(this){
-                val instance = Room.databaseBuilder(
-                    context = context.applicationContext,
-                    klass = ExpenseDatabase::class.java,
-                    name = "expense_database"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
+    @TypeConverter
+    fun toTimeStamp(value: LocalDate?): Long?{
+        return value?.toEpochDay()
     }
 }
