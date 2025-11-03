@@ -10,6 +10,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,6 +31,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableDoubleStateOf
@@ -42,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -51,6 +54,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.jazzant.expensetracker.ui.theme.ExpenseTrackerWithBillReaderTheme
+import kotlinx.coroutines.Job
+import java.math.RoundingMode
 import java.time.LocalDate
 import kotlin.math.exp
 
@@ -59,27 +64,25 @@ const val ADD_CATEGORY = "Add New Category"
 class MainActivity : ComponentActivity() {
     private lateinit var expenseViewModel: ExpenseViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        expenseViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory(application)
-        )[ExpenseViewModel::class.java]
-
         super.onCreate(savedInstanceState)
+        expenseViewModel = ExpenseViewModel()
+        expenseViewModel.setDatabase(this)
         enableEdgeToEdge()
         setContent {
             ExpenseTrackerWithBillReaderTheme {
+                val list by expenseViewModel.expenseList.collectAsState()
+                ShowExpenses(list)
                 ExpenseInput(expenseViewModel)
-                ShowExpenses(expenseViewModel)
             }
         }
     }
 }
 
 @Composable
-fun ShowExpenses(expenseViewModel: ExpenseViewModel){
-    val list = expenseViewModel.expenses
-    LazyColumn {
+fun ShowExpenses(list: List<Expense>){
+    Text("Expenses:")
+    LazyColumn (
+    ) {
         items(list){
             item ->
             ExpenseCard(item)
@@ -89,14 +92,23 @@ fun ShowExpenses(expenseViewModel: ExpenseViewModel){
 }
 @Composable
 fun ExpenseCard(expense: Expense){
-    Card {
-        Row {
-            Column {
+    Card (
+        modifier = Modifier.fillMaxWidth().padding(start = 5.dp, end = 5.dp)
+    ){
+        Row (
+            modifier = Modifier.fillMaxWidth().padding(start = 5.dp, end = 5.dp)
+        ) {
+            Column (
+                modifier = Modifier.fillMaxWidth(0.5f)
+            ){
                 Text("Name: " + expense.name)
                 Text("Category: " + expense.category)
             }
-            Column {
-                Text("%.2f".format(expense.amount))
+            Row (
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Text("$%.2f".format(expense.amount))
             }
         }
     }
@@ -192,7 +204,7 @@ fun ExpenseInput(expenseViewModel: ExpenseViewModel){
                             name = name,
                             date = LocalDate.now()
                         )
-                        expenseViewModel.addExpense(newExpense)
+                        expenseViewModel.insert(newExpense)
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -225,7 +237,10 @@ fun NumberInput(label:String, value: Float,
                 if(temp == null || temp!! < 0){
                     temp = value
                 }
-                onValueChange(temp!!)
+                else {
+                    temp = temp!!.toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
+                    onValueChange(temp!!)
+                }
             },
             modifier = Modifier.fillMaxWidth()
         )
