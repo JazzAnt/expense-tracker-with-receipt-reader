@@ -33,7 +33,7 @@ import java.math.RoundingMode
 import java.time.LocalDate
 
 @Composable
-fun ExpenseInput(expenseViewModel: ExpenseViewModel){
+fun ExpenseEditorScreen(expenseViewModel: ExpenseViewModel){
     val (expense, onExpenseChange) = remember { mutableFloatStateOf(0.0f) }
     val (name, onNameChange) = remember { mutableStateOf("") }
     val categories = listOf("Groceries", "Restaurant", "Vending Machine", ADD_CATEGORY)

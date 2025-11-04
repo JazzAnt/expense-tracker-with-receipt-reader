@@ -14,6 +14,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
+fun ExpenseListScreen(list: List<Expense>){
+    Text("Expenses:")
+    LazyColumn (
+    ) {
+        items(list){
+                item ->
+            ExpenseCard(item)
+        }
+
+    }
+}
+@Composable
 fun ExpenseCard(expense: Expense){
     Card (
         modifier = Modifier.fillMaxWidth().padding(start = 5.dp, end = 5.dp)
@@ -34,17 +46,5 @@ fun ExpenseCard(expense: Expense){
                 Text("$%.2f".format(expense.amount))
             }
         }
-    }
-}
-@Composable
-fun ShowExpenses(list: List<Expense>){
-    Text("Expenses:")
-    LazyColumn (
-    ) {
-        items(list){
-                item ->
-            ExpenseCard(item)
-        }
-
     }
 }

@@ -21,9 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ExpenseTrackerWithBillReaderTheme {
-                val list by expenseViewModel.expenseList.collectAsState()
-                ShowExpenses(list)
-                ExpenseInput(expenseViewModel)
+                ExpenseApp()
             }
         }
     }
