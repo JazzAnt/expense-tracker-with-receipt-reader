@@ -123,7 +123,7 @@ fun ExpenseEditorScreen(expenseViewModel: ExpenseViewModel){
                             name = name,
                             date = LocalDate.now()
                         )
-                        expenseViewModel.insert(newExpense)
+                        expenseViewModel.insertExpenseToDb(newExpense)
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
