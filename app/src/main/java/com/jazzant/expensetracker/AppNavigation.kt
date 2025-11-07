@@ -52,7 +52,7 @@ fun ExpenseApp(
                 }
                 */
                 ExpenseEditorScreen(
-                    categoryList = list + SpecialCategories.ADD_NEW_CATEGORY.name,
+                    categoryList = list + ADD_NEW_CATEGORY,
                     amount = expenseState.amount,
                     onAmountChange = {viewModel.setAmount(it)},
                     name = expenseState.name,

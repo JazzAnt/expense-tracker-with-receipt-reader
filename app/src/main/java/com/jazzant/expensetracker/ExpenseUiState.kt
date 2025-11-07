@@ -9,7 +9,3 @@ data class ExpenseUiState(
     val tip: Float = 0.0f,
     val date: Long = System.currentTimeMillis()
 )
-
-enum class SpecialCategories{
-    ADD_NEW_CATEGORY
-}

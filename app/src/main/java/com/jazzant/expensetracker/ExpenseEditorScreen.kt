@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+const val ADD_NEW_CATEGORY = "Add New Category"
+
 @Composable
 fun ExpenseEditorScreen(
     categoryList: List<String>,
@@ -56,7 +58,7 @@ fun ExpenseEditorScreen(
             onOptionChange = onCategoryChange,
             modifier = Modifier.fillMaxWidth()
         )
-        if(category == SpecialCategories.ADD_NEW_CATEGORY.name){
+        if(category == ADD_NEW_CATEGORY){
             TextInput(
                 label = "",
                 value = newCategory,
@@ -98,7 +100,7 @@ fun ExpenseEditorScreen(
                     }
                 }")
                 Text("Category\t: ${
-                    if(category == SpecialCategories.ADD_NEW_CATEGORY.name){
+                    if(category == ADD_NEW_CATEGORY){
                         newCategory
                     } else {
                         category

@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.jazzant.expensetracker.ui.theme.ExpenseTrackerWithBillReaderTheme
 
-const val LABEL_FRACTION = 0.4f
 class MainActivity : ComponentActivity() {
     private lateinit var expenseViewModel: ExpenseViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,9 +22,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-
 
 @Preview(showBackground = true)
 @Composable

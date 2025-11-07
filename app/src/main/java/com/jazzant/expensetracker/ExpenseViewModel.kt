@@ -51,7 +51,7 @@ class ExpenseViewModel(): ViewModel() {
             expenseUiState.amount
         }
 
-        val category = if(expenseUiState.category == SpecialCategories.ADD_NEW_CATEGORY.name){
+        val category = if(expenseUiState.category == ADD_NEW_CATEGORY){
             expenseUiState.newCategory
         } else {
             expenseUiState.category
