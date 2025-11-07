@@ -5,6 +5,8 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 class ExpenseRepository (private val expenseDao: ExpenseDao){
     fun getAllExpenses() = expenseDao.getAllExpenses()
 
+    fun getAllCategories() = expenseDao.getAllCategories()
+
     suspend fun insert(expense: Expense){
         expenseDao.insert(expense)
     }

@@ -20,4 +20,7 @@ interface ExpenseDao {
 
     @Query("SELECT * FROM expense_table ORDER BY date ASC")
     fun getAllExpenses(): Flow<List<Expense>>
+
+    @Query("SELECT DISTINCT category FROM expense_table ORDER BY category ASC")
+    fun getAllCategories(): Flow<List<String>>
 }

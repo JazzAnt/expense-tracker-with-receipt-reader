@@ -17,6 +17,8 @@ class ExpenseViewModel(): ViewModel() {
     lateinit var expenseRepository: ExpenseRepository
     private val _expenseList = MutableStateFlow<List<Expense>>(emptyList())
     val expenseList: StateFlow<List<Expense>> get() = _expenseList
+    private val _categoryList = MutableStateFlow<List<String>>(emptyList())
+    val categoryList: StateFlow<List<String>> get() = _categoryList
 
     fun setDatabase(context: Context){
         val expenseDatabase = ExpenseDatabase.getInstance(context)
@@ -24,6 +26,9 @@ class ExpenseViewModel(): ViewModel() {
         viewModelScope.launch {
             expenseRepository.getAllExpenses().collect { expenses ->
                 _expenseList.value = expenses
+            }
+            expenseRepository.getAllCategories().collect { categories ->
+                _categoryList.value = categories
             }
         }
     }
