@@ -185,7 +185,7 @@ fun DatePickerField(label: String, date: Long, onDateChange: (Long?)->Unit){
             value = convertMillisToDate(date),
             onValueChange = { },
             label = {Text(label)},
-            placeholder = {Text("YYYY-MM-DD")},
+            placeholder = {Text("DD/MM/YYYY")},
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.DateRange,

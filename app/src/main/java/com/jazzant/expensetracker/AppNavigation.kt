@@ -42,12 +42,15 @@ fun ExpenseApp(
         ){
             composable(route = AppScreen.EXPENSE_EDITOR.name) {
                 val list by viewModel.categoryList.collectAsState()
+                /**
+                 * TODO: Place these functions on the button to open the editor so it triggers only once
                 viewModel.resetUiState()
                 if(list.isEmpty()){
                     viewModel.setCategory(SpecialCategories.ADD_NEW_CATEGORY.name)
                 } else {
                     viewModel.setCategory(list[0])
                 }
+                */
                 ExpenseEditorScreen(
                     categoryList = list + SpecialCategories.ADD_NEW_CATEGORY.name,
                     amount = expenseState.amount,
