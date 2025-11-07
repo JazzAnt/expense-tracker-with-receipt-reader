@@ -33,7 +33,7 @@ class ExpenseViewModel(): ViewModel() {
         }
     }
 
-    fun insertExpenseUiToDb(expense: Expense){
+    fun insertExpenseUiToDb(){
         viewModelScope.launch {
             expenseRepository.insert(
                 expenseUiToExpenseEntity(
