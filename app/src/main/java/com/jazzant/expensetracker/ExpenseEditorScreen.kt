@@ -37,21 +37,21 @@ fun ExpenseEditorScreen(
         modifier = modifier
     ) {
         NumberInput(
-            label = "Expense Amount:",
+            label = stringResource(R.string.amount_input_label),
             value = amount,
             onValueChange = onAmountChange,
             modifier = Modifier.fillMaxWidth()
         )
 
         TextInput(
-            label = "Expense Name:",
+            label = stringResource(R.string.name_input_label),
             value = name,
             onValueChange = onNameChange,
             modifier = Modifier.fillMaxWidth()
         )
 
         RadioButtons(
-            label = "Expense Category:",
+            label = stringResource(R.string.category_selector_label),
             radioOptions = categoryList,
             selectedOption = category,
             onOptionChange = onCategoryChange,
@@ -59,7 +59,7 @@ fun ExpenseEditorScreen(
         )
         if(category == stringResource(R.string.add_new_category)){
             TextInput(
-                label = "",
+                label = stringResource(R.string.new_category_input_label),
                 value = newCategory,
                 onValueChange = onNewCategoryChange,
                 modifier = Modifier.fillMaxWidth()
@@ -67,14 +67,14 @@ fun ExpenseEditorScreen(
         }
 
         CheckBoxField(
-            text = "Add tip?",
+            text = stringResource(R.string.add_tip_checkbox_label),
             state = tipping,
             onStateChanged = onTippingChange,
             modifier = Modifier.fillMaxWidth(0.5f)
         )
         if(tipping){
             NumberInput(
-                label = "Tip Amount",
+                label = stringResource(R.string.tip_input_label),
                 value = tip,
                 onValueChange = onTipChange,
                 modifier = Modifier.fillMaxWidth()
@@ -82,7 +82,7 @@ fun ExpenseEditorScreen(
         }
 
         DatePickerField(
-            label = "Date of Expense",
+            label = stringResource(R.string.date_picker_label),
             date = date,
             onDateChange = onDateChange
         )
