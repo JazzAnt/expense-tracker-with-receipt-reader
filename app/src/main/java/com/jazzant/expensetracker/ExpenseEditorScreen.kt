@@ -27,6 +27,7 @@ fun ExpenseEditorScreen(
     tip: Float,
     onTipChange: (Float) -> Unit,
     date: LocalDate,
+    onDateChange: (Long?) -> Unit,
     onSaveButtonPress: () -> Unit,
     modifier: Modifier = Modifier
 ){
@@ -79,6 +80,12 @@ fun ExpenseEditorScreen(
                 modifier = Modifier.fillMaxWidth()
             )
         }
+
+        DatePickerField(
+            label = "Date of Expense",
+            date = date,
+            onDateChange = onDateChange
+        )
 
         Card(
             modifier = Modifier.fillMaxWidth()

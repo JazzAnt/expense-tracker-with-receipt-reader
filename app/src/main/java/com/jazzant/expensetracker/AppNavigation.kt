@@ -64,6 +64,7 @@ fun ExpenseApp(
                     tip = expenseState.tip,
                     onTipChange = {viewModel.setTip(it)},
                     date = LocalDate.now(),
+                    onDateChange = {viewModel.setDate(LocalDate.ofEpochDay(it?: System.currentTimeMillis()))},
                     onSaveButtonPress = {
                         //TODO: Add validator for Expense Contents
                         viewModel.insertExpenseUiToDb()
