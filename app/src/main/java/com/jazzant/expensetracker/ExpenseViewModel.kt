@@ -40,14 +40,27 @@ class ExpenseViewModel(): ViewModel() {
 
     //TYPE CONVERTER
     fun expenseUiToExpenseEntity(expenseUiState: ExpenseUiState): Expense{
+        val amount = if(expenseUiState.tipping){
+            expenseUiState.amount + expenseUiState.tip
+        } else {
+            expenseUiState.amount
+        }
+
+        val category = if(expenseUiState.category == SpecialCategories.ADD_NEW_CATEGORY.name){
+            expenseUiState.newCategory
+        } else {
+            expenseUiState.category
+        }
+
         return Expense(
-            amount = expenseUiState.amount,
-            category = expenseUiState.category,
+            amount = amount,
+            category = category,
             name = expenseUiState.name,
             date = expenseUiState.date
         )
     }
     fun expenseEntityToUi(expense: Expense){
+        resetUiState()
         setAmount(expense.amount)
         setCategory(expense.category)
         setName(expense.name)
@@ -56,6 +69,10 @@ class ExpenseViewModel(): ViewModel() {
     //UI STATE STUFF
     private val _expenseState = MutableStateFlow(ExpenseUiState())
     val expenseState: StateFlow<ExpenseUiState> = _expenseState.asStateFlow()
+
+    fun resetUiState(){
+        _expenseState.value = ExpenseUiState()
+    }
 
     fun setAmount(expenseAmount: Float){
         _expenseState.update { currentState ->
