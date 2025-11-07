@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import java.time.LocalDate
 
 @Composable
 fun ExpenseEditorScreen(
@@ -26,7 +25,7 @@ fun ExpenseEditorScreen(
     onTippingChange: (Boolean) -> Unit,
     tip: Float,
     onTipChange: (Float) -> Unit,
-    date: LocalDate,
+    date: Long,
     onDateChange: (Long?) -> Unit,
     onSaveButtonPress: () -> Unit,
     modifier: Modifier = Modifier
@@ -106,7 +105,7 @@ fun ExpenseEditorScreen(
                     }
                 }")
                 Text("Name\t: $name")
-                Text("Date\t: $date")
+                Text("Date\t: ${convertMillisToDate(date)}")
 
             }
         }

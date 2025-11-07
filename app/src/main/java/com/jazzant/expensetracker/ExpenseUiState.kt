@@ -1,7 +1,5 @@
 package com.jazzant.expensetracker
 
-import java.time.LocalDate
-
 data class ExpenseUiState(
     val amount: Float = 0.0f,
     val category: String = "",
@@ -9,7 +7,7 @@ data class ExpenseUiState(
     val name: String = "",
     val tipping: Boolean = false,
     val tip: Float = 0.0f,
-    val date: LocalDate = LocalDate.now()
+    val date: Long = System.currentTimeMillis()
 )
 
 enum class SpecialCategories{

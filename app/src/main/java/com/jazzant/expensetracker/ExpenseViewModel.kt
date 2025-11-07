@@ -94,7 +94,7 @@ class ExpenseViewModel(): ViewModel() {
             currentState.copy(name = expenseName)
         }
     }
-    fun setDate(expenseDate: LocalDate){
+    fun setDate(expenseDate: Long){
         _expenseState.update { currentState ->
             currentState.copy(date = expenseDate)
         }

@@ -1,7 +1,5 @@
 package com.jazzant.expensetracker
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
-
 class ExpenseRepository (private val expenseDao: ExpenseDao){
     fun getAllExpenses() = expenseDao.getAllExpenses()
 

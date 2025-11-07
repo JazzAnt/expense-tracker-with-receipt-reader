@@ -17,7 +17,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import java.time.LocalDate
 import kotlin.math.exp
 
 enum class AppScreen(){
@@ -63,8 +62,8 @@ fun ExpenseApp(
                     onTippingChange = {viewModel.setTipping(it)},
                     tip = expenseState.tip,
                     onTipChange = {viewModel.setTip(it)},
-                    date = LocalDate.now(),
-                    onDateChange = {viewModel.setDate(LocalDate.ofEpochDay(it?: System.currentTimeMillis()))},
+                    date = expenseState.date,
+                    onDateChange = {viewModel.setDate(it?: expenseState.date)},
                     onSaveButtonPress = {
                         //TODO: Add validator for Expense Contents
                         viewModel.insertExpenseUiToDb()

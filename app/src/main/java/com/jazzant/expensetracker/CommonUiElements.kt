@@ -46,11 +46,13 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import java.math.RoundingMode
-import java.time.LocalDate
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @Composable
 fun NumberInput(label:String, value: Float,
@@ -173,24 +175,22 @@ fun SwitchField(text:String,
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerField(label: String, date: LocalDate, onDateChange: (Long?)->Unit){
+fun DatePickerField(label: String, date: Long, onDateChange: (Long?)->Unit){
     var showDatePicker by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier.fillMaxWidth()
     ){
         OutlinedTextField(
-            value = date.toString(),
+            value = convertMillisToDate(date),
             onValueChange = { },
             label = {Text(label)},
             placeholder = {Text("YYYY-MM-DD")},
             trailingIcon = {
-                IconButton(onClick = {showDatePicker = !showDatePicker}) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = "Select Date"
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = "Select Date"
+                )
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -204,7 +204,7 @@ fun DatePickerField(label: String, date: LocalDate, onDateChange: (Long?)->Unit)
         )
         if (showDatePicker){
             DatePickerModal(
-                date = date.toEpochDay(),
+                date = date,
                 onDateSelected = onDateChange,
                 onDismiss = {showDatePicker = false}
             )
@@ -238,4 +238,9 @@ fun DatePickerModal(
     ) {
         DatePicker(state = datePickerState)
     }
+}
+
+fun convertMillisToDate(millis: Long): String{
+    val formatter = SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+    return formatter.format(Date(millis))
 }

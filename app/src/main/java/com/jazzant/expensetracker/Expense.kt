@@ -10,7 +10,7 @@ data class Expense(
     @ColumnInfo(name = "amount") val amount: Float,
     @ColumnInfo(name = "category") val category: String,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "date") val date: LocalDate
+    @ColumnInfo(name = "date") val date: Long
 ){
     @PrimaryKey(autoGenerate = true) var expenseId: Int = 0
 }
