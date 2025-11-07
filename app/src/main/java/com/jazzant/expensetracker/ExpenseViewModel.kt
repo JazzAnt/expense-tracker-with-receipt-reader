@@ -1,6 +1,7 @@
 package com.jazzant.expensetracker
 
 import android.content.Context
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,25 +34,26 @@ class ExpenseViewModel(): ViewModel() {
         }
     }
 
-    fun insertExpenseUiToDb(){
+    fun insertExpenseUiToDb(context: Context){
         viewModelScope.launch {
             expenseRepository.insert(
                 expenseUiToExpenseEntity(
-                    _expenseState.value
+                    expenseUiState = _expenseState.value,
+                    context = context
                 )
             )
         }
     }
 
     //TYPE CONVERTER
-    fun expenseUiToExpenseEntity(expenseUiState: ExpenseUiState): Expense{
+    fun expenseUiToExpenseEntity(expenseUiState: ExpenseUiState, context: Context): Expense{
         val amount = if(expenseUiState.tipping){
             expenseUiState.amount + expenseUiState.tip
         } else {
             expenseUiState.amount
         }
 
-        val category = if(expenseUiState.category == ADD_NEW_CATEGORY){
+        val category = if(expenseUiState.category == context.getString(R.string.add_new_category)){
             expenseUiState.newCategory
         } else {
             expenseUiState.category

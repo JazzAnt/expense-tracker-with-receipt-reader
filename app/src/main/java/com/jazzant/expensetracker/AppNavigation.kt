@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -52,7 +53,7 @@ fun ExpenseApp(
                 }
                 */
                 ExpenseEditorScreen(
-                    categoryList = list + ADD_NEW_CATEGORY,
+                    categoryList = list + stringResource(R.string.add_new_category),
                     amount = expenseState.amount,
                     onAmountChange = {viewModel.setAmount(it)},
                     name = expenseState.name,
@@ -69,7 +70,7 @@ fun ExpenseApp(
                     onDateChange = {viewModel.setDate(it?: expenseState.date)},
                     onSaveButtonPress = {
                         //TODO: Add validator for Expense Contents
-                        viewModel.insertExpenseUiToDb()
+                        viewModel.insertExpenseUiToDb(context)
                         Toast.makeText(context, "Successfully added to Database", Toast.LENGTH_SHORT).show()
                         //TODO: Add method to navigate to main menu once that's created
                     }

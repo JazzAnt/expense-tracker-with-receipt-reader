@@ -54,7 +54,7 @@ import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
 
-const val LABEL_FRACTION = 0.4f
+private const val LABEL_FRACTION = 0.4f
 @Composable
 fun NumberInput(label:String, value: Float,
                 onValueChange:(Float)->Unit,

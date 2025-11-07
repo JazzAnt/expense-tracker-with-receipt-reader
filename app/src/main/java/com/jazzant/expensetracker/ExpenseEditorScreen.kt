@@ -9,8 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-
-const val ADD_NEW_CATEGORY = "Add New Category"
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun ExpenseEditorScreen(
@@ -58,7 +57,7 @@ fun ExpenseEditorScreen(
             onOptionChange = onCategoryChange,
             modifier = Modifier.fillMaxWidth()
         )
-        if(category == ADD_NEW_CATEGORY){
+        if(category == stringResource(R.string.add_new_category)){
             TextInput(
                 label = "",
                 value = newCategory,
@@ -100,7 +99,7 @@ fun ExpenseEditorScreen(
                     }
                 }")
                 Text("Category\t: ${
-                    if(category == ADD_NEW_CATEGORY){
+                    if(category == stringResource(R.string.add_new_category)){
                         newCategory
                     } else {
                         category

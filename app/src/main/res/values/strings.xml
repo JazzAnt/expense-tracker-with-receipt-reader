@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Expense Tracker with Bill Reader</string>
+    <string name="add_new_category">Add New Category</string>
 </resources>
