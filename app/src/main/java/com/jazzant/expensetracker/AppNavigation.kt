@@ -16,29 +16,30 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 enum class AppScreen(){
-    Editor,
-    ExpenseList
+    EXPENSE_EDITOR,
+    EXPENSE_LIST
 }
 
 @Composable
 fun ExpenseApp(
-    expenseViewModel: ExpenseViewModel = viewModel(),
+    viewModel: ExpenseViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ){
     Scaffold { innerPadding ->
+        val expenseState by viewModel.expenseState.collectAsState()
         NavHost(
             navController = navController,
-            startDestination = AppScreen.Editor.name,
+            startDestination = AppScreen.EXPENSE_EDITOR.name,
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ){
-            composable(route = AppScreen.Editor.name) {
-                ExpenseEditorScreen(expenseViewModel)
+            composable(route = AppScreen.EXPENSE_EDITOR.name) {
+                //TEMP REMOVED TO UPDATE ARGUMENTS
             }
-            composable(route = AppScreen.ExpenseList.name) {
-                val list by expenseViewModel.expenseList.collectAsState()
+            composable(route = AppScreen.EXPENSE_LIST.name) {
+                val list by viewModel.expenseList.collectAsState()
                 ExpenseListScreen(list)
             }
         }
