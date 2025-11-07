@@ -77,4 +77,21 @@ class ExpenseViewModel(): ViewModel() {
             currentState.copy(date = expenseDate)
         }
     }
+
+    fun setNewCategory(expenseNewCategory: String){
+        _expenseState.update { currentState ->
+            currentState.copy(newCategory = expenseNewCategory)
+        }
+    }
+
+    fun setTipping(expenseTipping: Boolean){
+        _expenseState.update { currentState ->
+            currentState.copy(tipping = expenseTipping)
+        }
+    }
+    fun setTip(expenseTip: Float){
+        _expenseState.update { currentState ->
+            currentState.copy(tip = expenseTip)
+        }
+    }
 }
