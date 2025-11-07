@@ -27,7 +27,7 @@ fun ExpenseEditorScreen(
     tip: Float,
     onTipChange: (Float) -> Unit,
     date: LocalDate,
-    onButtonPress: () -> Unit,
+    onSaveButtonPress: () -> Unit,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -105,7 +105,7 @@ fun ExpenseEditorScreen(
         }
 
         Button(
-            onClick = onButtonPress,
+            onClick = onSaveButtonPress,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Save")
