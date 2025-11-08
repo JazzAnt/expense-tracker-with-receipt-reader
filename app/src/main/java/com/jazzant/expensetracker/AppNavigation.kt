@@ -42,6 +42,7 @@ fun ExpenseApp(
     navController: NavHostController = rememberNavController(),
     context: Context = LocalContext.current
 ){
+    viewModel.setDatabase(context)
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppScreen.valueOf(
         backStackEntry?.destination?.route?: AppScreen.EXPENSE_LIST.name
