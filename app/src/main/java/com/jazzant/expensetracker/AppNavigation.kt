@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +32,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlin.math.exp
 import kotlin.math.floor
@@ -42,7 +47,32 @@ fun ExpenseApp(
     viewModel: ExpenseViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ){
-    Scaffold { innerPadding ->
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = AppScreen.valueOf(
+        backStackEntry?.destination?.route?: AppScreen.EXPENSE_LIST.name
+    )
+    Scaffold(
+        bottomBar = {
+            BottomNavBar(
+                items = listOf(
+                    BottomNavItem(
+                        name = "list",
+                        route = AppScreen.EXPENSE_LIST.name,
+                        icon = Icons.AutoMirrored.Filled.List
+                    ),
+
+                    BottomNavItem(
+                        name = "Add",
+                        route = AppScreen.EXPENSE_EDITOR.name,
+                        icon = Icons.Default.Add,
+                        floating = true
+                    )
+                ),
+                onItemClick = {navController.navigate(it.route)},
+                currentRoute = currentScreen.name
+            )
+        }
+    ) { innerPadding ->
         val context = LocalContext.current
         val expenseState by viewModel.expenseState.collectAsState()
         NavHost(
