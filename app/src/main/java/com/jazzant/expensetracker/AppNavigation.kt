@@ -39,7 +39,8 @@ enum class AppScreen(){
 @Composable
 fun ExpenseApp(
     viewModel: ExpenseViewModel = viewModel(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    context: Context = LocalContext.current
 ){
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppScreen.valueOf(
@@ -59,7 +60,16 @@ fun ExpenseApp(
                         name = "Add",
                         route = AppScreen.EXPENSE_EDITOR.name,
                         icon = Icons.Default.Add,
-                        floating = true
+                        floating = true,
+                        onNavButtonClick = {
+                            val list = viewModel.categoryList.value
+                            viewModel.resetUiState()
+                            if(list.isEmpty()){
+                                viewModel.setCategory(context.getString(R.string.add_new_category))
+                            } else {
+                                viewModel.setCategory(list[0])
+                            }
+                        }
                     )
                 ),
                 onItemClick = {navController.navigate(it.route)},
@@ -79,15 +89,6 @@ fun ExpenseApp(
         ){
             composable(route = AppScreen.EXPENSE_EDITOR.name) {
                 val list by viewModel.categoryList.collectAsState()
-                /**
-                 * TODO: Place these functions on the button to open the editor so it triggers only once
-                viewModel.resetUiState()
-                if(list.isEmpty()){
-                    viewModel.setCategory(SpecialCategories.ADD_NEW_CATEGORY.name)
-                } else {
-                    viewModel.setCategory(list[0])
-                }
-                */
                 ExpenseEditorScreen(
                     categoryList = list + stringResource(R.string.add_new_category),
                     amount = expenseState.amount,
