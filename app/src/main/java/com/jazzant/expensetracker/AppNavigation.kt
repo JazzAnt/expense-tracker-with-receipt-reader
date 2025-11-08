@@ -1,24 +1,36 @@
 package com.jazzant.expensetracker
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlin.math.exp
+import kotlin.math.floor
 
 enum class AppScreen(){
     EXPENSE_EDITOR,
@@ -82,4 +94,54 @@ fun ExpenseApp(
             }
         }
     }
+}
+
+data class BottomNavItem(
+    val name: String,
+    val route: String,
+    val icon: ImageVector,
+    val floating: Boolean = false
+)
+
+@Composable
+fun BottomNavBar(
+    items: List<BottomNavItem>,
+    onItemClick: (BottomNavItem) -> Unit,
+    currentRoute: String,
+    modifier: Modifier = Modifier
+) {
+    BottomAppBar(
+        modifier = modifier,
+        actions = {
+            items.forEach {
+                if(it.floating) { return@forEach }
+                val selected = it.route == currentRoute
+                IconButton(
+                    onClick = {onItemClick(it)},
+                    enabled = !selected
+                ) {
+                    Icon(
+                        imageVector = it.icon,
+                        contentDescription = it.name,
+                        tint = if (selected) { Color.Red } else { Color.Gray }
+                    )
+                }
+            }
+        },
+        floatingActionButton = {
+            items.forEach {
+                if (!it.floating){ return@forEach }
+                FloatingActionButton(
+                    onClick = { onItemClick(it) },
+                    containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                    elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                ) {
+                    Icon(
+                        imageVector = it.icon,
+                        contentDescription = it.name,
+                    )
+                }
+            }
+        }
+    )
 }
