@@ -63,13 +63,7 @@ fun ExpenseApp(
                         icon = Icons.Default.Add,
                         floating = true,
                         onNavButtonClick = {
-                            val list = viewModel.categoryList.value
                             viewModel.resetUiState()
-                            if(list.isEmpty()){
-                                viewModel.setCategory(context.getString(R.string.add_new_category))
-                            } else {
-                                viewModel.setCategory(list[0])
-                            }
                         }
                     )
                 ),
@@ -82,16 +76,15 @@ fun ExpenseApp(
         val expenseState by viewModel.expenseState.collectAsState()
         NavHost(
             navController = navController,
-            startDestination = AppScreen.EXPENSE_EDITOR.name,
+            startDestination = AppScreen.EXPENSE_LIST.name,
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+//                .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ){
             composable(route = AppScreen.EXPENSE_EDITOR.name) {
-                val list by viewModel.categoryList.collectAsState()
                 ExpenseEditorScreen(
-                    categoryList = list + stringResource(R.string.add_new_category),
+                    categoryList = listOf("A", "B", "C") + stringResource(R.string.add_new_category),
                     amount = expenseState.amount,
                     onAmountChange = {viewModel.setAmount(it)},
                     name = expenseState.name,
@@ -116,7 +109,10 @@ fun ExpenseApp(
             }
             composable(route = AppScreen.EXPENSE_LIST.name) {
                 val list by viewModel.expenseList.collectAsState()
-                ExpenseListScreen(list)
+
+                ExpenseListScreen(list, onCardClick = {
+                    navController.navigate(route = AppScreen.EXPENSE_EDITOR.name)
+                })
             }
         }
     }
