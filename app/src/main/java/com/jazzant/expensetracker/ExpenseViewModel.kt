@@ -1,7 +1,6 @@
 package com.jazzant.expensetracker
 
 import android.content.Context
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,8 +8,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import kotlin.math.exp
 
 
 class ExpenseViewModel(): ViewModel() {
@@ -20,8 +17,9 @@ class ExpenseViewModel(): ViewModel() {
     val expenseList: StateFlow<List<Expense>> get() = _expenseList
     private val _categoryList = MutableStateFlow<List<String>>(emptyList())
     val categoryList: StateFlow<List<String>> get() = _categoryList
+    private lateinit var ADD_NEW_CATEGORY: String
 
-    fun setDatabase(context: Context){
+    fun initializeViewModel(context: Context){
         val expenseDatabase = ExpenseDatabase.getInstance(context)
         expenseRepository = ExpenseRepository(expenseDatabase.expenseDao())
         viewModelScope.launch {
@@ -32,28 +30,28 @@ class ExpenseViewModel(): ViewModel() {
                 _categoryList.value = categories
             }
         }
+        ADD_NEW_CATEGORY = context.getString(R.string.add_new_category)
     }
 
-    fun insertExpenseUiToDb(context: Context){
+    fun insertExpenseUiToDb(){
         viewModelScope.launch {
             expenseRepository.insert(
                 expenseUiToExpenseEntity(
                     expenseUiState = _expenseState.value,
-                    context = context
                 )
             )
         }
     }
 
     //TYPE CONVERTER
-    fun expenseUiToExpenseEntity(expenseUiState: ExpenseUiState, context: Context): Expense{
+    fun expenseUiToExpenseEntity(expenseUiState: ExpenseUiState): Expense{
         val amount = if(expenseUiState.tipping){
             expenseUiState.amount + expenseUiState.tip
         } else {
             expenseUiState.amount
         }
 
-        val category = if(expenseUiState.category == context.getString(R.string.add_new_category)){
+        val category = if(expenseUiState.category == ADD_NEW_CATEGORY){
             expenseUiState.newCategory
         } else {
             expenseUiState.category

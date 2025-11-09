@@ -4,8 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
@@ -42,7 +40,7 @@ fun ExpenseApp(
     navController: NavHostController = rememberNavController(),
     context: Context = LocalContext.current
 ){
-    viewModel.setDatabase(context)
+    viewModel.initializeViewModel(context)
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppScreen.valueOf(
         backStackEntry?.destination?.route?: AppScreen.EXPENSE_LIST.name
@@ -101,7 +99,7 @@ fun ExpenseApp(
                     onDateChange = {viewModel.setDate(it?: expenseState.date)},
                     onSaveButtonPress = {
                         //TODO: Add validator for Expense Contents
-                        viewModel.insertExpenseUiToDb(context)
+                        viewModel.insertExpenseUiToDb()
                         Toast.makeText(context, "Successfully added to Database", Toast.LENGTH_SHORT).show()
                         //TODO: Add method to navigate to main menu once that's created
                     }

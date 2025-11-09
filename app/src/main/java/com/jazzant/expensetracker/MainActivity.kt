@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         expenseViewModel = ExpenseViewModel()
-        expenseViewModel.setDatabase(this)
+        expenseViewModel.initializeViewModel(this)
         enableEdgeToEdge()
         setContent {
             ExpenseTrackerWithBillReaderTheme {
