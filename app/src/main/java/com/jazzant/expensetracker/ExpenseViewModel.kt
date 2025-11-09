@@ -35,7 +35,14 @@ class ExpenseViewModel(): ViewModel() {
         ADD_NEW_CATEGORY = context.getString(R.string.add_new_category)
     }
 
-    fun insertExpenseUiToDb(){
+    fun insertExpenseToDB(){
+        if(expenseId.intValue < 0)
+            createExpenseOnDB()
+        else
+            updateExpenseOnDB()
+    }
+
+    fun createExpenseOnDB(){
         viewModelScope.launch {
             expenseRepository.insert(
                 expenseUiToExpenseEntity(
@@ -44,7 +51,7 @@ class ExpenseViewModel(): ViewModel() {
             )
         }
     }
-    fun updateExpenseUiToDb(){
+    fun updateExpenseOnDB(){
         val expense = expenseUiToExpenseEntity(_expenseState.value)
         expense.expenseId = expenseId.intValue
         viewModelScope.launch {
