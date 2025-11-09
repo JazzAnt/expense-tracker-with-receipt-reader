@@ -30,8 +30,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 enum class AppScreen(){
-    EXPENSE_EDITOR,
-    EXPENSE_LIST
+    EXPENSE_LIST,
+    ADD_EXPENSE,
+    UPDATE_EXPENSE
 }
 
 @Composable
@@ -57,7 +58,7 @@ fun ExpenseApp(
 
                     BottomNavItem(
                         name = "Add",
-                        route = AppScreen.EXPENSE_EDITOR.name,
+                        route = AppScreen.ADD_EXPENSE.name,
                         icon = Icons.Default.Add,
                         floating = true,
                         onNavButtonClick = {
@@ -80,7 +81,15 @@ fun ExpenseApp(
 //                .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ){
-            composable(route = AppScreen.EXPENSE_EDITOR.name) {
+            composable(route = AppScreen.EXPENSE_LIST.name) {
+                val list by viewModel.expenseList.collectAsState()
+
+                ExpenseListScreen(list, onCardClick = { expense ->
+                    viewModel.expenseEntityToUi(expense)
+                    navController.navigate(route = AppScreen.UPDATE_EXPENSE.name)
+                })
+            }
+            composable(route = AppScreen.ADD_EXPENSE.name) {
                 ExpenseEditorScreen(
                     categoryList = listOf("A", "B", "C") + stringResource(R.string.add_new_category),
                     amount = expenseState.amount,
@@ -105,12 +114,30 @@ fun ExpenseApp(
                     }
                 )
             }
-            composable(route = AppScreen.EXPENSE_LIST.name) {
-                val list by viewModel.expenseList.collectAsState()
-
-                ExpenseListScreen(list, onCardClick = {
-                    navController.navigate(route = AppScreen.EXPENSE_EDITOR.name)
-                })
+            composable(route = AppScreen.UPDATE_EXPENSE.name) {
+                ExpenseEditorScreen(
+                    categoryList = listOf("A", "B", "C") + stringResource(R.string.add_new_category),
+                    amount = expenseState.amount,
+                    onAmountChange = {viewModel.setAmount(it)},
+                    name = expenseState.name,
+                    onNameChange = {viewModel.setName(it)},
+                    category = expenseState.category,
+                    onCategoryChange = {viewModel.setCategory(it)},
+                    newCategory = expenseState.newCategory,
+                    onNewCategoryChange = {viewModel.setNewCategory(it)},
+                    tipping = expenseState.tipping,
+                    onTippingChange = {viewModel.setTipping(it)},
+                    tip = expenseState.tip,
+                    onTipChange = {viewModel.setTip(it)},
+                    date = expenseState.date,
+                    onDateChange = {viewModel.setDate(it?: expenseState.date)},
+                    onSaveButtonPress = {
+                        //TODO: Add validator for Expense Contents
+                        viewModel.updateExpenseUiToDb()
+                        Toast.makeText(context, "Successfully Edited Expense on Database", Toast.LENGTH_SHORT).show()
+                        //TODO: Add method to navigate to main menu once that's created
+                    }
+                )
             }
         }
     }
