@@ -1,6 +1,7 @@
 package com.jazzant.expensetracker
 
 import android.content.Context
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +19,7 @@ class ExpenseViewModel(): ViewModel() {
     private val _categoryList = MutableStateFlow<List<String>>(emptyList())
     val categoryList: StateFlow<List<String>> get() = _categoryList
     private lateinit var ADD_NEW_CATEGORY: String
+    private var expenseId = mutableIntStateOf(-1)
 
     fun initializeViewModel(context: Context){
         val expenseDatabase = ExpenseDatabase.getInstance(context)
@@ -39,6 +41,15 @@ class ExpenseViewModel(): ViewModel() {
                 expenseUiToExpenseEntity(
                     expenseUiState = _expenseState.value,
                 )
+            )
+        }
+    }
+    fun updateExpenseUiToDb(){
+        val expense = expenseUiToExpenseEntity(_expenseState.value)
+        expense.expenseId = expenseId.intValue
+        viewModelScope.launch {
+            expenseRepository.update(
+                expense
             )
         }
     }
@@ -70,6 +81,7 @@ class ExpenseViewModel(): ViewModel() {
         setCategory(expense.category)
         setName(expense.name)
         setDate(expense.date)
+        expenseId.intValue = expense.expenseId
     }
     //UI STATE STUFF
     private val _expenseState = MutableStateFlow(ExpenseUiState())
@@ -77,6 +89,7 @@ class ExpenseViewModel(): ViewModel() {
 
     fun resetUiState(){
         _expenseState.value = ExpenseUiState()
+        expenseId.intValue = -1
     }
 
     fun setAmount(expenseAmount: Float){
