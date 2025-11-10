@@ -119,7 +119,7 @@ fun ExpenseApp(
                         //TODO: Add validator for Expense Contents
                         viewModel.insertExpenseToDB()
                         Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
-                        //TODO: Add method to navigate to main menu once that's created
+                        navController.popBackStack()
                     }
                 )
             }
