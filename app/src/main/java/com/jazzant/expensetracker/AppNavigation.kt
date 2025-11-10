@@ -5,10 +5,13 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,7 +40,8 @@ import androidx.navigation.compose.rememberNavController
 
 enum class AppScreen(){
     HOME_SCREEN,
-    EDIT_EXPENSE
+    EDIT_EXPENSE,
+    CAMERA_PREVIEW
 }
 
 @Composable
@@ -67,6 +71,12 @@ fun ExpenseApp(
                     ),
 
                     BottomNavItem(
+                        name = "camera",
+                        route = AppScreen.CAMERA_PREVIEW.name,
+                        icon = Icons.Default.ShoppingCart
+                    ),
+
+                    BottomNavItem(
                         name = "Add",
                         route = AppScreen.EDIT_EXPENSE.name,
                         icon = Icons.Default.Add,
@@ -88,7 +98,6 @@ fun ExpenseApp(
             startDestination = AppScreen.HOME_SCREEN.name,
             modifier = Modifier
                 .fillMaxSize()
-//                .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ){
             composable(route = AppScreen.HOME_SCREEN.name) {
@@ -123,6 +132,9 @@ fun ExpenseApp(
                         navController.popBackStack()
                     }
                 )
+            }
+            composable(route = AppScreen.CAMERA_PREVIEW.name) {
+                CameraPreviewScreen()
             }
         }
     }
