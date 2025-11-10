@@ -5,34 +5,43 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 
 class ExpenseViewModel(): ViewModel() {
     //DATABASE STUFF
     lateinit var expenseRepository: ExpenseRepository
-    private val _expenseList = MutableStateFlow<List<Expense>>(emptyList())
-    val expenseList: StateFlow<List<Expense>> get() = _expenseList
-    private val _categoryList = MutableStateFlow<List<String>>(emptyList())
-    val categoryList: StateFlow<List<String>> get() = _categoryList
+    lateinit var expenseList: StateFlow<List<Expense>>
+    lateinit var categoryList: StateFlow<List<String>>
     private lateinit var ADD_NEW_CATEGORY: String
     private var expenseId = mutableIntStateOf(-1)
 
     fun initializeViewModel(context: Context){
+        //Set the Repository
         val expenseDatabase = ExpenseDatabase.getInstance(context)
         expenseRepository = ExpenseRepository(expenseDatabase.expenseDao())
-        viewModelScope.launch {
-            expenseRepository.getAllExpenses().collect { expenses ->
-                _expenseList.value = expenses
-            }
-            expenseRepository.getAllCategories().collect { categories ->
-                _categoryList.value = categories
-            }
-        }
+        //Fetch the add_new_category string
         ADD_NEW_CATEGORY = context.getString(R.string.add_new_category)
+        //Pass the flows
+        expenseList = expenseRepository.getAllExpenses()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5.seconds),
+                initialValue = emptyList()
+            )
+        categoryList = expenseRepository.getAllCategories()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5.seconds),
+                initialValue = emptyList()
+            )
     }
 
     fun insertExpenseToDB(){

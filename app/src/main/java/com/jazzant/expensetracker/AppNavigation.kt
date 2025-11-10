@@ -1,14 +1,12 @@
 package com.jazzant.expensetracker
 
 import android.content.Context
-import android.graphics.drawable.Icon
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
@@ -18,7 +16,6 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -29,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -93,16 +91,16 @@ fun ExpenseApp(
                 .padding(innerPadding)
         ){
             composable(route = AppScreen.EXPENSE_LIST.name) {
-                val list by viewModel.expenseList.collectAsState()
-
-                ExpenseListScreen(list, onCardClick = { expense ->
+                val expenseList by viewModel.expenseList.collectAsStateWithLifecycle()
+                ExpenseListScreen(expenseList, onCardClick = { expense ->
                     viewModel.expenseEntityToUi(expense)
                     navController.navigate(route = AppScreen.EDIT_EXPENSE.name)
                 })
             }
             composable(route = AppScreen.EDIT_EXPENSE.name) {
+                val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
                 ExpenseEditorScreen(
-                    categoryList = listOf("A", "B", "C") + stringResource(R.string.add_new_category),
+                    categoryList = categoryList + stringResource(R.string.add_new_category),
                     amount = expenseState.amount,
                     onAmountChange = {viewModel.setAmount(it)},
                     name = expenseState.name,
