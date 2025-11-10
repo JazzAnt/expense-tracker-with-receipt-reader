@@ -22,13 +22,14 @@ fun CameraPreviewScreen(){
     val lensFacing = CameraSelector.LENS_FACING_BACK
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-    //Build the preview
+    //Build the preview object
     val preview = Preview.Builder()
         .build()
     val previewView = remember {
         PreviewView(context)
     }
     //Build the camera selector, require back facing lens
+    //Using CameraSelector.DEFAULT_BACK_CAMERA also works
     val cameraxSelector = CameraSelector.Builder()
         .requireLensFacing(lensFacing)
         .build()
@@ -52,11 +53,15 @@ fun CameraPreviewScreen(){
 
 private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
     suspendCoroutine { continuation ->
-        //Get instance of CameraProvider from Context
+        //Get instance of CameraProvider from Context to bind lifecycle of cameras to owner
+        //This means there's no need to open and close the camera manually
+        //CameraX will automatically do that depending on the lifecycle
         ProcessCameraProvider.getInstance(this).also { cameraProvider ->
             cameraProvider.addListener({
                 //Bind Lifecycle of Cameras to Lifecycle Owner (Context)
                 continuation.resume(cameraProvider.get())
             }, ContextCompat.getMainExecutor(this))
+                //This returns an executor that runs on the main thread
+                //Thus the runnable task is run there
         }
     }
