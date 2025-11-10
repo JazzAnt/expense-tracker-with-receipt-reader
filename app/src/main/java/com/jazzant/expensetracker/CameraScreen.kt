@@ -1,7 +1,12 @@
 package com.jazzant.expensetracker
 
 import android.content.Context
+import android.util.Log
+import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -14,6 +19,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -49,6 +57,30 @@ fun CameraPreviewScreen(){
     }
     //Turns the PreviewView (an android View) into a composable
     AndroidView(factory = {previewView}, modifier = Modifier.fillMaxSize())
+}
+
+private class TextAnalyzer : ImageAnalysis.Analyzer{
+    @OptIn(ExperimentalGetImage::class)
+    override fun analyze(imageProxy: ImageProxy) {
+        val mediaImage = imageProxy.image
+        if(mediaImage != null){
+            val inputImage = InputImage.fromMediaImage(
+                mediaImage,
+                imageProxy.imageInfo.rotationDegrees
+            )
+            val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+            val result = recognizer.process(inputImage)
+                .addOnSuccessListener { visionText ->
+                    for (block in visionText.textBlocks){
+                        Log.d("TEXTREADER", block.text)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("TEXTREADER", exception.message!!)
+                }
+        }
+    }
+
 }
 
 private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
