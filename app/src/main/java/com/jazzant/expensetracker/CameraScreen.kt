@@ -22,24 +22,40 @@ fun CameraPreviewScreen(){
     val lensFacing = CameraSelector.LENS_FACING_BACK
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-    val preview = Preview.Builder().build()
+    //Build the preview
+    val preview = Preview.Builder()
+        .build()
     val previewView = remember {
         PreviewView(context)
     }
-    val cameraxSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
+    //Build the camera selector, require back facing lens
+    val cameraxSelector = CameraSelector.Builder()
+        .requireLensFacing(lensFacing)
+        .build()
+    //Launch Camera as a coroutine
     LaunchedEffect(lensFacing) {
+        //Get the camera provider from the context
         val cameraProvider = context.getCameraProvider()
+        //Unbind existing use cases before rebinding
         cameraProvider.unbindAll()
-        cameraProvider.bindToLifecycle(lifecycleOwner, cameraxSelector, preview)
+        //Bind use cases to camera
+        cameraProvider.bindToLifecycle(
+            lifecycleOwner = lifecycleOwner,
+            cameraSelector = cameraxSelector,
+            preview)
+        //The preview Surface property is received from the PreviewView
         preview.surfaceProvider = previewView.surfaceProvider
     }
+    //Turns the PreviewView (an android View) into a composable
     AndroidView(factory = {previewView}, modifier = Modifier.fillMaxSize())
 }
 
 private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
     suspendCoroutine { continuation ->
+        //Get instance of CameraProvider from Context
         ProcessCameraProvider.getInstance(this).also { cameraProvider ->
             cameraProvider.addListener({
+                //Bind Lifecycle of Cameras to Lifecycle Owner (Context)
                 continuation.resume(cameraProvider.get())
             }, ContextCompat.getMainExecutor(this))
         }
