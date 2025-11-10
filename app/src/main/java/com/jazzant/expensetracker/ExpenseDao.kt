@@ -18,7 +18,7 @@ interface ExpenseDao {
     @Update
     suspend fun update(expense: Expense)
 
-    @Query("SELECT * FROM expense_table ORDER BY date ASC")
+    @Query("SELECT * FROM expense_table ORDER BY date DESC")
     fun getAllExpenses(): Flow<List<Expense>>
 
     @Query("SELECT DISTINCT category FROM expense_table ORDER BY category ASC")
