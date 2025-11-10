@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
@@ -35,7 +36,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 enum class AppScreen(){
-    EXPENSE_LIST,
+    HOME_SCREEN,
     EDIT_EXPENSE
 }
 
@@ -48,7 +49,7 @@ fun ExpenseApp(
     viewModel.initializeViewModel(context)
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppScreen.valueOf(
-        backStackEntry?.destination?.route?: AppScreen.EXPENSE_LIST.name
+        backStackEntry?.destination?.route?: AppScreen.HOME_SCREEN.name
     )
     Scaffold(
         topBar = {
@@ -60,9 +61,9 @@ fun ExpenseApp(
             BottomNavBar(
                 items = listOf(
                     BottomNavItem(
-                        name = "list",
-                        route = AppScreen.EXPENSE_LIST.name,
-                        icon = Icons.AutoMirrored.Filled.List
+                        name = "home",
+                        route = AppScreen.HOME_SCREEN.name,
+                        icon = Icons.Default.Home
                     ),
 
                     BottomNavItem(
@@ -84,13 +85,13 @@ fun ExpenseApp(
         val expenseState by viewModel.expenseState.collectAsState()
         NavHost(
             navController = navController,
-            startDestination = AppScreen.EXPENSE_LIST.name,
+            startDestination = AppScreen.HOME_SCREEN.name,
             modifier = Modifier
                 .fillMaxSize()
 //                .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ){
-            composable(route = AppScreen.EXPENSE_LIST.name) {
+            composable(route = AppScreen.HOME_SCREEN.name) {
                 val expenseList by viewModel.expenseList.collectAsStateWithLifecycle()
                 ExpenseListScreen(expenseList, onCardClick = { expense ->
                     viewModel.expenseEntityToUi(expense)
