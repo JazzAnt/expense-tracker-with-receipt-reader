@@ -88,7 +88,6 @@ fun ExpenseApp(
             startDestination = AppScreen.HOME_SCREEN.name,
             modifier = Modifier
                 .fillMaxSize()
-//                .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ){
             composable(route = AppScreen.HOME_SCREEN.name) {

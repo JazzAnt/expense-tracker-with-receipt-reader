@@ -9,11 +9,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.jazzant.expensetracker.ui.theme.ExpenseTrackerWithBillReaderTheme
 
 class MainActivity : ComponentActivity() {
-    private lateinit var expenseViewModel: ExpenseViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        expenseViewModel = ExpenseViewModel()
-        expenseViewModel.initializeViewModel(this)
         enableEdgeToEdge()
         setContent {
             ExpenseTrackerWithBillReaderTheme {
