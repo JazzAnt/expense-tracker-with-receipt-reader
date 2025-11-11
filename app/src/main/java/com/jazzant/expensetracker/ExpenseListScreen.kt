@@ -36,7 +36,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 @Composable
-fun ExpenseListScreen(list: List<Expense>, onCardClick: (Expense) -> Unit){
+fun ExpenseListScreen(list: List<Expense>, onCardClick: (Expense) -> Unit, sumOfExpenses: Float){
     Box(Modifier.fillMaxSize()){
         LazyColumn () {
             items(list){
@@ -44,7 +44,7 @@ fun ExpenseListScreen(list: List<Expense>, onCardClick: (Expense) -> Unit){
                 ExpenseCard(item, onCardClick)
             }
         }
-        ExpenseSumCard(100f, Modifier.align(Alignment.BottomEnd))
+        ExpenseSumCard(sumOfExpenses, Modifier.align(Alignment.BottomEnd))
     }
 }
 

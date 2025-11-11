@@ -93,10 +93,13 @@ fun ExpenseApp(
         ){
             composable(route = AppScreen.HOME_SCREEN.name) {
                 val expenseList by viewModel.expenseList.collectAsStateWithLifecycle()
-                ExpenseListScreen(expenseList, onCardClick = { expense ->
+                val sumOfExpenses by viewModel.sumOfExpenses.collectAsStateWithLifecycle()
+                ExpenseListScreen(
+                    list = expenseList, onCardClick = { expense ->
                     viewModel.expenseEntityToUi(expense)
                     navController.navigate(route = AppScreen.EDIT_EXPENSE.name)
-                })
+                },
+                    sumOfExpenses = sumOfExpenses)
             }
             composable(route = AppScreen.EDIT_EXPENSE.name) {
                 val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
