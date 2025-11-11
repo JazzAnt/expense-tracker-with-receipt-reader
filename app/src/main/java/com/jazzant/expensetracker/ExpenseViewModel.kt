@@ -20,6 +20,7 @@ class ExpenseViewModel(): ViewModel() {
     lateinit var expenseRepository: ExpenseRepository
     lateinit var expenseList: StateFlow<List<Expense>>
     lateinit var categoryList: StateFlow<List<String>>
+    lateinit var sumOfExpenses: StateFlow<Float>
     private lateinit var ADD_NEW_CATEGORY: String
     private var expenseId = mutableIntStateOf(-1)
 
@@ -41,6 +42,12 @@ class ExpenseViewModel(): ViewModel() {
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5.seconds),
                 initialValue = emptyList()
+            )
+        sumOfExpenses = expenseRepository.getSumOfExpenses()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5.seconds),
+                initialValue = 0f
             )
     }
 
