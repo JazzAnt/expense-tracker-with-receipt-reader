@@ -1,9 +1,14 @@
 package com.jazzant.expensetracker
 
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +27,8 @@ class ExpenseViewModel(): ViewModel() {
     lateinit var categoryList: StateFlow<List<String>>
     private lateinit var ADD_NEW_CATEGORY: String
     private var expenseId = mutableIntStateOf(-1)
+    private val _recognizedText = mutableStateOf<String?>(null)
+    val recognizedText = _recognizedText
 
     fun initializeViewModel(context: Context){
         //Set the Repository
@@ -144,5 +151,13 @@ class ExpenseViewModel(): ViewModel() {
         _expenseState.update { currentState ->
             currentState.copy(tip = expenseTip)
         }
+    }
+
+    fun recognizeText(bitmap: Bitmap){
+        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+        val inputImage = InputImage.fromBitmap(bitmap,0)
+        recognizer.process(inputImage)
+            .addOnSuccessListener { visionText -> _recognizedText.value = visionText.text }
+            .addOnFailureListener { e -> _recognizedText.value = "Error: ${e.message}" }
     }
 }

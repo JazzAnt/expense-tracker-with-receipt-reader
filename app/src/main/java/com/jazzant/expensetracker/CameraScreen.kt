@@ -1,12 +1,7 @@
 package com.jazzant.expensetracker
 
-import android.content.Context
-import android.media.Image
 import android.util.Log
-import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -14,18 +9,12 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,14 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @Composable
 fun CameraPreviewScreen(modifier:Modifier = Modifier, onImageCapture: (ImageProxy)-> Unit){
@@ -103,47 +85,6 @@ fun CameraPreviewScreen(modifier:Modifier = Modifier, onImageCapture: (ImageProx
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             Icon(Icons.Default.Search, contentDescription = "Take Picture to Analyze")
-        }
-    }
-}
-
-class TextRecognitionVM: ViewModel(){
-    private val _recognizedText = mutableStateOf<String?>(null)
-    val recognizedText = _recognizedText
-
-    fun recognizeText(mediaImage: Image, rotationDegrees: Int) {
-        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-        val image = InputImage.fromMediaImage(mediaImage,rotationDegrees)
-
-        recognizer.process(image)
-            .addOnSuccessListener { visionText ->
-                _recognizedText.value = visionText.text
-            }
-            .addOnFailureListener { e ->
-                _recognizedText.value = "Error: ${e.message}"
-            }
-    }
-}
-
-private class TextAnalyzer : ImageAnalysis.Analyzer {
-    @OptIn(ExperimentalGetImage::class)
-    override fun analyze(imageProxy: ImageProxy) {
-        val mediaImage = imageProxy.image
-        if (mediaImage != null) {
-            val inputImage = InputImage.fromMediaImage(
-                mediaImage,
-                imageProxy.imageInfo.rotationDegrees
-            )
-            val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-            val result = recognizer.process(inputImage)
-                .addOnSuccessListener { visionText ->
-                    for (block in visionText.textBlocks) {
-                        Log.d("TEXTREADER", block.text)
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.d("TEXTREADER", exception.message!!)
-                }
         }
     }
 }
