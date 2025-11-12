@@ -7,8 +7,22 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+
+@Composable
+fun CameraPermissionScreen(onCameraPermissionGranted: () -> Unit){
+    var permissionGranted by remember { mutableStateOf(false) }
+    CameraPermissionHandler(
+        onPermissionGranted = { permissionGranted = true }
+    )
+    if (permissionGranted)
+    { onCameraPermissionGranted() }
+}
 
 @Composable
 fun CameraPermissionHandler(onPermissionGranted: () -> Unit){
@@ -18,7 +32,7 @@ fun CameraPermissionHandler(onPermissionGranted: () -> Unit){
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
-            if(isGranted)
+            if (isGranted)
             { onPermissionGranted() }
             else
             { Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show() }
@@ -26,7 +40,7 @@ fun CameraPermissionHandler(onPermissionGranted: () -> Unit){
     )
 
     LaunchedEffect(key1 = true) {
-        if(ContextCompat.checkSelfPermission(context,cameraPermission) == PackageManager.PERMISSION_GRANTED)
+        if (ContextCompat.checkSelfPermission(context,cameraPermission) == PackageManager.PERMISSION_GRANTED)
         { onPermissionGranted() }
         else
         { permissionLauncher.launch(cameraPermission) }
