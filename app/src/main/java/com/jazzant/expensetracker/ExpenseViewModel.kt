@@ -32,11 +32,14 @@ class ExpenseViewModel(): ViewModel() {
     val recognizedText = _recognizedText
     private val _capturedBitmap = mutableStateOf<Bitmap?>(null)
     val capturedBitmap = _capturedBitmap
+    lateinit var receiptModelRepository: ReceiptModelRepository
+    lateinit var receiptModelList: StateFlow<List<ReceiptModel>>
 
     fun initializeViewModel(context: Context){
         //Set the Repository
         val expenseDatabase = ExpenseDatabase.getInstance(context)
         expenseRepository = ExpenseRepository(expenseDatabase.expenseDao())
+        receiptModelRepository = ReceiptModelRepository(expenseDatabase.receiptModelDao())
         //Fetch the add_new_category string
         ADD_NEW_CATEGORY = context.getString(R.string.add_new_category)
         //Pass the flows
@@ -47,6 +50,12 @@ class ExpenseViewModel(): ViewModel() {
                 initialValue = emptyList()
             )
         categoryList = expenseRepository.getAllCategories()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5.seconds),
+                initialValue = emptyList()
+            )
+        receiptModelList = receiptModelRepository.getAllReceiptModels()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5.seconds),

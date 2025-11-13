@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 @Database(entities = [Expense::class], version = 1)
 abstract class ExpenseDatabase : RoomDatabase() {
     abstract fun expenseDao(): ExpenseDao
+    abstract fun receiptModelDao(): ReceiptModelDao
 
     companion object {
         private var INSTANCE: ExpenseDatabase? = null
