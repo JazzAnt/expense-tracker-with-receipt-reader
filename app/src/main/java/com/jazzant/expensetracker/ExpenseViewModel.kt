@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +28,7 @@ class ExpenseViewModel(): ViewModel() {
     lateinit var categoryList: StateFlow<List<String>>
     private lateinit var ADD_NEW_CATEGORY: String
     private var expenseId = mutableIntStateOf(-1)
-    private val _recognizedText = mutableStateOf<String?>(null)
+    private val _recognizedText = mutableStateOf<Text?>(null)
     val recognizedText = _recognizedText
 
     fun initializeViewModel(context: Context){
@@ -157,7 +158,7 @@ class ExpenseViewModel(): ViewModel() {
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         val inputImage = InputImage.fromBitmap(bitmap,0)
         recognizer.process(inputImage)
-            .addOnSuccessListener { visionText -> _recognizedText.value = visionText.text }
-            .addOnFailureListener { e -> _recognizedText.value = "Error: ${e.message}" }
+            .addOnSuccessListener { visionText -> _recognizedText.value = visionText}
+            .addOnFailureListener { e -> _recognizedText.value = null }
     }
 }

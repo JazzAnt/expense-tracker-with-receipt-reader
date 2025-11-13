@@ -147,7 +147,7 @@ fun ExpenseApp(
             }
             composable(route = AppScreen.TEXT_ANALYZER.name) {
                 val recognizedText by viewModel.recognizedText
-                TextAnalyzerScreen(recognizedText?:"Error: No Text Found")
+                TextAnalyzerScreen(recognizedText)
             }
         }
     }
