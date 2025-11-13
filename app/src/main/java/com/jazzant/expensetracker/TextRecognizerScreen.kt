@@ -3,9 +3,7 @@ package com.jazzant.expensetracker
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -21,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.google.mlkit.vision.text.Text
 
 @Composable
-fun TextAnalyzerScreen(
+fun TextRecognizerScreen(
     recognizedText: Text?,
     bitmap: Bitmap,
     onRetakeImageButtonPress: () -> Unit,

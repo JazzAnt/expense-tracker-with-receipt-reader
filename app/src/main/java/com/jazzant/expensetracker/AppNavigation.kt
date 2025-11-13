@@ -148,7 +148,7 @@ fun ExpenseApp(
             composable(route = AppScreen.TEXT_ANALYZER.name) {
                 val recognizedText by viewModel.recognizedText
                 val bitmap by viewModel.capturedBitmap
-                TextAnalyzerScreen(
+                TextRecognizerScreen(
                     recognizedText = recognizedText,
                     bitmap = bitmap!!,
                     onCancelButtonPress = { navController.navigate(AppScreen.HOME_SCREEN.name) },
