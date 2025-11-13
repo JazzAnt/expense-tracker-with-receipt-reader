@@ -5,11 +5,8 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
@@ -43,7 +40,7 @@ enum class AppScreen(){
     EDIT_EXPENSE,
     REQUEST_CAMERA_PERMISSION,
     CAMERA_PREVIEW,
-    ANALYZE_TEXT
+    TEXT_ANALYZER
 }
 
 @Composable
@@ -144,8 +141,13 @@ fun ExpenseApp(
                 CameraPreviewScreen(
                     onImageCapture = {imageProxy ->
                         viewModel.recognizeText(imageProxy.toBitmap())
+                        navController.navigate(AppScreen.TEXT_ANALYZER.name)
                     }
                 )
+            }
+            composable(route = AppScreen.TEXT_ANALYZER.name) {
+                val recognizedText by viewModel.recognizedText
+                TextAnalyzerScreen(recognizedText?:"Error: No Text Found")
             }
         }
     }
