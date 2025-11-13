@@ -30,6 +30,8 @@ class ExpenseViewModel(): ViewModel() {
     private var expenseId = mutableIntStateOf(-1)
     private val _recognizedText = mutableStateOf<Text?>(null)
     val recognizedText = _recognizedText
+    private val _capturedBitmap = mutableStateOf<Bitmap?>(null)
+    val capturedBitmap = _capturedBitmap
 
     fun initializeViewModel(context: Context){
         //Set the Repository
@@ -154,7 +156,9 @@ class ExpenseViewModel(): ViewModel() {
         }
     }
 
+    //TEXT ANALYSIS STUFF
     fun recognizeText(bitmap: Bitmap){
+        _capturedBitmap.value = bitmap
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         val inputImage = InputImage.fromBitmap(bitmap,0)
         recognizer.process(inputImage)
