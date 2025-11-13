@@ -41,7 +41,9 @@ import androidx.navigation.compose.rememberNavController
 enum class AppScreen(){
     HOME_SCREEN,
     EDIT_EXPENSE,
-    CAMERA_PREVIEW
+    REQUEST_CAMERA_PERMISSION,
+    CAMERA_PREVIEW,
+    ANALYZE_TEXT
 }
 
 @Composable
@@ -72,7 +74,7 @@ fun ExpenseApp(
 
                     BottomNavItem(
                         name = "camera",
-                        route = AppScreen.CAMERA_PREVIEW.name,
+                        route = AppScreen.REQUEST_CAMERA_PERMISSION.name,
                         icon = Icons.Default.ShoppingCart
                     ),
 
@@ -133,8 +135,17 @@ fun ExpenseApp(
                     }
                 )
             }
+            composable(route = AppScreen.REQUEST_CAMERA_PERMISSION.name){
+                CameraPermissionScreen(
+                    onCameraPermissionGranted = {navController.navigate(AppScreen.CAMERA_PREVIEW.name)}
+                )
+            }
             composable(route = AppScreen.CAMERA_PREVIEW.name) {
-                CameraPreviewScreen()
+                CameraPreviewScreen(
+                    onImageCapture = {imageProxy ->
+                        viewModel.recognizeText(imageProxy.toBitmap())
+                    }
+                )
             }
         }
     }
