@@ -152,7 +152,10 @@ fun ExpenseApp(
                 TextRecognizerScreen(
                     recognizedText = recognizedText,
                     bitmap = bitmap!!,
-                    onTextRecognized = {  },
+                    onTextRecognized = {
+                        viewModel.findKeyword(receiptModelList)
+                        //TODO move to another screen here
+                    },
                     onCancelButtonPress = { navController.navigate(AppScreen.HOME_SCREEN.name) },
                     onRetakeImageButtonPress = { navController.popBackStack() }
                 )
