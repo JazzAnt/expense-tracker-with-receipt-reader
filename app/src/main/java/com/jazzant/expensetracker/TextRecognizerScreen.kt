@@ -50,26 +50,3 @@ fun TextRecognizerScreen(
         { Text("Cancel") }
     }
 }
-
-/**
- * Checks the recognized text if it contains any of the keyword in the receiptModelList.
- * Returns the index of the receiptModelList where a keyword is found, or -1 if none are found.
- */
-fun findKeyword(
-    recognizedText: Text,
-    receiptModelList: List<ReceiptModel>
-): Int
-{
-    var index = -1
-    val listLastIndex = receiptModelList.size - 1
-    for (i in 0..listLastIndex)
-    {
-        val keyword = receiptModelList[i].keyword
-        if(recognizedText.text.contains(keyword, ignoreCase = true))
-        {
-            index = i
-            break
-        }
-    }
-    return index
-}

@@ -182,4 +182,28 @@ class ExpenseViewModel(): ViewModel() {
         _recognizedText.value = null
         _receiptModelIndex.intValue = -1
     }
+
+    /**
+     * Checks the recognized text if it contains any of the keyword in the receiptModelList.
+     * Returns the index of the receiptModelList where a keyword is found, or -1 if none are found.
+     */
+    fun findKeyword(receiptModels: List<ReceiptModel>)
+    {
+        if(receiptModels.isEmpty()){
+            _receiptModelIndex.intValue = -1
+            return
+        }
+        var index = -1
+        val listLastIndex = receiptModels.size - 1
+        for (i in 0..listLastIndex)
+        {
+            val keyword = receiptModels[i].keyword
+            if(recognizedText.value!!.text.contains(keyword, ignoreCase = true))
+            {
+                index = i
+                break
+            }
+        }
+        _receiptModelIndex.intValue = index
+    }
 }
