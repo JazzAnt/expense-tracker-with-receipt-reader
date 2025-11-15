@@ -24,6 +24,7 @@ fun TextRecognizerScreen(
     recognizedText: Text?,
     bitmap: Bitmap,
     receiptModelList: List<ReceiptModel>,
+    receiptModelIndex: Int,
     onRetakeImageButtonPress: () -> Unit,
     onCancelButtonPress: () -> Unit,
     modifier: Modifier = Modifier
