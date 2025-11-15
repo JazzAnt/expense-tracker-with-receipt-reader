@@ -176,4 +176,10 @@ class ExpenseViewModel(): ViewModel() {
             .addOnSuccessListener { visionText -> _recognizedText.value = visionText}
             .addOnFailureListener { e -> _recognizedText.value = null }
     }
+
+    fun resetTextRecognition(){
+        _capturedBitmap.value = null
+        _recognizedText.value = null
+        _receiptModelIndex.intValue = -1
+    }
 }
