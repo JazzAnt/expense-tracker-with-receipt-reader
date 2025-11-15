@@ -34,6 +34,8 @@ class ExpenseViewModel(): ViewModel() {
     val capturedBitmap = _capturedBitmap
     lateinit var receiptModelRepository: ReceiptModelRepository
     lateinit var receiptModelList: StateFlow<List<ReceiptModel>>
+    private val _receiptModelIndex = mutableIntStateOf(-1)
+    val receiptModelIndex = _receiptModelIndex
 
     fun initializeViewModel(context: Context){
         //Set the Repository
