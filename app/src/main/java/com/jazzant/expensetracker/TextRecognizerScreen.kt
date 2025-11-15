@@ -23,6 +23,7 @@ import com.google.mlkit.vision.text.Text
 fun TextRecognizerScreen(
     recognizedText: Text?,
     bitmap: Bitmap,
+    receiptModelList: List<ReceiptModel>,
     onRetakeImageButtonPress: () -> Unit,
     onCancelButtonPress: () -> Unit,
     modifier: Modifier = Modifier

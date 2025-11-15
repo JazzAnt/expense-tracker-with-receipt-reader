@@ -148,9 +148,11 @@ fun ExpenseApp(
             composable(route = AppScreen.TEXT_ANALYZER.name) {
                 val recognizedText by viewModel.recognizedText
                 val bitmap by viewModel.capturedBitmap
+                val receiptModelList by viewModel.receiptModelList.collectAsStateWithLifecycle()
                 TextRecognizerScreen(
                     recognizedText = recognizedText,
                     bitmap = bitmap!!,
+                    receiptModelList = receiptModelList,
                     onCancelButtonPress = { navController.navigate(AppScreen.HOME_SCREEN.name) },
                     onRetakeImageButtonPress = { navController.popBackStack() }
                 )
