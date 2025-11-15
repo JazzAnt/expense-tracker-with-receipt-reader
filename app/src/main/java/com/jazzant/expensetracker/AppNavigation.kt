@@ -40,7 +40,7 @@ enum class AppScreen(){
     EDIT_EXPENSE,
     REQUEST_CAMERA_PERMISSION,
     CAMERA_PREVIEW,
-    TEXT_ANALYZER
+    TEXT_RECOGNIZER
 }
 
 @Composable
@@ -140,12 +140,13 @@ fun ExpenseApp(
             composable(route = AppScreen.CAMERA_PREVIEW.name) {
                 CameraPreviewScreen(
                     onImageCapture = {imageProxy ->
+                        viewModel.resetTextRecognition()
                         viewModel.recognizeText(imageProxy.toBitmap())
-                        navController.navigate(AppScreen.TEXT_ANALYZER.name)
+                        navController.navigate(AppScreen.TEXT_RECOGNIZER.name)
                     }
                 )
             }
-            composable(route = AppScreen.TEXT_ANALYZER.name) {
+            composable(route = AppScreen.TEXT_RECOGNIZER.name) {
                 val recognizedText by viewModel.recognizedText
                 val bitmap by viewModel.capturedBitmap
                 val receiptModelList by viewModel.receiptModelList.collectAsStateWithLifecycle()
