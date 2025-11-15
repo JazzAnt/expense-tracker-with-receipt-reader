@@ -149,12 +149,10 @@ fun ExpenseApp(
                 val recognizedText by viewModel.recognizedText
                 val bitmap by viewModel.capturedBitmap
                 val receiptModelList by viewModel.receiptModelList.collectAsStateWithLifecycle()
-                val receiptModelIndex by viewModel.receiptModelIndex
                 TextRecognizerScreen(
                     recognizedText = recognizedText,
                     bitmap = bitmap!!,
-                    receiptModelList = receiptModelList,
-                    receiptModelIndex = receiptModelIndex,
+                    onTextRecognized = {  },
                     onCancelButtonPress = { navController.navigate(AppScreen.HOME_SCREEN.name) },
                     onRetakeImageButtonPress = { navController.popBackStack() }
                 )

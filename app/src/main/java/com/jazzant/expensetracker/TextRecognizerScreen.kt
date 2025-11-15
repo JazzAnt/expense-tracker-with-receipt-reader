@@ -23,8 +23,7 @@ import com.google.mlkit.vision.text.Text
 fun TextRecognizerScreen(
     recognizedText: Text?,
     bitmap: Bitmap,
-    receiptModelList: List<ReceiptModel>,
-    receiptModelIndex: Int,
+    onTextRecognized:() -> Unit,
     onRetakeImageButtonPress: () -> Unit,
     onCancelButtonPress: () -> Unit,
     modifier: Modifier = Modifier
@@ -43,7 +42,7 @@ fun TextRecognizerScreen(
         if (recognizedText == null)
         { Text("No text found yet...") }
         else
-        { Text("TEXT ANALYZED (TODO: add functions here)") }
+        { onTextRecognized() }
         Button(onClick = onRetakeImageButtonPress)
         { Text("Retake Image") }
         Button(onClick = onCancelButtonPress)
