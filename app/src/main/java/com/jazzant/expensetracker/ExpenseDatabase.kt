@@ -1,11 +1,16 @@
 package com.jazzant.expensetracker
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Expense::class], version = 1)
+@Database(
+    version = 2,
+    entities = [Expense::class, ReceiptModel::class],
+    exportSchema = true
+)
 abstract class ExpenseDatabase : RoomDatabase() {
     abstract fun expenseDao(): ExpenseDao
     abstract fun receiptModelDao(): ReceiptModelDao
@@ -18,7 +23,9 @@ abstract class ExpenseDatabase : RoomDatabase() {
                     context = context.applicationContext,
                     klass = ExpenseDatabase::class.java,
                     name = "expense_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration(false)
+                    .build()
                 INSTANCE = instance
                 instance
             }
