@@ -81,7 +81,6 @@ fun ExpenseApp(
             )
         }
     ) { innerPadding ->
-        val context = LocalContext.current
         val expenseState by viewModel.expenseState.collectAsState()
         NavHost(
             navController = navController,
