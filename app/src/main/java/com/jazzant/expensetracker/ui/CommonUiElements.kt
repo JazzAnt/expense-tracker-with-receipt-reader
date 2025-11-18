@@ -1,5 +1,7 @@
 package com.jazzant.expensetracker.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
@@ -7,13 +9,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -33,6 +39,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
@@ -40,8 +49,12 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.database.expense.Expense
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -233,8 +246,73 @@ fun DatePickerModal(
         DatePicker(state = datePickerState)
     }
 }
+@Composable
+fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
+    Card (
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .background(Color.White)
+            .border(width = 1.dp, color = Color.Black),
+        onClick = {onCardClick(expense)}
+    ){
+        Row (
+            modifier = Modifier.fillMaxWidth().padding(5.dp)
+        ) {
+            DateBox(expense.date)
+            Column (
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth(0.5f)
+                    .fillMaxHeight()
+
+            ){
+                Text(stringResource(R.string.expenseNameLabel)+": " + expense.name, fontSize = TextUnit(4f, TextUnitType.Em))
+                Text(stringResource(R.string.expenseCategoryLabel)+": " + expense.category, fontSize = TextUnit(3f, TextUnitType.Em))
+            }
+            Row (
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Text("$%.2f".format(expense.amount), fontSize = TextUnit(5f, TextUnitType.Em))
+            }
+        }
+    }
+}
+@Composable
+fun DateBox(millis: Long){
+    val formatter = SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault())
+    val dateText = formatter.format(Date(millis)).split('/')
+    Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(end = 10.dp)
+            .width(40.dp)
+            .height(50.dp)
+            .drawBehind {
+                drawLine(
+                    Color.Black,
+                    Offset(size.width, 0f),
+                    Offset(size.width, size.height),
+                    5f
+                )
+            }
+    ){
+        dateText.forEach {
+            Text(it)
+        }
+    }
+}
 
 fun convertMillisToDate(millis: Long): String{
     val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     return formatter.format(Date(millis))
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CardPreview() {
+    ExpenseCard(
+        Expense(100f, "Food", "Burger", System.currentTimeMillis()),
+        onCardClick = {}
+    )
 }

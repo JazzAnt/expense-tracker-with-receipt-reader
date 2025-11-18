@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.database.expense.Expense
+import com.jazzant.expensetracker.ui.ExpenseCard
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -67,72 +68,3 @@ fun ExpenseSumCard(sum: Float, modifier: Modifier = Modifier){
         }
     }
 }
-@Composable
-fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
-    Card (
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(Color.White)
-            .border(width = 1.dp, color = Color.Black),
-        onClick = {onCardClick(expense)}
-    ){
-        Row (
-            modifier = Modifier.fillMaxWidth().padding(5.dp)
-        ) {
-            DateBox(expense.date)
-            Column (
-                verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(0.5f)
-                    .fillMaxHeight()
-
-            ){
-                Text(stringResource(R.string.expenseNameLabel)+": " + expense.name, fontSize = TextUnit(4f, TextUnitType.Em))
-                Text(stringResource(R.string.expenseCategoryLabel)+": " + expense.category, fontSize = TextUnit(3f, TextUnitType.Em))
-            }
-            Row (
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Text("$%.2f".format(expense.amount), fontSize = TextUnit(5f, TextUnitType.Em))
-            }
-        }
-    }
-}
-@Composable
-fun DateBox(millis: Long){
-    val formatter = SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault())
-    val dateText = formatter.format(Date(millis)).split('/')
-    Column (
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .padding(end = 10.dp)
-            .width(40.dp)
-            .height(50.dp)
-            .drawBehind {
-
-                drawLine(
-                    Color.Black,
-                    Offset(size.width, 0f),
-                    Offset(size.width, size.height),
-                    5f
-
-                )
-            }
-    ){
-        dateText.forEach {
-            Text(it)
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CardPreview() {
-    ExpenseCard(
-        Expense(100f, "Food", "Burger", System.currentTimeMillis()),
-        onCardClick = {}
-    )
-
-}
-
