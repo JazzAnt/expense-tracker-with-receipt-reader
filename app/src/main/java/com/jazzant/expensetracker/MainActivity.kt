@@ -9,8 +9,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.jazzant.expensetracker.ui.theme.ExpenseTrackerWithBillReaderTheme
 
 class MainActivity : ComponentActivity() {
-    private lateinit var expenseViewModel: ExpenseViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -19,8 +17,6 @@ class MainActivity : ComponentActivity() {
                 ExpenseApp()
             }
         }
-        expenseViewModel = ExpenseViewModel()
-        expenseViewModel.initializeViewModel(this)
     }
 }
 

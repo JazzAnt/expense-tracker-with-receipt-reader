@@ -64,7 +64,7 @@ fun ExpenseApp(
             BottomNavBar(
                 items = listOf(
                     BottomNavItem(
-                        name = "home",
+                        name = stringResource(R.string.homeNavIcon),
                         route = AppScreen.HOME_SCREEN.name,
                         icon = Icons.Default.Home
                     ),
@@ -76,7 +76,7 @@ fun ExpenseApp(
                     ),
 
                     BottomNavItem(
-                        name = "Add",
+                        name = stringResource(R.string.addExpenseNavIcon),
                         route = AppScreen.EDIT_EXPENSE.name,
                         icon = Icons.Default.Add,
                         floating = true,
@@ -90,7 +90,6 @@ fun ExpenseApp(
             )
         }
     ) { innerPadding ->
-        val context = LocalContext.current
         val expenseState by viewModel.expenseState.collectAsState()
         NavHost(
             navController = navController,
@@ -101,15 +100,18 @@ fun ExpenseApp(
         ){
             composable(route = AppScreen.HOME_SCREEN.name) {
                 val expenseList by viewModel.expenseList.collectAsStateWithLifecycle()
-                ExpenseListScreen(expenseList, onCardClick = { expense ->
+                val sumOfExpenses by viewModel.sumOfExpenses.collectAsStateWithLifecycle()
+                ExpenseListScreen(
+                    list = expenseList, onCardClick = { expense ->
                     viewModel.expenseEntityToUi(expense)
                     navController.navigate(route = AppScreen.EDIT_EXPENSE.name)
-                })
+                },
+                    sumOfExpenses = sumOfExpenses)
             }
             composable(route = AppScreen.EDIT_EXPENSE.name) {
                 val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
                 ExpenseEditorScreen(
-                    categoryList = categoryList + stringResource(R.string.add_new_category),
+                    categoryList = categoryList + stringResource(R.string.addNewCategorySelection),
                     amount = expenseState.amount,
                     onAmountChange = {viewModel.setAmount(it)},
                     name = expenseState.name,
@@ -127,7 +129,7 @@ fun ExpenseApp(
                     onSaveButtonPress = {
                         //TODO: Add validator for Expense Contents
                         viewModel.insertExpenseToDB()
-                        Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.saveExpenseToast), Toast.LENGTH_SHORT).show()
                         navController.popBackStack()
                     }
                 )
@@ -182,7 +184,7 @@ fun TopNavBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = "Home",
+                    contentDescription = stringResource(R.string.menuNavIcon),
                     tint = Color.Gray
                 )
             }

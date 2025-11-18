@@ -1,12 +1,27 @@
 <resources>
-    <string name="app_name">Expense Tracker with Bill Reader</string>
-    <string name="add_new_category">Add New Category</string>
-
-    <string name="amount_input_label">Expense Amount</string>
-    <string name="name_input_label">Expense Name</string>
-    <string name="category_selector_label">Expense Category</string>
-    <string name="new_category_input_label">New Category</string>
-    <string name="add_tip_checkbox_label">Add Tip?</string>
-    <string name="tip_input_label">Tip Amount</string>
-    <string name="date_picker_label">Date of Expense</string>
+    <string name="app_name">Expense Tracker with Receipt Reader</string>
+    <string name="addNewCategorySelection">Add New Category</string>
+    <!--EXPENSE EDITOR-->
+    <string name="amountInputLabel">Expense Amount</string>
+    <string name="nameInputLabel">Expense Name</string>
+    <string name="categorySelectorLabel">Expense Category</string>
+    <string name="newCategoryInputLabel">New Category</string>
+    <string name="addTipCheckboxLabel">Add Tip?</string>
+    <string name="tipInputLabel">Tip Amount</string>
+    <string name="datePickerLabel">Date of Expense</string>
+    <!--EXPENSE CARD-->
+    <string name="expenseNameLabel">Name</string>
+    <string name="expenseCategoryLabel">Category</string>
+    <string name="sumOfExpensesLabel">Sum</string>
+    <!--NAVIGATION ICONS-->
+    <string name="homeNavIcon">Home</string>
+    <string name="addExpenseNavIcon">Add Expense</string>
+    <string name="menuNavIcon">Menu</string>
+    <!--BUTTONS-->
+    <string name="cancelButton">Cancel</string>
+    <string name="okButton">OK</string>
+    <!--CONTENT DESCRIPTIONS-->
+    <string name="datePickerContentDescription">Select Date</string>
+    <!--TOAST MESSAGES-->
+    <string name="saveExpenseToast">Expense Saved</string>
 </resources>

@@ -26,6 +26,7 @@ class ExpenseViewModel(): ViewModel() {
     lateinit var expenseRepository: ExpenseRepository
     lateinit var expenseList: StateFlow<List<Expense>>
     lateinit var categoryList: StateFlow<List<String>>
+    lateinit var sumOfExpenses: StateFlow<Float>
     private lateinit var ADD_NEW_CATEGORY: String
     private var expenseId = mutableIntStateOf(-1)
     private val _recognizedText = mutableStateOf<Text?>(null)
@@ -43,7 +44,7 @@ class ExpenseViewModel(): ViewModel() {
         expenseRepository = ExpenseRepository(expenseDatabase.expenseDao())
         receiptModelRepository = ReceiptModelRepository(expenseDatabase.receiptModelDao())
         //Fetch the add_new_category string
-        ADD_NEW_CATEGORY = context.getString(R.string.add_new_category)
+        ADD_NEW_CATEGORY = context.getString(R.string.addNewCategorySelection)
         //Pass the flows
         expenseList = expenseRepository.getAllExpenses()
             .stateIn(
@@ -62,6 +63,12 @@ class ExpenseViewModel(): ViewModel() {
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5.seconds),
                 initialValue = emptyList()
+            )
+        sumOfExpenses = expenseRepository.getSumOfExpenses()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5.seconds),
+                initialValue = 0f
             )
     }
 

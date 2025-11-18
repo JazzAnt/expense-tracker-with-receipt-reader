@@ -5,6 +5,7 @@ class ExpenseRepository (private val expenseDao: ExpenseDao){
 
     fun getAllCategories() = expenseDao.getAllCategories()
 
+    fun getSumOfExpenses() = expenseDao.getSumOfExpenses()
     suspend fun insert(expense: Expense){
         expenseDao.insert(expense)
     }

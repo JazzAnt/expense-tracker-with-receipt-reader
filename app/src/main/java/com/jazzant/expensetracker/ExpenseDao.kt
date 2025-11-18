@@ -23,4 +23,7 @@ interface ExpenseDao {
 
     @Query("SELECT DISTINCT category FROM expense_table ORDER BY category ASC")
     fun getAllCategories(): Flow<List<String>>
+
+    @Query("SELECT SUM(amount) FROM expense_table")
+    fun getSumOfExpenses(): Flow<Float>
 }
