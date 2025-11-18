@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 
 @Composable
@@ -35,7 +36,7 @@ fun CameraPermissionHandler(onPermissionGranted: () -> Unit){
             if (isGranted)
             { onPermissionGranted() }
             else
-            { Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show() }
+            { Toast.makeText(context, context.getString(R.string.cameraPermissionDeniedToast), Toast.LENGTH_SHORT).show() }
         }
     )
 

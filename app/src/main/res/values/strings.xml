@@ -13,6 +13,9 @@
     <string name="expenseNameLabel">Name</string>
     <string name="expenseCategoryLabel">Category</string>
     <string name="sumOfExpensesLabel">Sum</string>
+    <!--TEXT RECOGNIZER SCREEN-->
+    <string name="analyzingImageText">Analyzing Image…</string>
+    <string name="noTextRecognizedText">No text found yet…</string>
     <!--NAVIGATION ICONS-->
     <string name="homeNavIcon">Home</string>
     <string name="addExpenseNavIcon">Add Expense</string>
@@ -20,8 +23,12 @@
     <!--BUTTONS-->
     <string name="cancelButton">Cancel</string>
     <string name="okButton">OK</string>
+    <string name="retakeImageButton">Retake Image</string>
     <!--CONTENT DESCRIPTIONS-->
     <string name="datePickerContentDescription">Select Date</string>
+    <string name="takePictureContentDescription">Take Picture to Analyze</string>
+    <string name="capturedImageBitmapContentDescription">CapturedImage</string>
     <!--TOAST MESSAGES-->
     <string name="saveExpenseToast">Expense Saved</string>
+    <string name="cameraPermissionDeniedToast">Camera Permission Denied</string>
 </resources>

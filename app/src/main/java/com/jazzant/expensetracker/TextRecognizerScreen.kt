@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.TextUnit
@@ -30,22 +31,22 @@ fun TextRecognizerScreen(
 ){
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxSize()) {
         Text(
-            text = "Analyzing Image...",
+            text = stringResource(R.string.analyzingImageText),
             fontSize = TextUnit(5f, TextUnitType.Em),
             fontWeight = FontWeight.Bold
         )
         Image(
             bitmap = bitmap.asImageBitmap(),
-            contentDescription = "Image being analyzed",
+            contentDescription = stringResource(R.string.capturedImageBitmapContentDescription),
             modifier = Modifier.border(2.dp, Color.Black)
         )
         if (recognizedText == null)
-        { Text("No text found yet...") }
+        { Text(stringResource(R.string.noTextRecognizedText)) }
         else
         { onTextRecognized() }
         Button(onClick = onRetakeImageButtonPress)
-        { Text("Retake Image") }
+        { Text(stringResource(R.string.retakeImageButton)) }
         Button(onClick = onCancelButtonPress)
-        { Text("Cancel") }
+        { Text(stringResource(R.string.cancelButton)) }
     }
 }
