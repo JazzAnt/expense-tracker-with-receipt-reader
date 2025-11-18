@@ -1,4 +1,4 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.database.receiptmodel
 
 class ReceiptModelRepository(private val receiptModelDao: ReceiptModelDao) {
     fun getAllReceiptModels() = receiptModelDao.getAllReceiptModels()

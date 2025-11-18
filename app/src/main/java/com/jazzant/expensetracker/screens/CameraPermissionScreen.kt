@@ -1,4 +1,4 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.screens
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -12,8 +12,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
+import com.jazzant.expensetracker.R
 
 @Composable
 fun CameraPermissionScreen(onCameraPermissionGranted: () -> Unit){

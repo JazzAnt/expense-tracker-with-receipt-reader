@@ -11,8 +11,8 @@ import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.jazzant.expensetracker.R
-import com.jazzant.expensetracker.ReceiptModel
-import com.jazzant.expensetracker.ReceiptModelRepository
+import com.jazzant.expensetracker.database.receiptmodel.ReceiptModel
+import com.jazzant.expensetracker.database.receiptmodel.ReceiptModelRepository
 import com.jazzant.expensetracker.database.ExpenseDatabase
 import com.jazzant.expensetracker.database.expense.Expense
 import com.jazzant.expensetracker.database.expense.ExpenseRepository

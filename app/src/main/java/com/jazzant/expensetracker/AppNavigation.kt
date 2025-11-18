@@ -34,8 +34,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.jazzant.expensetracker.screens.CameraPermissionScreen
+import com.jazzant.expensetracker.screens.CameraPreviewScreen
 import com.jazzant.expensetracker.screens.ExpenseEditorScreen
 import com.jazzant.expensetracker.screens.ExpenseListScreen
+import com.jazzant.expensetracker.screens.TextRecognizerScreen
 import com.jazzant.expensetracker.viewmodel.ExpenseViewModel
 
 enum class AppScreen(){
@@ -144,12 +147,12 @@ fun ExpenseApp(
             }
             composable(route = AppScreen.REQUEST_CAMERA_PERMISSION.name){
                 CameraPermissionScreen(
-                    onCameraPermissionGranted = {navController.navigate(AppScreen.CAMERA_PREVIEW.name)}
+                    onCameraPermissionGranted = { navController.navigate(AppScreen.CAMERA_PREVIEW.name) }
                 )
             }
             composable(route = AppScreen.CAMERA_PREVIEW.name) {
                 CameraPreviewScreen(
-                    onImageCapture = {imageProxy ->
+                    onImageCapture = { imageProxy ->
                         viewModel.resetTextRecognition()
                         viewModel.recognizeText(imageProxy.toBitmap())
                         navController.navigate(AppScreen.TEXT_RECOGNIZER.name)

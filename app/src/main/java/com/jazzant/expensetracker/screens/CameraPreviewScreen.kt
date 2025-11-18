@@ -1,4 +1,4 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.screens
 
 import android.util.Log
 import androidx.camera.core.CameraSelector
@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.jazzant.expensetracker.R
 
 @Composable
 fun CameraPreviewScreen(modifier:Modifier = Modifier, onImageCapture: (ImageProxy)-> Unit){

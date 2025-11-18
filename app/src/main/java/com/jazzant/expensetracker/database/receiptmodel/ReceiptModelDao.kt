@@ -1,4 +1,4 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.database.receiptmodel
 
 import androidx.room.Dao
 import androidx.room.Insert
