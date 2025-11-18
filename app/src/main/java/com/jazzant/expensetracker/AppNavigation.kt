@@ -38,6 +38,7 @@ import com.jazzant.expensetracker.screens.CameraPermissionScreen
 import com.jazzant.expensetracker.screens.CameraPreviewScreen
 import com.jazzant.expensetracker.screens.ExpenseEditorScreen
 import com.jazzant.expensetracker.screens.ExpenseListScreen
+import com.jazzant.expensetracker.screens.TextAnalyzerScreen
 import com.jazzant.expensetracker.screens.TextRecognizerScreen
 import com.jazzant.expensetracker.viewmodel.ExpenseViewModel
 
@@ -46,7 +47,8 @@ enum class AppScreen(){
     EDIT_EXPENSE,
     REQUEST_CAMERA_PERMISSION,
     CAMERA_PREVIEW,
-    TEXT_RECOGNIZER
+    TEXT_RECOGNIZER,
+    TEXT_ANALYZER
 }
 
 @Composable
@@ -168,10 +170,25 @@ fun ExpenseApp(
                     bitmap = bitmap!!,
                     onTextRecognized = {
                         viewModel.findKeyword(receiptModelList)
-                        //TODO move to another screen here
+                        navController.navigate(AppScreen.TEXT_ANALYZER.name)
                     },
                     onCancelButtonPress = { navController.navigate(AppScreen.HOME_SCREEN.name) },
                     onRetakeImageButtonPress = { navController.popBackStack() }
+                )
+            }
+            composable(route = AppScreen.TEXT_ANALYZER.name) {
+                val receiptModelIndex by viewModel.receiptModelIndex
+                val receiptModelList by viewModel.receiptModelList.collectAsStateWithLifecycle()
+                val bitmap by viewModel.capturedBitmap
+                TextAnalyzerScreen(
+                    receiptModelIndex = receiptModelIndex,
+                    receiptModelList = receiptModelList,
+                    bitmap = bitmap!!,
+                    onCreateNewReceiptModelButtonPress = {},
+                    onUseAnalyzedExpenseButtonPress = {},
+                    onInputExpenseManuallyButtonPress = {},
+                    onRetakeImageButtonPress = {},
+                    onCancelButtonPress = {}
                 )
             }
         }
