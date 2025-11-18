@@ -1,10 +1,12 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.database
 
 import android.content.Context
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.jazzant.expensetracker.database.expense.Expense
+import com.jazzant.expensetracker.database.expense.ExpenseDao
 
 @Database(
     version = 2,

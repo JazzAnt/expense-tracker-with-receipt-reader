@@ -34,6 +34,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.jazzant.expensetracker.screens.ExpenseEditorScreen
+import com.jazzant.expensetracker.screens.ExpenseListScreen
+import com.jazzant.expensetracker.viewmodel.ExpenseViewModel
 
 enum class AppScreen(){
     HOME_SCREEN,
@@ -103,33 +106,38 @@ fun ExpenseApp(
                 val sumOfExpenses by viewModel.sumOfExpenses.collectAsStateWithLifecycle()
                 ExpenseListScreen(
                     list = expenseList, onCardClick = { expense ->
-                    viewModel.expenseEntityToUi(expense)
-                    navController.navigate(route = AppScreen.EDIT_EXPENSE.name)
-                },
-                    sumOfExpenses = sumOfExpenses)
+                        viewModel.expenseEntityToUi(expense)
+                        navController.navigate(route = AppScreen.EDIT_EXPENSE.name)
+                    },
+                    sumOfExpenses = sumOfExpenses
+                )
             }
             composable(route = AppScreen.EDIT_EXPENSE.name) {
                 val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
                 ExpenseEditorScreen(
                     categoryList = categoryList + stringResource(R.string.addNewCategorySelection),
                     amount = expenseState.amount,
-                    onAmountChange = {viewModel.setAmount(it)},
+                    onAmountChange = { viewModel.setAmount(it) },
                     name = expenseState.name,
-                    onNameChange = {viewModel.setName(it)},
+                    onNameChange = { viewModel.setName(it) },
                     category = expenseState.category,
-                    onCategoryChange = {viewModel.setCategory(it)},
+                    onCategoryChange = { viewModel.setCategory(it) },
                     newCategory = expenseState.newCategory,
-                    onNewCategoryChange = {viewModel.setNewCategory(it)},
+                    onNewCategoryChange = { viewModel.setNewCategory(it) },
                     tipping = expenseState.tipping,
-                    onTippingChange = {viewModel.setTipping(it)},
+                    onTippingChange = { viewModel.setTipping(it) },
                     tip = expenseState.tip,
-                    onTipChange = {viewModel.setTip(it)},
+                    onTipChange = { viewModel.setTip(it) },
                     date = expenseState.date,
-                    onDateChange = {viewModel.setDate(it?: expenseState.date)},
+                    onDateChange = { viewModel.setDate(it ?: expenseState.date) },
                     onSaveButtonPress = {
                         //TODO: Add validator for Expense Contents
                         viewModel.insertExpenseToDB()
-                        Toast.makeText(context, context.getString(R.string.saveExpenseToast), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.saveExpenseToast),
+                            Toast.LENGTH_SHORT
+                        ).show()
                         navController.popBackStack()
                     }
                 )
