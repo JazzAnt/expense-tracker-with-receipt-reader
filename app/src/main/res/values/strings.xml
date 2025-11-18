@@ -16,6 +16,11 @@
     <!--TEXT RECOGNIZER SCREEN-->
     <string name="analyzingImageText">Analyzing Image…</string>
     <string name="noTextRecognizedText">No text found yet…</string>
+    <!--TEXT ANALYZER SCREEN-->
+    <string name="imageAnalyzedText">Image Analyzed</string>
+    <string name="createNewReceiptModelButton">Create New Receipt Model</string>
+    <string name="useAnalyzedExpenseButton">Use Analyzed Expense</string>
+    <string name="inputExpenseManuallyButton">Input Expense Manually</string>
     <!--NAVIGATION ICONS-->
     <string name="homeNavIcon">Home</string>
     <string name="addExpenseNavIcon">Add Expense</string>
