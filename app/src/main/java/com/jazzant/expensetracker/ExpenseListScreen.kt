@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -58,7 +59,8 @@ fun ExpenseSumCard(sum: Float, modifier: Modifier = Modifier){
         .height(50.dp)
         .zIndex(1f)) {
         Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-            Text("Sum: $%.2f".format(sum),
+            Text(
+                stringResource(R.string.sumOfExpensesLabel) +": $%.2f".format(sum),
                 fontSize = TextUnit(5f, TextUnitType.Em),
                 fontWeight = FontWeight.Bold
             )
@@ -85,8 +87,8 @@ fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
                     .fillMaxHeight()
 
             ){
-                Text("Name: " + expense.name, fontSize = TextUnit(4f, TextUnitType.Em))
-                Text("Category: " + expense.category, fontSize = TextUnit(3f, TextUnitType.Em))
+                Text(stringResource(R.string.expenseNameLabel)+": " + expense.name, fontSize = TextUnit(4f, TextUnitType.Em))
+                Text(stringResource(R.string.expenseCategoryLabel)+": " + expense.category, fontSize = TextUnit(3f, TextUnitType.Em))
             }
             Row (
                 horizontalArrangement = Arrangement.End,

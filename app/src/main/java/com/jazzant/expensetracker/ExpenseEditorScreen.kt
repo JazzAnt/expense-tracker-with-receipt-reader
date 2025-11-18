@@ -37,29 +37,29 @@ fun ExpenseEditorScreen(
         modifier = modifier
     ) {
         NumberInput(
-            label = stringResource(R.string.amount_input_label),
+            label = stringResource(R.string.amountInputLabel),
             value = amount,
             onValueChange = onAmountChange,
             modifier = Modifier.fillMaxWidth()
         )
 
         TextInput(
-            label = stringResource(R.string.name_input_label),
+            label = stringResource(R.string.nameInputLabel),
             value = name,
             onValueChange = onNameChange,
             modifier = Modifier.fillMaxWidth()
         )
 
         RadioButtons(
-            label = stringResource(R.string.category_selector_label),
+            label = stringResource(R.string.categorySelectorLabel),
             radioOptions = categoryList,
             selectedOption = category,
             onOptionChange = onCategoryChange,
             modifier = Modifier.fillMaxWidth()
         )
-        if(category == stringResource(R.string.add_new_category)){
+        if(category == stringResource(R.string.addNewCategorySelection)){
             TextInput(
-                label = stringResource(R.string.new_category_input_label),
+                label = stringResource(R.string.newCategoryInputLabel),
                 value = newCategory,
                 onValueChange = onNewCategoryChange,
                 modifier = Modifier.fillMaxWidth()
@@ -67,14 +67,14 @@ fun ExpenseEditorScreen(
         }
 
         CheckBoxField(
-            text = stringResource(R.string.add_tip_checkbox_label),
+            text = stringResource(R.string.addTipCheckboxLabel),
             state = tipping,
             onStateChanged = onTippingChange,
             modifier = Modifier.fillMaxWidth(0.5f)
         )
         if(tipping){
             NumberInput(
-                label = stringResource(R.string.tip_input_label),
+                label = stringResource(R.string.tipInputLabel),
                 value = tip,
                 onValueChange = onTipChange,
                 modifier = Modifier.fillMaxWidth()
@@ -82,7 +82,7 @@ fun ExpenseEditorScreen(
         }
 
         DatePickerField(
-            label = stringResource(R.string.date_picker_label),
+            label = stringResource(R.string.datePickerLabel),
             date = date,
             onDateChange = onDateChange
         )
@@ -99,7 +99,7 @@ fun ExpenseEditorScreen(
                     }
                 }")
                 Text("Category\t: ${
-                    if(category == stringResource(R.string.add_new_category)){
+                    if(category == stringResource(R.string.addNewCategorySelection)){
                         newCategory
                     } else {
                         category

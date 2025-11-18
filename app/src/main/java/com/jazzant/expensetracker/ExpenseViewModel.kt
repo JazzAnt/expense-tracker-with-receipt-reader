@@ -29,7 +29,7 @@ class ExpenseViewModel(): ViewModel() {
         val expenseDatabase = ExpenseDatabase.getInstance(context)
         expenseRepository = ExpenseRepository(expenseDatabase.expenseDao())
         //Fetch the add_new_category string
-        ADD_NEW_CATEGORY = context.getString(R.string.add_new_category)
+        ADD_NEW_CATEGORY = context.getString(R.string.addNewCategorySelection)
         //Pass the flows
         expenseList = expenseRepository.getAllExpenses()
             .stateIn(
