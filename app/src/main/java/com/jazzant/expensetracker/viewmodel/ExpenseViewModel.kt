@@ -1,9 +1,13 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.viewmodel
 
 import android.content.Context
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.database.ExpenseDatabase
+import com.jazzant.expensetracker.database.expense.Expense
+import com.jazzant.expensetracker.database.expense.ExpenseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -78,7 +82,7 @@ class ExpenseViewModel(): ViewModel() {
     }
 
     //TYPE CONVERTER
-    fun expenseUiToExpenseEntity(expenseUiState: ExpenseUiState): Expense{
+    fun expenseUiToExpenseEntity(expenseUiState: ExpenseUiState): Expense {
         val amount = if(expenseUiState.tipping){
             expenseUiState.amount + expenseUiState.tip
         } else {

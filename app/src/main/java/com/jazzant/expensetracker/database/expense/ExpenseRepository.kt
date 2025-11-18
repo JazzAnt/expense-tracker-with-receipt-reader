@@ -1,4 +1,4 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.database.expense
 
 class ExpenseRepository (private val expenseDao: ExpenseDao){
     fun getAllExpenses() = expenseDao.getAllExpenses()

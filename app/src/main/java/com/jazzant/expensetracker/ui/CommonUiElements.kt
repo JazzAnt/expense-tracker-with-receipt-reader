@@ -1,4 +1,4 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.ui
 
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -41,9 +41,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.jazzant.expensetracker.R
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 private const val LABEL_FRACTION = 0.4f
 @Composable
@@ -233,6 +235,6 @@ fun DatePickerModal(
 }
 
 fun convertMillisToDate(millis: Long): String{
-    val formatter = SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+    val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     return formatter.format(Date(millis))
 }

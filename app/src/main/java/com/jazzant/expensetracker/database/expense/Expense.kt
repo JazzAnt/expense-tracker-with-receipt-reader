@@ -1,9 +1,8 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.database.expense
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDate
 
 @Entity(tableName = "expense_table")
 data class Expense(

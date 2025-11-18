@@ -1,4 +1,4 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -32,9 +30,11 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.jazzant.expensetracker.ui.theme.ExpenseTrackerWithBillReaderTheme
+import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.database.expense.Expense
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 @Composable
 fun ExpenseListScreen(list: List<Expense>, onCardClick: (Expense) -> Unit, sumOfExpenses: Float){
@@ -101,7 +101,7 @@ fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
 }
 @Composable
 fun DateBox(millis: Long){
-    val formatter = SimpleDateFormat("dd/MMM/yyyy", java.util.Locale.getDefault())
+    val formatter = SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault())
     val dateText = formatter.format(Date(millis)).split('/')
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,

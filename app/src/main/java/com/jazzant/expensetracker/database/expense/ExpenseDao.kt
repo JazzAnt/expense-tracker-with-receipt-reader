@@ -1,4 +1,4 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.database.expense
 
 import androidx.room.Dao
 import androidx.room.Delete

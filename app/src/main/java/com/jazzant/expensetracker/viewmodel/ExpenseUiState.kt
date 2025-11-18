@@ -1,4 +1,4 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.viewmodel
 
 data class ExpenseUiState(
     val amount: Float = 0.0f,
