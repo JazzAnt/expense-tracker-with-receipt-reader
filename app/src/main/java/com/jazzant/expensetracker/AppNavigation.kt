@@ -172,8 +172,8 @@ fun ExpenseApp(
                         viewModel.findKeyword(receiptModelList)
                         navController.navigate(AppScreen.TEXT_ANALYZER.name)
                     },
-                    onCancelButtonPress = { navController.navigate(AppScreen.HOME_SCREEN.name) },
-                    onRetakeImageButtonPress = { navController.popBackStack() }
+                    onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
+                    onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
                 )
             }
             composable(route = AppScreen.TEXT_ANALYZER.name) {
@@ -187,8 +187,8 @@ fun ExpenseApp(
                     onCreateNewReceiptModelButtonPress = {},
                     onUseAnalyzedExpenseButtonPress = {},
                     onInputExpenseManuallyButtonPress = {},
-                    onRetakeImageButtonPress = {},
-                    onCancelButtonPress = {}
+                    onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
+                    onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
                 )
             }
         }
