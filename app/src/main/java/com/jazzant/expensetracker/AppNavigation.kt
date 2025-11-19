@@ -194,6 +194,7 @@ fun ExpenseApp(
                     bitmap = bitmap!!,
                     onCreateNewReceiptModelButtonPress = {
                         viewModel.resetReceiptModelUiState()
+                        //TODO: Parse RecognizedText and Generate List of TextBlock Strings in Viewmodel
                         navController.navigate(AppScreen.CHOOSE_KEYWORD.name)
                                                          },
                     onUseAnalyzedExpenseButtonPress = { TODO("Store analyzed values to ExpenseUiState and navigate to ExpenseEditorScreen") },
@@ -203,14 +204,18 @@ fun ExpenseApp(
                 )
             }
             composable(route = AppScreen.CHOOSE_KEYWORD.name) {
+                val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                 ChooseKeywordScreen(
-                    switchState = TODO(),
-                    onSwitchStateChanged = TODO(),
-                    textBlockList = TODO(),
-                    keyword = TODO(),
-                    onKeywordChange = TODO(),
-                    invalidInput = TODO(),
-                    onNextButtonPress = { TODO("Navigate to ChooseNameScreen") },
+                    switchState = receiptModelState.switchState,
+                    onSwitchStateChanged = { viewModel.setReceiptSwitch(it) },
+                    textBlockList = emptyList(), //TODO: Receive TextBlock List from Viewmodel
+                    keyword = receiptModelState.keyword,
+                    onKeywordChange = {
+                        viewModel.setReceiptKeyword(it)
+                        //TODO: Validate Keyword and change InvalidInput depending on validation
+                                      },
+                    invalidInput = receiptModelState.invalidInput,
+                    onNextButtonPress = { navController.navigate(AppScreen.CHOOSE_NAME.name) },
                 )
             }
             composable(route = AppScreen.CHOOSE_NAME.name) {
