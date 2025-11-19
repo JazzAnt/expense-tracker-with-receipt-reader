@@ -36,6 +36,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jazzant.expensetracker.screens.CameraPermissionScreen
 import com.jazzant.expensetracker.screens.CameraPreviewScreen
+import com.jazzant.expensetracker.screens.ChooseAmountScreen
+import com.jazzant.expensetracker.screens.ChooseKeywordScreen
+import com.jazzant.expensetracker.screens.ChooseNameScreen
+import com.jazzant.expensetracker.screens.ChooseStrategyScreen
 import com.jazzant.expensetracker.screens.ExpenseEditorScreen
 import com.jazzant.expensetracker.screens.ExpenseListScreen
 import com.jazzant.expensetracker.screens.TextAnalyzerScreen
@@ -48,7 +52,11 @@ enum class AppScreen(){
     REQUEST_CAMERA_PERMISSION,
     CAMERA_PREVIEW,
     TEXT_RECOGNIZER,
-    TEXT_ANALYZER
+    TEXT_ANALYZER,
+    CHOOSE_KEYWORD,
+    CHOOSE_NAME,
+    CHOOSE_AMOUNT,
+    CHOOSE_STRATEGY
 }
 
 @Composable
@@ -189,6 +197,45 @@ fun ExpenseApp(
                     onInputExpenseManuallyButtonPress = {},
                     onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
                     onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
+                )
+            }
+            composable(route = AppScreen.CHOOSE_KEYWORD.name) {
+                ChooseKeywordScreen(
+                    switchState = TODO(),
+                    onSwitchStateChanged = TODO(),
+                    textBlockList = TODO(),
+                    keyword = TODO(),
+                    onKeywordChange = TODO(),
+                    invalidInput = TODO(),
+                    onNextButtonPress = TODO(),
+                )
+            }
+            composable(route = AppScreen.CHOOSE_NAME.name) {
+                ChooseNameScreen(
+                    checkBoxState = TODO(),
+                    onCheckBoxStateChange = TODO(),
+                    name = TODO(),
+                    onNameChange = TODO(),
+                    invalidInput = TODO(),
+                    onNextButtonPress = TODO(),
+                )
+            }
+            composable(route = AppScreen.CHOOSE_AMOUNT.name) {
+                ChooseAmountScreen(
+                    amountList = TODO(),
+                    amount = TODO(),
+                    onAmountChange = TODO(),
+                    onNextButtonPress = TODO(),
+                    invalidInput = TODO(),
+                )
+            }
+            composable(route = AppScreen.CHOOSE_STRATEGY.name) {
+                ChooseStrategyScreen(
+                    strategyList = TODO(),
+                    strategy = TODO(),
+                    onStrategyChange = TODO(),
+                    invalidInput = TODO(),
+                    onNextButtonPress = TODO(),
                 )
             }
         }
