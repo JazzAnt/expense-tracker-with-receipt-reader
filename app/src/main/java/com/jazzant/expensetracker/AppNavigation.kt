@@ -215,17 +215,24 @@ fun ExpenseApp(
                         //TODO: Validate Keyword and change InvalidInput depending on validation
                                       },
                     invalidInput = receiptModelState.invalidInput,
-                    onNextButtonPress = { navController.navigate(AppScreen.CHOOSE_NAME.name) },
+                    onNextButtonPress = {
+                        //TODO: Validate name and change InvalidInput depending on validation
+                        navController.navigate(AppScreen.CHOOSE_NAME.name)
+                                        },
                 )
             }
             composable(route = AppScreen.CHOOSE_NAME.name) {
+                val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                 ChooseNameScreen(
-                    checkBoxState = TODO(),
-                    onCheckBoxStateChange = TODO(),
-                    name = TODO(),
-                    onNameChange = TODO(),
-                    invalidInput = TODO(),
-                    onNextButtonPress = { TODO("Navigate to ChooseAmountScreen") },
+                    checkBoxState = receiptModelState.checkBoxState,
+                    onCheckBoxStateChange = { viewModel.setReceiptCheckBox(it) },
+                    name = receiptModelState.name,
+                    onNameChange = {
+                        viewModel.setReceiptName(it)
+                        //TODO: Validate name and change InvalidInput depending on validation
+                    },
+                    invalidInput = receiptModelState.invalidInput,
+                    onNextButtonPress = { navController.navigate(AppScreen.CHOOSE_AMOUNT.name) },
                 )
             }
             composable(route = AppScreen.CHOOSE_AMOUNT.name) {
