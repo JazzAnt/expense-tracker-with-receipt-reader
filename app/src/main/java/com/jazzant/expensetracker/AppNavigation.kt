@@ -249,16 +249,33 @@ fun ExpenseApp(
                         //TODO: Validate amount, see if it can be parsed to Float, set InvalidInput accordingly
                     },
                     invalidInput = receiptModelState.invalidInput,
-                    onNextButtonPress = { navController.navigate(AppScreen.CHOOSE_STRATEGY.name) },
+                    onNextButtonPress = {
+                        //TODO: execute function to see which strategy works on the amount, add them to strategyList
+                        //TODO: validate strategy, set invalid input accordingly
+                        navController.navigate(AppScreen.CHOOSE_STRATEGY.name)
+                                        },
                 )
             }
             composable(route = AppScreen.CHOOSE_STRATEGY.name) {
+                val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                 ChooseStrategyScreen(
-                    strategyList = TODO(),
-                    strategy = TODO(),
-                    onStrategyChange = TODO(),
-                    invalidInput = TODO(),
-                    onNextButtonPress = { TODO("Save values to database, pass values to ExpenseUiState, navigate to Editor") },
+                    strategyList = emptyList(), //TODO: get strategy list from viewmodel
+                    strategy = receiptModelState.strategy,
+                    onStrategyChange = {
+                        viewModel.setReceiptStrategy(it)
+                        //TODO: set receiptStrategyValue1 if necessary
+                        //TODO: Validate strategy, set invalidInput accordingly
+                    },
+                    invalidInput = receiptModelState.invalidInput,
+                    onNextButtonPress = {
+                        TODO("Save values on receiptModelState to Database")
+                        TODO("Toast that alerts user")
+                        navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                        viewModel.resetUiState()
+                        TODO("pass values to ExpenseUiState")
+                        viewModel.resetReceiptModelUiState()
+                        navController.navigate(AppScreen.EDIT_EXPENSE.name)
+                                        },
                 )
             }
         }
