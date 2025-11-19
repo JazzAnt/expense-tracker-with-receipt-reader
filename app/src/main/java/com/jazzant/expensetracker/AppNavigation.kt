@@ -192,7 +192,10 @@ fun ExpenseApp(
                     receiptModelIndex = receiptModelIndex,
                     receiptModelList = receiptModelList,
                     bitmap = bitmap!!,
-                    onCreateNewReceiptModelButtonPress = { TODO("Reset ReceiptModelUiState and navigate to ChooseKeywordScreen") },
+                    onCreateNewReceiptModelButtonPress = {
+                        viewModel.resetReceiptModelUiState()
+                        navController.navigate(AppScreen.CHOOSE_KEYWORD.name)
+                                                         },
                     onUseAnalyzedExpenseButtonPress = { TODO("Store analyzed values to ExpenseUiState and navigate to ExpenseEditorScreen") },
                     onInputExpenseManuallyButtonPress = { TODO("Parse highest amount to ExpenseUiState and navigate to ExpenseEditorScreen") },
                     onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
