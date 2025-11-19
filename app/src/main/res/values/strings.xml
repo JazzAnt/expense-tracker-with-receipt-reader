@@ -34,6 +34,11 @@
     <string name="chooseName_checkBoxLabel">Use the keyword as the name?</string>
     <string name="chooseName_textInputLabel">Enter Name</string>
     <string name="chooseName_invalidNameText">The name input is empty!</string>
+    <!--CHOOSE AMOUNT SCREEN-->
+    <string name="chooseAmount_header">Choose Amount Screen</string>
+    <string name="chooseAmount_description">Which one of these values correspond to the amount you spent? This helps the app determine the amount for any following receipts from this shop.</string>
+    <string name="chooseAmount_radioButtonLabel">Amount Spent</string>
+    <string name="chooseAmount_invalidAmountLabel">ERROR: App Cannot Parse Amount</string>
     <!--NAVIGATION ICONS-->
     <string name="homeNavIcon">Home</string>
     <string name="addExpenseNavIcon">Add Expense</string>
