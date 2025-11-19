@@ -232,16 +232,24 @@ fun ExpenseApp(
                         //TODO: Validate name and change InvalidInput depending on validation
                     },
                     invalidInput = receiptModelState.invalidInput,
-                    onNextButtonPress = { navController.navigate(AppScreen.CHOOSE_AMOUNT.name) },
+                    onNextButtonPress = {
+                        //TODO: parse amount in text and put them in a list (list needs to be String due to RadioButtons() requirement)
+                        //TODO: call validate amount and modify InvalidInput accordingly
+                        navController.navigate(AppScreen.CHOOSE_AMOUNT.name)
+                                        },
                 )
             }
             composable(route = AppScreen.CHOOSE_AMOUNT.name) {
+                val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                 ChooseAmountScreen(
-                    amountList = TODO(),
-                    amount = TODO(),
-                    onAmountChange = TODO(),
-                    invalidInput = TODO(),
-                    onNextButtonPress = { TODO("Navigate to ChooseStrategyScreen") },
+                    amountList = emptyList(), //TODO: get amount list from viewmodel
+                    amount = receiptModelState.amountString,
+                    onAmountChange = {
+                        viewModel.setReceiptAmountString(it)
+                        //TODO: Validate amount, see if it can be parsed to Float, set InvalidInput accordingly
+                    },
+                    invalidInput = receiptModelState.invalidInput,
+                    onNextButtonPress = { navController.navigate(AppScreen.CHOOSE_STRATEGY.name) },
                 )
             }
             composable(route = AppScreen.CHOOSE_STRATEGY.name) {
