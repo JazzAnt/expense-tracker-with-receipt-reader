@@ -94,9 +94,12 @@ fun NumberInput(label:String, value: Float,
 }
 
 @Composable
-fun TextInput(label:String, value: String,
-              onValueChange:(String)->Unit,
-              modifier: Modifier = Modifier){
+fun TextInput(
+    label:String,
+    value: String,
+    onValueChange:(String)->Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true){
     Row (verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = modifier
@@ -110,6 +113,7 @@ fun TextInput(label:String, value: String,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             singleLine = true,
             onValueChange = onValueChange,
+            enabled = enabled,
             modifier = Modifier.fillMaxWidth()
         )
     }
