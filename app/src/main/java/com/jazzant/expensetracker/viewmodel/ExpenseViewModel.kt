@@ -1,7 +1,6 @@
 package com.jazzant.expensetracker.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jazzant.expensetracker.R
@@ -66,43 +65,41 @@ class ExpenseViewModel(): ViewModel() {
     fun createExpenseOnDB(){
         viewModelScope.launch {
             expenseRepository.insert(
-                expenseUiToExpenseEntity(
-                    expenseUiState = _expenseState.value,
-                )
+                getExpenseEntityFromExpenseUIState()
             )
         }
     }
     fun updateExpenseOnDB(){
-        val expense = expenseUiToExpenseEntity(_expenseState.value)
         viewModelScope.launch {
             expenseRepository.update(
-                expense
+                getExpenseEntityFromExpenseUIState()
             )
         }
     }
 
     //TYPE CONVERTER
-    fun expenseUiToExpenseEntity(expenseUiState: ExpenseUiState): Expense {
-        val amount = if(expenseUiState.tipping){
-            expenseUiState.amount + expenseUiState.tip
+    fun getExpenseEntityFromExpenseUIState(): Expense {
+        _expenseState.value
+        val amount = if(_expenseState.value.tipping){
+            _expenseState.value.amount + _expenseState.value.tip
         } else {
-            expenseUiState.amount
+            _expenseState.value.amount
         }
 
-        val category = if(expenseUiState.category == ADD_NEW_CATEGORY){
-            expenseUiState.newCategory
+        val category = if(_expenseState.value.category == ADD_NEW_CATEGORY){
+            _expenseState.value.newCategory
         } else {
-            expenseUiState.category
+            _expenseState.value.category
         }
 
         val expense = Expense(
             amount = amount,
             category = category,
-            name = expenseUiState.name,
-            date = expenseUiState.date
+            name = _expenseState.value.name,
+            date = _expenseState.value.date
         )
-        if (expenseUiState.id >= 0){
-            expense.expenseId = expenseUiState.id
+        if (_expenseState.value.id >= 0){
+            expense.expenseId = _expenseState.value.id
         }
         return expense
     }
