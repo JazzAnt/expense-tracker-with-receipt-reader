@@ -26,7 +26,6 @@ class ExpenseViewModel(): ViewModel() {
     lateinit var categoryList: StateFlow<List<String>>
     lateinit var sumOfExpenses: StateFlow<Float>
     private lateinit var ADD_NEW_CATEGORY: String
-    private var _expenseId = mutableIntStateOf(-1)
     private val _expenseState = MutableStateFlow(ExpenseUiState())
     val expenseState: StateFlow<ExpenseUiState> = _expenseState.asStateFlow()
 
@@ -58,7 +57,7 @@ class ExpenseViewModel(): ViewModel() {
     }
 
     fun insertExpenseToDB(){
-        if(_expenseId.intValue < 0)
+        if(_expenseState.value.id < 0)
             createExpenseOnDB()
         else
             updateExpenseOnDB()
@@ -75,7 +74,6 @@ class ExpenseViewModel(): ViewModel() {
     }
     fun updateExpenseOnDB(){
         val expense = expenseUiToExpenseEntity(_expenseState.value)
-        expense.expenseId = _expenseId.intValue
         viewModelScope.launch {
             expenseRepository.update(
                 expense
@@ -97,27 +95,35 @@ class ExpenseViewModel(): ViewModel() {
             expenseUiState.category
         }
 
-        return Expense(
+        val expense = Expense(
             amount = amount,
             category = category,
             name = expenseUiState.name,
             date = expenseUiState.date
         )
+        if (expenseUiState.id >= 0){
+            expense.expenseId = expenseUiState.id
+        }
+        return expense
     }
     fun expenseEntityToUi(expense: Expense){
         resetUiState()
+        setId(expense.expenseId)
         setAmount(expense.amount)
         setCategory(expense.category)
         setName(expense.name)
         setDate(expense.date)
-        _expenseId.intValue = expense.expenseId
     }
     //UI STATE STUFF
     fun resetUiState(){
         _expenseState.value = ExpenseUiState()
-        _expenseId.intValue = -1
     }
 
+    fun setId(expenseId: Int){
+        _expenseState.update { currentState ->
+            currentState.copy(id = expenseId)
+        }
+    }
     fun setAmount(expenseAmount: Float){
         _expenseState.update { currentState ->
             currentState.copy(amount = expenseAmount)

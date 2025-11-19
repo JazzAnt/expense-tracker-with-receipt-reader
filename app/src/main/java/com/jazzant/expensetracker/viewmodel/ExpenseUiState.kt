@@ -1,6 +1,7 @@
 package com.jazzant.expensetracker.viewmodel
 
 data class ExpenseUiState(
+    val id: Int = -1,
     val amount: Float = 0.0f,
     val category: String = "",
     val newCategory: String = "",
