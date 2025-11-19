@@ -26,7 +26,9 @@ class ExpenseViewModel(): ViewModel() {
     lateinit var categoryList: StateFlow<List<String>>
     lateinit var sumOfExpenses: StateFlow<Float>
     private lateinit var ADD_NEW_CATEGORY: String
-    private var expenseId = mutableIntStateOf(-1)
+    private var _expenseId = mutableIntStateOf(-1)
+    private val _expenseState = MutableStateFlow(ExpenseUiState())
+    val expenseState: StateFlow<ExpenseUiState> = _expenseState.asStateFlow()
 
     fun initializeViewModel(context: Context){
         //Set the Repository
@@ -56,7 +58,7 @@ class ExpenseViewModel(): ViewModel() {
     }
 
     fun insertExpenseToDB(){
-        if(expenseId.intValue < 0)
+        if(_expenseId.intValue < 0)
             createExpenseOnDB()
         else
             updateExpenseOnDB()
@@ -73,7 +75,7 @@ class ExpenseViewModel(): ViewModel() {
     }
     fun updateExpenseOnDB(){
         val expense = expenseUiToExpenseEntity(_expenseState.value)
-        expense.expenseId = expenseId.intValue
+        expense.expenseId = _expenseId.intValue
         viewModelScope.launch {
             expenseRepository.update(
                 expense
@@ -108,15 +110,12 @@ class ExpenseViewModel(): ViewModel() {
         setCategory(expense.category)
         setName(expense.name)
         setDate(expense.date)
-        expenseId.intValue = expense.expenseId
+        _expenseId.intValue = expense.expenseId
     }
     //UI STATE STUFF
-    private val _expenseState = MutableStateFlow(ExpenseUiState())
-    val expenseState: StateFlow<ExpenseUiState> = _expenseState.asStateFlow()
-
     fun resetUiState(){
         _expenseState.value = ExpenseUiState()
-        expenseId.intValue = -1
+        _expenseId.intValue = -1
     }
 
     fun setAmount(expenseAmount: Float){
