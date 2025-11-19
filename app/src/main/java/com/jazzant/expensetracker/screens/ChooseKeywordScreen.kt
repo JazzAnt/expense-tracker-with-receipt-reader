@@ -20,8 +20,8 @@ fun ChooseKeywordScreen(
     textBlockList: List<String>,
     keyword: String,
     onKeywordChange: (String) -> Unit,
-    keywordFoundOnText: Boolean,
-    onKeywordChosenButtonPress: () -> Unit,
+    invalidInput: Boolean,
+    onNextButtonPress: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxSize()) {
@@ -51,14 +51,14 @@ fun ChooseKeywordScreen(
             )
         }
 
-        if (keywordFoundOnText)
+        if (invalidInput)
         {
-            Button(onClick = onKeywordChosenButtonPress) {
-                Text(stringResource(R.string.nextButton))
-            }
+            Text(stringResource(R.string.chooseKeyword_invalidKeywordText))
         }
         else {
-            Text(stringResource(R.string.chooseKeyword_invalidKeywordText))
+            Button(onClick = onNextButtonPress) {
+                Text(stringResource(R.string.nextButton))
+            }
         }
     }
 }
