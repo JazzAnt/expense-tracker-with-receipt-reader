@@ -163,19 +163,18 @@ fun ExpenseApp(
             composable(route = AppScreen.CAMERA_PREVIEW.name) {
                 CameraPreviewScreen(
                     onImageCapture = { imageProxy ->
-                        viewModel.resetTextRecognition()
+                        viewModel.resetReceiptAnalyzerUiState()
                         viewModel.recognizeText(imageProxy.toBitmap())
                         navController.navigate(AppScreen.TEXT_RECOGNIZER.name)
                     }
                 )
             }
             composable(route = AppScreen.TEXT_RECOGNIZER.name) {
-                val recognizedText by viewModel.recognizedText
-                val bitmap by viewModel.capturedBitmap
+                val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
                 val receiptModelList by viewModel.receiptModelList.collectAsStateWithLifecycle()
                 TextRecognizerScreen(
-                    recognizedText = recognizedText,
-                    bitmap = bitmap!!,
+                    recognizedText = receiptAnalyzerState.recognizedText,
+                    bitmap = receiptAnalyzerState.capturedBitmap!!,
                     onTextRecognized = {
                         viewModel.findKeyword(receiptModelList)
                         navController.navigate(AppScreen.TEXT_ANALYZER.name)
@@ -185,13 +184,12 @@ fun ExpenseApp(
                 )
             }
             composable(route = AppScreen.TEXT_ANALYZER.name) {
-                val receiptModelIndex by viewModel.receiptModelIndex
+                val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
                 val receiptModelList by viewModel.receiptModelList.collectAsStateWithLifecycle()
-                val bitmap by viewModel.capturedBitmap
                 TextAnalyzerScreen(
-                    receiptModelIndex = receiptModelIndex,
+                    receiptModelIndex = receiptAnalyzerState.receiptModelIndex,
                     receiptModelList = receiptModelList,
-                    bitmap = bitmap!!,
+                    bitmap = receiptAnalyzerState.capturedBitmap!!,
                     onCreateNewReceiptModelButtonPress = {
                         viewModel.resetReceiptModelUiState()
                         //TODO: Parse RecognizedText and Generate List of TextBlock Strings in Viewmodel

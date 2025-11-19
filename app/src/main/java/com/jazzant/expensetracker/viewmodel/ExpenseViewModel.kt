@@ -35,15 +35,10 @@ class ExpenseViewModel(): ViewModel() {
     lateinit var sumOfExpenses: StateFlow<Float>
     private lateinit var ADD_NEW_CATEGORY: String
     private var expenseId = mutableIntStateOf(-1)
-    private val _recognizedText = mutableStateOf<Text?>(null)
-    val recognizedText = _recognizedText
-    private val _capturedBitmap = mutableStateOf<Bitmap?>(null)
-    val capturedBitmap = _capturedBitmap
     lateinit var receiptModelRepository: ReceiptModelRepository
     lateinit var receiptModelList: StateFlow<List<ReceiptModel>>
-    private val _receiptModelIndex = mutableIntStateOf(-1)
-    val receiptModelIndex = _receiptModelIndex
-
+    private val _receiptAnalyzerUiState = MutableStateFlow(ReceiptAnalyzerUiState())
+    val receiptAnalyzerUiState: StateFlow<ReceiptAnalyzerUiState> = _receiptAnalyzerUiState.asStateFlow()
     private val _receiptModelUiState = MutableStateFlow(ReceiptModelUiState())
     val receiptModelUiState: StateFlow<ReceiptModelUiState> = _receiptModelUiState.asStateFlow()
 
@@ -184,19 +179,35 @@ class ExpenseViewModel(): ViewModel() {
     }
 
     //TEXT ANALYSIS STUFF
+    fun resetReceiptAnalyzerUiState(){
+        _receiptAnalyzerUiState.value = ReceiptAnalyzerUiState()
+    }
+    fun setAnalyzerText(recognizedText: Text){
+        _receiptAnalyzerUiState.update { currentState ->
+            currentState.copy(recognizedText = recognizedText)
+        }
+    }
+    fun setAnalyzerBitmap(bitmap: Bitmap){
+        _receiptAnalyzerUiState.update { currentState ->
+            currentState.copy(capturedBitmap = bitmap)
+        }
+    }
+    fun setAnalyzerModelIndex(index: Int){
+        _receiptAnalyzerUiState.update { currentState ->
+            currentState.copy(receiptModelIndex = index)
+        }
+    }
+
     fun recognizeText(bitmap: Bitmap){
-        _capturedBitmap.value = bitmap
+        resetReceiptAnalyzerUiState()
+        setAnalyzerBitmap(bitmap)
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         val inputImage = InputImage.fromBitmap(bitmap,0)
         recognizer.process(inputImage)
-            .addOnSuccessListener { visionText -> _recognizedText.value = visionText}
-            .addOnFailureListener { e -> _recognizedText.value = null }
-    }
-
-    fun resetTextRecognition(){
-        _capturedBitmap.value = null
-        _recognizedText.value = null
-        _receiptModelIndex.intValue = -1
+            .addOnSuccessListener { visionText ->
+                setAnalyzerText(visionText)
+            }
+            .addOnFailureListener { e -> TODO("Maybe throw exception here idk")}
     }
 
     /**
@@ -206,7 +217,7 @@ class ExpenseViewModel(): ViewModel() {
     fun findKeyword(receiptModels: List<ReceiptModel>)
     {
         if(receiptModels.isEmpty()){
-            _receiptModelIndex.intValue = -1
+            setAnalyzerModelIndex(-1)
             return
         }
         var index = -1
@@ -214,13 +225,13 @@ class ExpenseViewModel(): ViewModel() {
         for (i in 0..listLastIndex)
         {
             val keyword = receiptModels[i].keyword
-            if(recognizedText.value!!.text.contains(keyword, ignoreCase = true))
+            if(_receiptAnalyzerUiState.value.recognizedText!!.text.contains(keyword, ignoreCase = true))
             {
                 index = i
                 break
             }
         }
-        _receiptModelIndex.intValue = index
+        setAnalyzerModelIndex(index)
     }
 
     //Receipt Model Ui State Stuff
