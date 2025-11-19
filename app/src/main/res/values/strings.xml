@@ -28,6 +28,12 @@
     <string name="chooseKeyword_textInputLabel">Enter the keyword</string>
     <string name="chooseKeyword_radioButtonLabel">Which of these values are unique to this shop?</string>
     <string name="chooseKeyword_invalidKeywordText">The app couldn\'t find the keyword amongst the recognized text!</string>
+    <!--CHOOSE NAME SCREEN-->
+    <string name="chooseName_header">Choose the Name of the Shop</string>
+    <string name="chooseName_description">This is what you (the user) use to identify the shop, which can be the same or different than the keyword.</string>
+    <string name="chooseName_checkBoxLabel">Use the keyword as the name?</string>
+    <string name="chooseName_textInputLabel">Enter Name</string>
+    <string name="chooseName_invalidNameText">The name input is empty!</string>
     <!--NAVIGATION ICONS-->
     <string name="homeNavIcon">Home</string>
     <string name="addExpenseNavIcon">Add Expense</string>
