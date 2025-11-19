@@ -44,6 +44,9 @@ class ExpenseViewModel(): ViewModel() {
     private val _receiptModelIndex = mutableIntStateOf(-1)
     val receiptModelIndex = _receiptModelIndex
 
+    private val _receiptModelUiState = MutableStateFlow(ReceiptModelUiState())
+    val receiptModelUiState: StateFlow<ReceiptModelUiState> = _receiptModelUiState.asStateFlow()
+
     fun initializeViewModel(context: Context){
         //Set the Repository
         val expenseDatabase = ExpenseDatabase.getInstance(context)
@@ -218,5 +221,64 @@ class ExpenseViewModel(): ViewModel() {
             }
         }
         _receiptModelIndex.intValue = index
+    }
+
+    //Receipt Model Ui State Stuff
+    fun resetReceiptModelUiState(){
+        _receiptModelUiState.value = ReceiptModelUiState()
+    }
+
+    fun setReceiptSwitch(state: Boolean){
+        _receiptModelUiState.update { currentState ->
+            currentState.copy(switchState = state)
+        }
+    }
+
+    fun setReceiptCheckBox(state: Boolean){
+        _receiptModelUiState.update { currentState ->
+            currentState.copy(checkBoxState = state)
+        }
+    }
+
+    fun setReceiptInvalidInput(state: Boolean){
+        _receiptModelUiState.update { currentState ->
+            currentState.copy(invalidInput = state)
+        }
+    }
+
+    fun setReceiptKeyword(keyword: String){
+        _receiptModelUiState.update { currentState ->
+            currentState.copy(keyword = keyword)
+        }
+    }
+
+    fun setReceiptName(name: String){
+        _receiptModelUiState.update { currentState ->
+            currentState.copy(name = name)
+        }
+    }
+
+    fun setReceiptAmountString(amount: String){
+        _receiptModelUiState.update { currentState ->
+            currentState.copy(amountString = amount)
+        }
+    }
+
+    fun setReceiptAmountFloat(amount: Float){
+        _receiptModelUiState.update { currentState ->
+            currentState.copy(amountFloat = amount)
+        }
+    }
+
+    fun setReceiptStrategy(strategy: String){
+        _receiptModelUiState.update { currentState ->
+            currentState.copy(strategy = strategy)
+        }
+    }
+
+    fun setReceiptStrategyValue1(value1: Int){
+        _receiptModelUiState.update { currentState ->
+            currentState.copy(strategyValue1 = value1)
+        }
     }
 }
