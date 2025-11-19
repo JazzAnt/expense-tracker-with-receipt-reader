@@ -35,10 +35,15 @@
     <string name="chooseName_textInputLabel">Enter Name</string>
     <string name="chooseName_invalidNameText">The name input is empty!</string>
     <!--CHOOSE AMOUNT SCREEN-->
-    <string name="chooseAmount_header">Choose Amount Screen</string>
+    <string name="chooseAmount_header">Choose The Amount You Spent</string>
     <string name="chooseAmount_description">Which one of these values correspond to the amount you spent? This helps the app determine the amount for any following receipts from this shop.</string>
     <string name="chooseAmount_radioButtonLabel">Amount Spent</string>
     <string name="chooseAmount_invalidAmountLabel">ERROR: App Cannot Parse Amount</string>
+    <!--CHOOSE STRATEGY SCREEN-->
+    <string name="chooseStrategy_header">Choose the Amount Finder Strategy</string>
+    <string name="chooseStrategy_description">Here is the strategies to find the expense amount we find to be compatible with this type of receipt. Which one would you like to choose for receipts from this shop?</string>
+    <string name="chooseStrategy_radioButtonLabel">Strategy</string>
+    <string name="chooseStrategy_invalidStrategyLabel">Please Choose a Strategy before Proceeding</string>
     <!--NAVIGATION ICONS-->
     <string name="homeNavIcon">Home</string>
     <string name="addExpenseNavIcon">Add Expense</string>
