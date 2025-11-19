@@ -21,6 +21,13 @@
     <string name="createNewReceiptModelButton">Create New Receipt Model</string>
     <string name="useAnalyzedExpenseButton">Use Analyzed Expense</string>
     <string name="inputExpenseManuallyButton">Input Expense Manually</string>
+    <!--CHOOSE KEYWORD SCREEN-->
+    <string name="chooseKeyword_header">Choose the Keyword</string>
+    <string name="chooseKeyword_description"> Keyword is a unique identifier of the shop listed in your receipt. It\'s usually either the shop name or address.</string>
+    <string name="chooseKeyword_switchLabel">Enter Keyword Manually?</string>
+    <string name="chooseKeyword_textInputLabel">Enter the keyword</string>
+    <string name="chooseKeyword_radioButtonLabel">Which of these values are unique to this shop?</string>
+    <string name="chooseKeyword_invalidKeywordText">The app couldn\'t find the keyword amongst the recognized text!</string>
     <!--NAVIGATION ICONS-->
     <string name="homeNavIcon">Home</string>
     <string name="addExpenseNavIcon">Add Expense</string>
@@ -29,6 +36,7 @@
     <string name="cancelButton">Cancel</string>
     <string name="okButton">OK</string>
     <string name="retakeImageButton">Retake Image</string>
+    <string name="nextButton">Next</string>
     <!--CONTENT DESCRIPTIONS-->
     <string name="datePickerContentDescription">Select Date</string>
     <string name="takePictureContentDescription">Take Picture to Analyze</string>
