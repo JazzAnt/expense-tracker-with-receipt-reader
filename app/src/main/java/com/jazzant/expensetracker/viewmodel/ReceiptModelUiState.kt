@@ -7,7 +7,7 @@ data class ReceiptModelUiState(
     val keyword: String = "",
     val name: String = "",
     val amountString: String = "",
-    val amountFloat: Float = 0.0f,
+    val amountFloat: Float = -1.0f,
     val strategy: String = "",
-    val strategyValue1: Int = 0
+    val strategyValue1: Int = -1
 )
