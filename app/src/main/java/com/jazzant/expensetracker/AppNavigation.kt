@@ -83,7 +83,6 @@ fun ExpenseApp(
             )
         }
     ) { innerPadding ->
-        val expenseState by viewModel.expenseState.collectAsState()
         NavHost(
             navController = navController,
             startDestination = AppScreen.HOME_SCREEN.name,
@@ -103,6 +102,7 @@ fun ExpenseApp(
                 )
             }
             composable(route = AppScreen.EDIT_EXPENSE.name) {
+                val expenseState by viewModel.expenseState.collectAsStateWithLifecycle()
                 val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
                 ExpenseEditorScreen(
                     categoryList = categoryList + stringResource(R.string.addNewCategorySelection),
