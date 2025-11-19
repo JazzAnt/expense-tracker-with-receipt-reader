@@ -192,9 +192,9 @@ fun ExpenseApp(
                     receiptModelIndex = receiptModelIndex,
                     receiptModelList = receiptModelList,
                     bitmap = bitmap!!,
-                    onCreateNewReceiptModelButtonPress = {},
-                    onUseAnalyzedExpenseButtonPress = {},
-                    onInputExpenseManuallyButtonPress = {},
+                    onCreateNewReceiptModelButtonPress = { TODO("Reset ReceiptModelUiState and navigate to ChooseKeywordScreen") },
+                    onUseAnalyzedExpenseButtonPress = { TODO("Store analyzed values to ExpenseUiState and navigate to ExpenseEditorScreen") },
+                    onInputExpenseManuallyButtonPress = { TODO("Parse highest amount to ExpenseUiState and navigate to ExpenseEditorScreen") },
                     onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
                     onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
                 )
@@ -207,7 +207,7 @@ fun ExpenseApp(
                     keyword = TODO(),
                     onKeywordChange = TODO(),
                     invalidInput = TODO(),
-                    onNextButtonPress = TODO(),
+                    onNextButtonPress = { TODO("Navigate to ChooseNameScreen") },
                 )
             }
             composable(route = AppScreen.CHOOSE_NAME.name) {
@@ -217,7 +217,7 @@ fun ExpenseApp(
                     name = TODO(),
                     onNameChange = TODO(),
                     invalidInput = TODO(),
-                    onNextButtonPress = TODO(),
+                    onNextButtonPress = { TODO("Navigate to ChooseAmountScreen") },
                 )
             }
             composable(route = AppScreen.CHOOSE_AMOUNT.name) {
@@ -225,8 +225,8 @@ fun ExpenseApp(
                     amountList = TODO(),
                     amount = TODO(),
                     onAmountChange = TODO(),
-                    onNextButtonPress = TODO(),
                     invalidInput = TODO(),
+                    onNextButtonPress = { TODO("Navigate to ChooseStrategyScreen") },
                 )
             }
             composable(route = AppScreen.CHOOSE_STRATEGY.name) {
@@ -235,7 +235,7 @@ fun ExpenseApp(
                     strategy = TODO(),
                     onStrategyChange = TODO(),
                     invalidInput = TODO(),
-                    onNextButtonPress = TODO(),
+                    onNextButtonPress = { TODO("Save values to database, pass values to ExpenseUiState, navigate to Editor") },
                 )
             }
         }
