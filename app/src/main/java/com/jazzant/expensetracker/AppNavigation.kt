@@ -34,8 +34,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.jazzant.expensetracker.analyzer.containsKeyword
 import com.jazzant.expensetracker.analyzer.toBlockList
+import com.jazzant.expensetracker.analyzer.toPriceLabelsAsFloatList
+import com.jazzant.expensetracker.analyzer.toPriceLabelsAsStringList
 import com.jazzant.expensetracker.screens.CameraPermissionScreen
 import com.jazzant.expensetracker.screens.CameraPreviewScreen
 import com.jazzant.expensetracker.screens.ChooseAmountScreen
@@ -226,6 +227,7 @@ fun ExpenseApp(
                 )
             }
             composable(route = AppScreen.CHOOSE_NAME.name) {
+                val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
                 val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                 ChooseNameScreen(
                     checkBoxState = receiptModelState.checkBoxState,
@@ -237,16 +239,22 @@ fun ExpenseApp(
                     },
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
-                        //TODO: parse amount in text and put them in a list (list needs to be String due to RadioButtons() requirement)
+                        viewModel.setAnalyzerPriceLabelsStringList(
+                            receiptAnalyzerState.recognizedText!!.toPriceLabelsAsStringList()
+                        )
+                        viewModel.setAnalyzerPriceLabelsFloatList(
+                            receiptAnalyzerState.recognizedText!!.toPriceLabelsAsFloatList()
+                        )
                         //TODO: call validate amount and modify InvalidInput accordingly
                         navController.navigate(AppScreen.CHOOSE_AMOUNT.name)
                                         },
                 )
             }
             composable(route = AppScreen.CHOOSE_AMOUNT.name) {
+                val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
                 val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                 ChooseAmountScreen(
-                    amountList = emptyList(), //TODO: get amount list from viewmodel
+                    amountList = receiptAnalyzerState.priceLabelsListString,
                     amount = receiptModelState.amountString,
                     onAmountChange = {
                         viewModel.setReceiptAmountString(it)
