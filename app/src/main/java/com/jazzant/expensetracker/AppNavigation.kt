@@ -245,7 +245,7 @@ fun ExpenseApp(
                         viewModel.setAnalyzerPriceLabelsFloatList(
                             receiptAnalyzerState.recognizedText!!.toPriceLabelsAsFloatList()
                         )
-                        //TODO: call validate amount and modify InvalidInput accordingly
+                        viewModel.validateReceiptModelAmount()
                         navController.navigate(AppScreen.CHOOSE_AMOUNT.name)
                                         },
                 )
@@ -258,7 +258,8 @@ fun ExpenseApp(
                     amount = receiptModelState.amountString,
                     onAmountChange = {
                         viewModel.setReceiptAmountString(it)
-                        //TODO: Validate amount, see if it can be parsed to Float, set InvalidInput accordingly
+                        viewModel.setReceiptAmountFloatFromReceiptAmountString()
+                        viewModel.validateReceiptModelAmount()
                     },
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
