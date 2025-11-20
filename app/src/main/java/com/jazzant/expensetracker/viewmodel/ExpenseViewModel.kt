@@ -3,7 +3,6 @@ package com.jazzant.expensetracker.viewmodel
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.common.InputImage
@@ -201,6 +200,16 @@ class ExpenseViewModel(): ViewModel() {
     fun setAnalyzerTextStringList(list: List<String>){
         _receiptAnalyzerUiState.update { currentState ->
             currentState.copy(recognizedTextStringList = list)
+        }
+    }
+    fun setAnalyzerPriceLabelsStringList(list: List<String>){
+        _receiptAnalyzerUiState.update { currentState ->
+            currentState.copy(priceLabelsListString = list)
+        }
+    }
+    fun setAnalyzerPriceLabelsFloatList(list: List<Float>){
+        _receiptAnalyzerUiState.update { currentState ->
+            currentState.copy(priceLabelsListFloat = list)
         }
     }
 
