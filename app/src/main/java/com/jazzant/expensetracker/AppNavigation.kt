@@ -34,6 +34,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.jazzant.expensetracker.analyzer.toBlockList
 import com.jazzant.expensetracker.screens.CameraPermissionScreen
 import com.jazzant.expensetracker.screens.CameraPreviewScreen
 import com.jazzant.expensetracker.screens.ChooseAmountScreen
@@ -192,7 +193,9 @@ fun ExpenseApp(
                     bitmap = receiptAnalyzerState.capturedBitmap!!,
                     onCreateNewReceiptModelButtonPress = {
                         viewModel.resetReceiptModelUiState()
-                        //TODO: Parse RecognizedText and Generate List of TextBlock Strings in Viewmodel
+                        viewModel.setAnalyzerTextStringList(
+                            list = receiptAnalyzerState.recognizedText!!.toBlockList()
+                        )
                         navController.navigate(AppScreen.CHOOSE_KEYWORD.name)
                                                          },
                     onUseAnalyzedExpenseButtonPress = { TODO("Store analyzed values to ExpenseUiState and navigate to ExpenseEditorScreen") },
