@@ -10,6 +10,10 @@
     <string name="addTipCheckboxLabel">Add Tip?</string>
     <string name="tipInputLabel">Tip Amount</string>
     <string name="datePickerLabel">Date of Expense</string>
+    <!--UI STATE ERROR MESSAGES-->
+    <string name="expenseUiError_invalidAmount">ERROR: Expense amount somehow is below 0</string>
+    <string name="expenseUiError_invalidCategory">ERROR: Category is empty</string>
+    <string name="expenseUiError_invalidName">ERROR: Name is empty</string>
     <!--EXPENSE CARD-->
     <string name="expenseNameLabel">Name</string>
     <string name="expenseCategoryLabel">Category</string>

@@ -116,12 +116,13 @@ class ExpenseViewModel(): ViewModel() {
      * then show the user the error message e.g. with a Toast.
      * @return an error message as a String or null if there's no errors
      */
-    fun checkForErrorsInUiState(): String?{
+    fun checkForErrorsInUiState(context: Context): String?{
         if (_expenseState.value.amount + _expenseState.value.tip < 0)
-        { return "ERROR: Invalid Expense Amount" }
-        //TODO: Category validator
+        { return context.getString(R.string.expenseUiError_invalidAmount) }
+        if (_expenseState.value.category.isBlank())
+        { return context.getString(R.string.expenseUiError_invalidCategory) }
         if (_expenseState.value.name.isBlank())
-        { return "ERROR: Name field is empty" }
+        { return context.getString(R.string.expenseUiError_invalidName) }
         return null
     }
     fun setId(expenseId: Int){
