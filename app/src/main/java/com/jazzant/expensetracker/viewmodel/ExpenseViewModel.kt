@@ -116,6 +116,23 @@ class ExpenseViewModel(): ViewModel() {
         _expenseState.value = ExpenseUiState()
     }
 
+    /**
+     * Returns either an error message or null. This weird implementation
+     * (returning String? instead of Boolean) is done so that in addition to
+     * knowing that there's an error, the UI can also know which value is
+     * problematic. The intended use is for the UI to check if this returns
+     * a null: if it does proceed with Insert/Update the DB, if it doesn't
+     * then show the user the error message e.g. with a Toast.
+     * @return an error message as a String or null if there's no errors
+     */
+    fun checkForErrorsInUiState(): String?{
+        if (_expenseState.value.amount + _expenseState.value.tip < 0)
+        { return "ERROR: Invalid Expense Amount" }
+        //TODO: Category validator
+        if (_expenseState.value.name.isBlank())
+        { return "ERROR: Name field is empty" }
+        return null
+    }
     fun setId(expenseId: Int){
         _expenseState.update { currentState ->
             currentState.copy(id = expenseId)
