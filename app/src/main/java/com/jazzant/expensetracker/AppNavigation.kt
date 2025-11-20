@@ -120,14 +120,26 @@ fun ExpenseApp(
                     date = expenseState.date,
                     onDateChange = { viewModel.setDate(it ?: expenseState.date) },
                     onSaveButtonPress = {
-                        //TODO: Add validator for Expense Contents
-                        viewModel.insertExpenseToDB()
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.saveExpenseToast),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        navController.popBackStack()
+                        val error = viewModel.checkForErrorsInUiState(context)
+                        if (error != null)
+                        {
+                            Toast.makeText(
+                                context,
+                                error,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        else
+                        {
+                            viewModel.insertExpenseToDB()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.saveExpenseToast),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                        }
+
                     }
                 )
             }
