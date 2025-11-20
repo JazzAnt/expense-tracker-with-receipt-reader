@@ -15,6 +15,7 @@ import com.jazzant.expensetracker.ui.DatePickerField
 import com.jazzant.expensetracker.ui.NumberInput
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.ui.RadioButtons
+import com.jazzant.expensetracker.ui.SwitchField
 import com.jazzant.expensetracker.ui.TextInput
 import com.jazzant.expensetracker.ui.convertMillisToDate
 
@@ -27,8 +28,8 @@ fun ExpenseEditorScreen(
     onNameChange: (String) -> Unit,
     category: String,
     onCategoryChange: (String) -> Unit,
-    newCategory: String,
-    onNewCategoryChange: (String) -> Unit,
+    newCategorySwitch: Boolean,
+    onNewCategorySwitchChange: (Boolean) -> Unit,
     tipping: Boolean,
     onTippingChange: (Boolean) -> Unit,
     tip: Float,
@@ -57,21 +58,36 @@ fun ExpenseEditorScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        RadioButtons(
-            label = stringResource(R.string.categorySelectorLabel),
-            radioOptions = categoryList,
-            selectedOption = category,
-            onOptionChange = onCategoryChange,
-            modifier = Modifier.fillMaxWidth()
+        SwitchField(
+            text = stringResource(R.string.newCategorySwitchLabel),
+            state = newCategorySwitch,
+            onStateChanged = onNewCategorySwitchChange
         )
-        if(category == stringResource(R.string.addNewCategorySelection)){
+
+        if (newCategorySwitch)
+        {
             TextInput(
                 label = stringResource(R.string.newCategoryInputLabel),
-                value = newCategory,
-                onValueChange = onNewCategoryChange,
+                value = category,
+                onValueChange = onCategoryChange,
                 modifier = Modifier.fillMaxWidth()
             )
         }
+        else if (categoryList.isEmpty())
+        {
+            Text(stringResource(R.string.emptyCategoryListAlert))
+        }
+        else
+        {
+            RadioButtons(
+                label = stringResource(R.string.categorySelectorLabel),
+                radioOptions = categoryList,
+                selectedOption = category,
+                onOptionChange = onCategoryChange,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
 
         CheckBoxField(
             text = stringResource(R.string.addTipCheckboxLabel),
@@ -105,13 +121,7 @@ fun ExpenseEditorScreen(
                         amount
                     }
                 }")
-                Text("Category\t: ${
-                    if(category == stringResource(R.string.addNewCategorySelection)){
-                        newCategory
-                    } else {
-                        category
-                    }
-                }")
+                Text("Category\t: $category")
                 Text("Name\t: $name")
                 Text("Date\t: ${convertMillisToDate(date)}")
 

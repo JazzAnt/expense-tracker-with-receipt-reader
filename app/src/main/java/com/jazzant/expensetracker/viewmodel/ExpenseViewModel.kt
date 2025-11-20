@@ -24,7 +24,6 @@ class ExpenseViewModel(): ViewModel() {
     lateinit var expenseList: StateFlow<List<Expense>>
     lateinit var categoryList: StateFlow<List<String>>
     lateinit var sumOfExpenses: StateFlow<Float>
-    private lateinit var ADD_NEW_CATEGORY: String
     private val _expenseState = MutableStateFlow(ExpenseUiState())
     val expenseState: StateFlow<ExpenseUiState> = _expenseState.asStateFlow()
 
@@ -32,8 +31,6 @@ class ExpenseViewModel(): ViewModel() {
         //Set the Repository
         val expenseDatabase = ExpenseDatabase.getInstance(context)
         expenseRepository = ExpenseRepository(expenseDatabase.expenseDao())
-        //Fetch the add_new_category string
-        ADD_NEW_CATEGORY = context.getString(R.string.addNewCategorySelection)
         //Pass the flows
         expenseList = expenseRepository.getAllExpenses()
             .stateIn(
@@ -86,15 +83,9 @@ class ExpenseViewModel(): ViewModel() {
             _expenseState.value.amount
         }
 
-        val category = if(_expenseState.value.category == ADD_NEW_CATEGORY){
-            _expenseState.value.newCategory
-        } else {
-            _expenseState.value.category
-        }
-
         val expense = Expense(
             amount = amount,
-            category = category,
+            category = _expenseState.value.category,
             name = _expenseState.value.name,
             date = _expenseState.value.date
         )
@@ -159,9 +150,9 @@ class ExpenseViewModel(): ViewModel() {
         }
     }
 
-    fun setNewCategory(expenseNewCategory: String){
+    fun setNewCategorySwitch(expenseNewCategorySwitchState: Boolean){
         _expenseState.update { currentState ->
-            currentState.copy(newCategory = expenseNewCategory)
+            currentState.copy(newCategorySwitch = expenseNewCategorySwitchState)
         }
     }
 

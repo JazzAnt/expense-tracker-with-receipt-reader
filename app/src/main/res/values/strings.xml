@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Expense Tracker with Receipt Reader</string>
-    <string name="addNewCategorySelection">Add New Category</string>
     <!--EXPENSE EDITOR-->
     <string name="amountInputLabel">Expense Amount</string>
     <string name="nameInputLabel">Expense Name</string>
     <string name="categorySelectorLabel">Expense Category</string>
+    <string name="emptyCategoryListAlert">There is no existing categories. Please create a new category.</string>
+    <string name="newCategorySwitchLabel">Add New Category?</string>
     <string name="newCategoryInputLabel">New Category</string>
     <string name="addTipCheckboxLabel">Add Tip?</string>
     <string name="tipInputLabel">Tip Amount</string>

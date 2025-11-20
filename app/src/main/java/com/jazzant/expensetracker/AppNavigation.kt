@@ -19,7 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -105,15 +104,15 @@ fun ExpenseApp(
                 val expenseState by viewModel.expenseState.collectAsStateWithLifecycle()
                 val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
                 ExpenseEditorScreen(
-                    categoryList = categoryList + stringResource(R.string.addNewCategorySelection),
+                    categoryList = categoryList,
                     amount = expenseState.amount,
                     onAmountChange = { viewModel.setAmount(it) },
                     name = expenseState.name,
                     onNameChange = { viewModel.setName(it) },
                     category = expenseState.category,
                     onCategoryChange = { viewModel.setCategory(it) },
-                    newCategory = expenseState.newCategory,
-                    onNewCategoryChange = { viewModel.setNewCategory(it) },
+                    newCategorySwitch = expenseState.newCategorySwitch,
+                    onNewCategorySwitchChange = { viewModel.setNewCategorySwitch(it) },
                     tipping = expenseState.tipping,
                     onTippingChange = { viewModel.setTipping(it) },
                     tip = expenseState.tip,
