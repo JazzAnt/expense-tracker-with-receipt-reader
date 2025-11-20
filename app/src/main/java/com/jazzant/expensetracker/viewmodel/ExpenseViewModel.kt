@@ -296,6 +296,18 @@ class ExpenseViewModel(): ViewModel() {
         }
     }
 
+    /**
+     * Sets the receiptAmountFloat using the receiptAmountString value.
+     * This function calls .toFloatOrNull() on the string value and assigns the float to the
+     * float value, or assigns -1.0f if the parsing fails (result in a null).
+     *
+     * validateReceiptModelAmount() should be called after this function
+     */
+    fun setReceiptAmountFloatFromReceiptAmountString(){
+        setReceiptAmountFloat(
+            _receiptModelUiState.value.amountString.toFloatOrNull()?:-1.0f
+        )
+    }
     fun setReceiptStrategy(strategy: String){
         _receiptModelUiState.update { currentState ->
             currentState.copy(strategy = strategy)
@@ -335,6 +347,33 @@ class ExpenseViewModel(): ViewModel() {
         val name = _receiptModelUiState.value.name
         setReceiptInvalidInput(
             name.isBlank()
+        )
+    }
+
+    /**
+     * Validates the receiptModelUiState amount value.
+     *
+     * This verifies:(1) that the amount string value and the float value are the same which makes sure
+     * that setReceiptAmountFloatFromReceiptAmountString() has been called before this function and
+     * did not result in a failed parsing; and (2) that the float value is actually contained inside
+     * the recognized text.
+     *
+     * as mentioned above, setReceiptAmountFloatFromReceiptAmountString() should be called before
+     * this function.
+     * @return no values. Instead, Boolean is directly set to the receiptModelUiState InvalidInput value.
+     */
+    fun validateReceiptModelAmount(){
+        val amountString = _receiptModelUiState.value.amountString
+        val amountFloat = _receiptModelUiState.value.amountFloat
+        if (amountString.toFloatOrNull() != amountFloat)
+        {
+            setReceiptInvalidInput(true)
+            return
+        }
+
+        val priceLabelFloatList = _receiptAnalyzerUiState.value.priceLabelsListFloat
+        setReceiptInvalidInput(
+            !priceLabelFloatList.contains(amountFloat)
         )
     }
 }
