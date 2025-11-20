@@ -11,6 +11,7 @@ import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.analyzer.containsKeyword
 import com.jazzant.expensetracker.database.receiptmodel.ReceiptModel
 import com.jazzant.expensetracker.database.receiptmodel.ReceiptModelRepository
 import com.jazzant.expensetracker.database.ExpenseDatabase
@@ -230,7 +231,7 @@ class ExpenseViewModel(): ViewModel() {
         for (i in 0..listLastIndex)
         {
             val keyword = receiptModels[i].keyword
-            if(_receiptAnalyzerUiState.value.recognizedText!!.text.contains(keyword, ignoreCase = true))
+            if(_receiptAnalyzerUiState.value.recognizedText!!.containsKeyword(keyword))
             {
                 index = i
                 break

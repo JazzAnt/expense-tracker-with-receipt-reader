@@ -3,6 +3,12 @@ package com.jazzant.expensetracker.analyzer
 import com.google.mlkit.vision.text.Text
 
 /**
+ * @return true if the text contains the keyword (case insensitive)
+ */
+fun Text.containsKeyword(keyword: String): Boolean {
+    return this.text.contains(keyword, ignoreCase = true)
+}
+/**
  * Returns all the textBlocks as a String
  * @return A List of all the textBlocks as a String
  */
