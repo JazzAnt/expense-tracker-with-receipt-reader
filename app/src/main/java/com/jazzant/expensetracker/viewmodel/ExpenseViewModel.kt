@@ -323,8 +323,12 @@ class ExpenseViewModel(): ViewModel() {
     /**
      * Validates the receiptModelUiState Keyword value.
      *
-     * This verifies if the keyword: (1) isn't blank. (2) doesn't already exist in the database.
-     * (3) is contained in the recognized text.
+     * This verifies if the keyword: (1) isn't blank. (2) is contained in the recognized text.
+     *
+     * Note that this does not check if the keyword already exists in the database because this
+     * function should only be called during the creation of a new keyword in which case the
+     * assumption is that the scanned receipt does not contain an existing keyword. Thus the (2)
+     * requirement should also verify that the keyword doesn't exist in the database.
      * @return no values. Instead, Boolean is directly set to the receiptModelUiState InvalidInput value.
      */
     fun validateReceiptModelKeyword(){
@@ -335,7 +339,6 @@ class ExpenseViewModel(): ViewModel() {
             setReceiptInvalidInput(true)
             return
         }
-        //TODO: add method to validate if the keyword already exists
         setReceiptInvalidInput(
             !text.containsKeyword(keyword)
         )
