@@ -298,4 +298,34 @@ class ExpenseViewModel(): ViewModel() {
             currentState.copy(strategyValue1 = value1)
         }
     }
+    //Receipt Model Value Validators
+    /**
+     * Validates the receiptModelUiState Keyword value.
+     *
+     * This verifies if the keyword: (1) isn't blank. (2) doesn't already exist in the database.
+     * (3) is contained in the recognized text.
+     * @return no values. Instead, Boolean is directly set to the receiptModelUiState InvalidInput value.
+     */
+    fun validateReceiptModelKeyword(){
+        val text = _receiptAnalyzerUiState.value.recognizedText
+        val keyword = _receiptModelUiState.value.keyword
+        if (text == null || keyword.isBlank())
+        { setReceiptInvalidInput(true) }
+        //TODO: add method to validate if the keyword already exists
+        setReceiptInvalidInput(
+            !text!!.containsKeyword(keyword)
+        )
+    }
+    /**
+     * Validates the receiptModelUiState name value.
+     *
+     * This simply verifies that the name isn't blank.
+     * @return no values. Instead, Boolean is directly set to the receiptModelUiState InvalidInput value.
+     */
+    fun validateReceiptModelName(){
+        val name = _receiptModelUiState.value.name
+        setReceiptInvalidInput(
+            name.isBlank()
+        )
+    }
 }

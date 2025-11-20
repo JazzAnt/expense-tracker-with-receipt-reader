@@ -215,11 +215,12 @@ fun ExpenseApp(
                     keyword = receiptModelState.keyword,
                     onKeywordChange = {
                         viewModel.setReceiptKeyword(it)
-                        viewModel.setReceiptInvalidInput(!receiptAnalyzerState.recognizedText!!.containsKeyword(it))
+                        viewModel.validateReceiptModelKeyword()
                                       },
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
-                        //TODO: Validate name and change InvalidInput depending on validation
+                        //validator called here to synchronize the InvalidInput state to the name variable instead of the keyword variable
+                        viewModel.validateReceiptModelName()
                         navController.navigate(AppScreen.CHOOSE_NAME.name)
                                         },
                 )
@@ -232,7 +233,7 @@ fun ExpenseApp(
                     name = receiptModelState.name,
                     onNameChange = {
                         viewModel.setReceiptName(it)
-                        //TODO: Validate name and change InvalidInput depending on validation
+                        viewModel.validateReceiptModelName()
                     },
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
