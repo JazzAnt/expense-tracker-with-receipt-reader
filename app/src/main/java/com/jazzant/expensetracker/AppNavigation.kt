@@ -34,6 +34,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.jazzant.expensetracker.analyzer.containsKeyword
 import com.jazzant.expensetracker.analyzer.toBlockList
 import com.jazzant.expensetracker.screens.CameraPermissionScreen
 import com.jazzant.expensetracker.screens.CameraPreviewScreen
@@ -205,15 +206,16 @@ fun ExpenseApp(
                 )
             }
             composable(route = AppScreen.CHOOSE_KEYWORD.name) {
+                val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
                 val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                 ChooseKeywordScreen(
                     switchState = receiptModelState.switchState,
                     onSwitchStateChanged = { viewModel.setReceiptSwitch(it) },
-                    textBlockList = emptyList(), //TODO: Receive TextBlock List from Viewmodel
+                    textBlockList = receiptAnalyzerState.recognizedTextStringList,
                     keyword = receiptModelState.keyword,
                     onKeywordChange = {
                         viewModel.setReceiptKeyword(it)
-                        //TODO: Validate Keyword and change InvalidInput depending on validation
+                        viewModel.setReceiptInvalidInput(!receiptAnalyzerState.recognizedText!!.containsKeyword(it))
                                       },
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
