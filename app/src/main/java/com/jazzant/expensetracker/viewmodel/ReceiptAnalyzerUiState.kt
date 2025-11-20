@@ -6,5 +6,6 @@ import com.google.mlkit.vision.text.Text
 data class ReceiptAnalyzerUiState(
     val recognizedText: Text? = null,
     val capturedBitmap: Bitmap? = null,
-    val receiptModelIndex: Int = -1
+    val receiptModelIndex: Int = -1,
+    val recognizedTextStringList: List<String> = emptyList(),
 )

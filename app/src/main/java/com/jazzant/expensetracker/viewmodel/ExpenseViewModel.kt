@@ -197,6 +197,11 @@ class ExpenseViewModel(): ViewModel() {
             currentState.copy(receiptModelIndex = index)
         }
     }
+    fun setAnalyzerTextStringList(list: List<String>){
+        _receiptAnalyzerUiState.update { currentState ->
+            currentState.copy(recognizedTextStringList = list)
+        }
+    }
 
     fun recognizeText(bitmap: Bitmap){
         resetReceiptAnalyzerUiState()
