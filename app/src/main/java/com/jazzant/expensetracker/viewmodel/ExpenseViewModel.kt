@@ -331,10 +331,13 @@ class ExpenseViewModel(): ViewModel() {
         val text = _receiptAnalyzerUiState.value.recognizedText
         val keyword = _receiptModelUiState.value.keyword
         if (text == null || keyword.isBlank())
-        { setReceiptInvalidInput(true) }
+        {
+            setReceiptInvalidInput(true)
+            return
+        }
         //TODO: add method to validate if the keyword already exists
         setReceiptInvalidInput(
-            !text!!.containsKeyword(keyword)
+            !text.containsKeyword(keyword)
         )
     }
     /**
