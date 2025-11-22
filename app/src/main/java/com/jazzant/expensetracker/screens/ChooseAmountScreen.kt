@@ -13,9 +13,9 @@ import com.jazzant.expensetracker.ui.RadioButtons
 
 @Composable
 fun ChooseAmountScreen(
-    amountList: List<String>,
-    amount: String,
-    onAmountChange: (String) -> Unit,
+    amountList: List<Float>,
+    amount: Float,
+    onAmountChange: (Float) -> Unit,
     onNextButtonPress: () -> Unit,
     invalidInput: Boolean,
     modifier: Modifier = Modifier
@@ -28,6 +28,8 @@ fun ChooseAmountScreen(
             radioOptions = amountList,
             selectedOption = amount,
             onOptionChange = onAmountChange,
+            radioText = {"$%.2f".format(it)}
+            //TODO: Make '$' non-static and allow user to change currency
         )
         if (invalidInput)
         {

@@ -203,14 +203,9 @@ class ExpenseViewModel(): ViewModel() {
             currentState.copy(recognizedTextStringList = list)
         }
     }
-    fun setAnalyzerPriceLabelsStringList(list: List<String>){
+    fun setAnalyzerPriceLabels(list: List<Float>){
         _receiptAnalyzerUiState.update { currentState ->
-            currentState.copy(priceLabelsListString = list)
-        }
-    }
-    fun setAnalyzerPriceLabelsFloatList(list: List<Float>){
-        _receiptAnalyzerUiState.update { currentState ->
-            currentState.copy(priceLabelsListFloat = list)
+            currentState.copy(priceLabelsList = list)
         }
     }
     fun setReceiptStrategyMap(strategies: Map<Strategy, Int>){
@@ -289,30 +284,12 @@ class ExpenseViewModel(): ViewModel() {
         }
     }
 
-    fun setReceiptAmountString(amount: String){
+    fun setReceiptAmount(amount: Float){
         _receiptModelUiState.update { currentState ->
-            currentState.copy(amountString = amount)
+            currentState.copy(amount = amount)
         }
     }
 
-    fun setReceiptAmountFloat(amount: Float){
-        _receiptModelUiState.update { currentState ->
-            currentState.copy(amountFloat = amount)
-        }
-    }
-
-    /**
-     * Sets the receiptAmountFloat using the receiptAmountString value.
-     * This function calls .toFloatOrNull() on the string value and assigns the float to the
-     * float value, or assigns -1.0f if the parsing fails (result in a null).
-     *
-     * validateReceiptModelAmount() should be called after this function
-     */
-    fun setReceiptAmountFloatFromReceiptAmountString(){
-        setReceiptAmountFloat(
-            _receiptModelUiState.value.amountString.toFloatOrNull()?:-1.0f
-        )
-    }
     fun setReceiptStrategy(strategy: Strategy){
         _receiptModelUiState.update { currentState ->
             currentState.copy(strategy = strategy)
@@ -364,25 +341,19 @@ class ExpenseViewModel(): ViewModel() {
     /**
      * Validates the receiptModelUiState amount value.
      *
-     * This verifies:(1) that the amount string value and the float value are the same which makes sure
-     * that setReceiptAmountFloatFromReceiptAmountString() has been called before this function and
-     * did not result in a failed parsing; and (2) that the float value is actually contained inside
-     * the recognized text.
-     *
-     * as mentioned above, setReceiptAmountFloatFromReceiptAmountString() should be called before
-     * this function.
+     * This verifies: (1) the float value is not negative; and (2) that the float value is actually
+     * contained inside the recognized text.
      * @return no values. Instead, Boolean is directly set to the receiptModelUiState InvalidInput value.
      */
     fun validateReceiptModelAmount(){
-        val amountString = _receiptModelUiState.value.amountString
-        val amountFloat = _receiptModelUiState.value.amountFloat
-        if (amountString.toFloatOrNull() != amountFloat)
+        val amountFloat = _receiptModelUiState.value.amount
+        if (amountFloat < 0)
         {
             setReceiptInvalidInput(true)
             return
         }
 
-        val priceLabelFloatList = _receiptAnalyzerUiState.value.priceLabelsListFloat
+        val priceLabelFloatList = _receiptAnalyzerUiState.value.priceLabelsList
         setReceiptInvalidInput(
             !priceLabelFloatList.contains(amountFloat)
         )

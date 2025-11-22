@@ -9,7 +9,6 @@ data class ReceiptAnalyzerUiState(
     val capturedBitmap: Bitmap? = null,
     val receiptModelIndex: Int = -1,
     val recognizedTextStringList: List<String> = emptyList(),
-    val priceLabelsListString: List<String> = emptyList(),
-    val priceLabelsListFloat: List<Float> = emptyList(),
+    val priceLabelsList: List<Float> = emptyList(),
     val strategies: Map<Strategy, Int> = emptyMap(),
 )

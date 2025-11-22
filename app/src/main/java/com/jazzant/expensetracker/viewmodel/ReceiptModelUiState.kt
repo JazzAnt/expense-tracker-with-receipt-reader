@@ -8,8 +8,7 @@ data class ReceiptModelUiState(
     val invalidInput: Boolean = false,
     val keyword: String = "",
     val name: String = "",
-    val amountString: String = "",
-    val amountFloat: Float = -1.0f,
+    val amount: Float = -1.0f,
     val strategy: Strategy = Strategy.NTH_PRICE_LABEL_FROM_LAST,
     val strategyValue1: Int = -1
 )

@@ -35,8 +35,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jazzant.expensetracker.analyzer.toBlockList
-import com.jazzant.expensetracker.analyzer.toPriceLabelsAsFloatList
-import com.jazzant.expensetracker.analyzer.toPriceLabelsAsStringList
+import com.jazzant.expensetracker.analyzer.toPriceLabelsList
 import com.jazzant.expensetracker.screens.CameraPermissionScreen
 import com.jazzant.expensetracker.screens.CameraPreviewScreen
 import com.jazzant.expensetracker.screens.ChooseAmountScreen
@@ -239,11 +238,8 @@ fun ExpenseApp(
                     },
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
-                        viewModel.setAnalyzerPriceLabelsStringList(
-                            receiptAnalyzerState.recognizedText!!.toPriceLabelsAsStringList()
-                        )
-                        viewModel.setAnalyzerPriceLabelsFloatList(
-                            receiptAnalyzerState.recognizedText!!.toPriceLabelsAsFloatList()
+                        viewModel.setAnalyzerPriceLabels(
+                            receiptAnalyzerState.recognizedText!!.toPriceLabelsList()
                         )
                         viewModel.validateReceiptModelAmount()
                         navController.navigate(AppScreen.CHOOSE_AMOUNT.name)
@@ -254,11 +250,10 @@ fun ExpenseApp(
                 val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
                 val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                 ChooseAmountScreen(
-                    amountList = receiptAnalyzerState.priceLabelsListString,
-                    amount = receiptModelState.amountString,
+                    amountList = receiptAnalyzerState.priceLabelsList,
+                    amount = receiptModelState.amount,
                     onAmountChange = {
-                        viewModel.setReceiptAmountString(it)
-                        viewModel.setReceiptAmountFloatFromReceiptAmountString()
+                        viewModel.setReceiptAmount(it)
                         viewModel.validateReceiptModelAmount()
                     },
                     invalidInput = receiptModelState.invalidInput,
