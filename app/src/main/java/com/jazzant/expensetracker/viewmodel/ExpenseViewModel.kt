@@ -10,6 +10,7 @@ import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.analyzer.Strategy
 import com.jazzant.expensetracker.analyzer.containsKeyword
 import com.jazzant.expensetracker.database.receiptmodel.ReceiptModel
 import com.jazzant.expensetracker.database.receiptmodel.ReceiptModelRepository
@@ -212,7 +213,11 @@ class ExpenseViewModel(): ViewModel() {
             currentState.copy(priceLabelsListFloat = list)
         }
     }
-
+    fun setReceiptStrategyMap(strategies: Map<Strategy, Int>){
+        _receiptAnalyzerUiState.update { currentState ->
+            currentState.copy(strategies = strategies)
+        }
+    }
     fun recognizeText(bitmap: Bitmap){
         resetReceiptAnalyzerUiState()
         setAnalyzerBitmap(bitmap)
@@ -308,7 +313,7 @@ class ExpenseViewModel(): ViewModel() {
             _receiptModelUiState.value.amountString.toFloatOrNull()?:-1.0f
         )
     }
-    fun setReceiptStrategy(strategy: String){
+    fun setReceiptStrategy(strategy: Strategy){
         _receiptModelUiState.update { currentState ->
             currentState.copy(strategy = strategy)
         }

@@ -1,5 +1,7 @@
 package com.jazzant.expensetracker.viewmodel
 
+import com.jazzant.expensetracker.analyzer.Strategy
+
 data class ReceiptModelUiState(
     val switchState: Boolean = false,
     val checkBoxState: Boolean = false,
@@ -8,6 +10,6 @@ data class ReceiptModelUiState(
     val name: String = "",
     val amountString: String = "",
     val amountFloat: Float = -1.0f,
-    val strategy: String = "",
+    val strategy: Strategy = Strategy.NTH_PRICE_LABEL_FROM_LAST,
     val strategyValue1: Int = -1
 )

@@ -2,6 +2,7 @@ package com.jazzant.expensetracker.viewmodel
 
 import android.graphics.Bitmap
 import com.google.mlkit.vision.text.Text
+import com.jazzant.expensetracker.analyzer.Strategy
 
 data class ReceiptAnalyzerUiState(
     val recognizedText: Text? = null,
@@ -10,4 +11,5 @@ data class ReceiptAnalyzerUiState(
     val recognizedTextStringList: List<String> = emptyList(),
     val priceLabelsListString: List<String> = emptyList(),
     val priceLabelsListFloat: List<Float> = emptyList(),
+    val strategies: Map<Strategy, Int> = emptyMap(),
 )
