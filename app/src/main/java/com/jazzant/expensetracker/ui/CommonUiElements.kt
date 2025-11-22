@@ -120,11 +120,13 @@ fun TextInput(
 }
 
 @Composable
-fun RadioButtons(label:String,
-                 radioOptions:List<String>,
-                 selectedOption:String,
-                 onOptionChange:(String)->Unit,
-                 modifier: Modifier = Modifier) {
+fun <T> RadioButtons(label:String,
+                     radioOptions:List<T>,
+                     selectedOption: T,
+                     onOptionChange:(T)->Unit,
+                     modifier: Modifier = Modifier,
+                     radioText: (T) -> String = {it.toString()},
+) {
     Row(verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Center,
         modifier = modifier
@@ -134,23 +136,23 @@ fun RadioButtons(label:String,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp))
         Column(modifier = Modifier.fillMaxWidth().selectableGroup()) {
-            radioOptions.forEach { text ->
+            radioOptions.forEach { radioOption ->
                 Row (
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .selectable(
-                            selected=(text==selectedOption),
-                            onClick={onOptionChange(text)},
+                            selected=(radioOption==selectedOption),
+                            onClick={onOptionChange(radioOption)},
                             role=Role.RadioButton
                         )
                         .padding(bottom = 5.dp)
                 ){
                     RadioButton(
-                        selected=(text == selectedOption),
+                        selected=(radioOption == selectedOption),
                         onClick=null //done by Row instead so that the text is also clickable
                     )
                     Text(
-                        text=text,
+                        text=radioText(radioOption),
                     )
                 }
             }
