@@ -34,6 +34,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.jazzant.expensetracker.analyzer.evaluateAllPossibleStrategies
 import com.jazzant.expensetracker.analyzer.toBlockList
 import com.jazzant.expensetracker.analyzer.toPriceLabelsList
 import com.jazzant.expensetracker.screens.CameraPermissionScreen
@@ -258,22 +259,29 @@ fun ExpenseApp(
                     },
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
-                        //TODO: execute function to see which strategy works on the amount, add them to strategyList
+                        val priceLabels = receiptAnalyzerState.priceLabelsList
+                        val desiredPriceLabel = receiptModelState.amount
+                        val validStrategies = evaluateAllPossibleStrategies(priceLabels, desiredPriceLabel)
+                        viewModel.setReceiptStrategyMap(validStrategies)
                         //TODO: validate strategy, set invalid input accordingly
                         navController.navigate(AppScreen.CHOOSE_STRATEGY.name)
                                         },
                 )
             }
             composable(route = AppScreen.CHOOSE_STRATEGY.name) {
+                val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
                 val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                 ChooseStrategyScreen(
-                    strategyList = emptyList(), //TODO: get strategy list from viewmodel
+                    strategyList = receiptAnalyzerState.strategies.keys.toList(),
                     strategy = receiptModelState.strategy,
                     onStrategyChange = {
                         viewModel.setReceiptStrategy(it)
-                        //TODO: set receiptStrategyValue1 if necessary
+                        viewModel.setReceiptStrategyValue1(
+                            receiptAnalyzerState.strategies[it] ?:1
+                        )
                         //TODO: Validate strategy, set invalidInput accordingly
                     },
+                    //TODO: Add high order function to manipulate RadioText
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
                         TODO("Save values on receiptModelState to Database")
