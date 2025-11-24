@@ -263,7 +263,7 @@ fun ExpenseApp(
                         val desiredPriceLabel = receiptModelState.amount
                         val validStrategies = evaluateAllPossibleStrategies(priceLabels, desiredPriceLabel)
                         viewModel.setReceiptStrategyMap(validStrategies)
-                        //TODO: validate strategy, set invalid input accordingly
+                        viewModel.validateReceiptModelStrategy()
                         navController.navigate(AppScreen.CHOOSE_STRATEGY.name)
                                         },
                 )
@@ -279,7 +279,7 @@ fun ExpenseApp(
                         viewModel.setReceiptStrategyValue1(
                             receiptAnalyzerState.strategies[it] ?:1
                         )
-                        //TODO: Validate strategy, set invalidInput accordingly
+                        viewModel.validateReceiptModelStrategy()
                     },
                     //TODO: Add high order function to manipulate RadioText
                     invalidInput = receiptModelState.invalidInput,
