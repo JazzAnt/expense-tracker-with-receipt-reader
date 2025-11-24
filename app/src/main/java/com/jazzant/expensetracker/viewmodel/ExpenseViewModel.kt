@@ -358,4 +358,15 @@ class ExpenseViewModel(): ViewModel() {
             !priceLabelFloatList.contains(amountFloat)
         )
     }
+
+    fun validateReceiptModelStrategy(){
+        val strategy = _receiptModelUiState.value.strategy
+        val value1 = _receiptModelUiState.value.strategyValue1
+        val viableStrategies = _receiptAnalyzerUiState.value.strategies
+
+        if (viableStrategies[strategy] == value1)
+        { setReceiptInvalidInput(false) }
+        else
+        { setReceiptInvalidInput(true) }
+    }
 }
