@@ -128,6 +128,17 @@ class ExpenseViewModel(): ViewModel() {
         setName(expense.name)
         setDate(expense.date)
     }
+    
+    fun receiptModelUiToEntity(): ReceiptModel{
+        val receiptUiState = _receiptModelUiState.value
+        return ReceiptModel(
+            keyword = receiptUiState.keyword,
+            name = receiptUiState.name,
+            amountRecognizerType = receiptUiState.strategy.ordinal,
+            amountRecognizerValue1 = receiptUiState.strategyValue1,
+        )
+
+    }
     //UI STATE STUFF
     fun resetUiState(){
         _expenseState.value = ExpenseUiState()
