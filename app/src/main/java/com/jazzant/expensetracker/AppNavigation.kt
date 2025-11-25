@@ -44,6 +44,7 @@ import com.jazzant.expensetracker.screens.ChooseNameScreen
 import com.jazzant.expensetracker.screens.ChooseStrategyScreen
 import com.jazzant.expensetracker.screens.ExpenseEditorScreen
 import com.jazzant.expensetracker.screens.ExpenseListScreen
+import com.jazzant.expensetracker.screens.LoadingScreen
 import com.jazzant.expensetracker.screens.TextAnalyzerScreen
 import com.jazzant.expensetracker.screens.TextRecognizerScreen
 import com.jazzant.expensetracker.viewmodel.ExpenseViewModel
@@ -58,6 +59,7 @@ enum class AppScreen(){
     CHOOSE_KEYWORD,
     CHOOSE_NAME,
     CHOOSE_AMOUNT,
+    ANALYZING_STRATEGY,
     CHOOSE_STRATEGY
 }
 
@@ -275,8 +277,16 @@ fun ExpenseApp(
                         val validStrategies = evaluateAllPossibleStrategies(priceLabels, desiredPriceLabel)
                         viewModel.setReceiptStrategyMap(validStrategies)
                         viewModel.validateReceiptModelStrategy()
-                        navController.navigate(AppScreen.CHOOSE_STRATEGY.name)
+                        navController.navigate(AppScreen.ANALYZING_STRATEGY.name)
                                         },
+                )
+            }
+            composable(route = AppScreen.ANALYZING_STRATEGY.name) {
+                val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
+                LoadingScreen(
+                    loadingText = "Analyzing Strategies...",
+                    isLoading = receiptAnalyzerState.strategies.isEmpty(),
+                    onLoadingComplete = { navController.navigate(AppScreen.CHOOSE_STRATEGY.name)}
                 )
             }
             composable(route = AppScreen.CHOOSE_STRATEGY.name) {
