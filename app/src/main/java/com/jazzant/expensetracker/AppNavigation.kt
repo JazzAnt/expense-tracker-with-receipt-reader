@@ -271,22 +271,19 @@ fun ExpenseApp(
                         viewModel.validateReceiptModelAmount()
                     },
                     invalidInput = receiptModelState.invalidInput,
-                    onNextButtonPress = {
-                        val priceLabels = receiptAnalyzerState.priceLabelsList
-                        val desiredPriceLabel = receiptModelState.amount
-                        val validStrategies = evaluateAllPossibleStrategies(priceLabels, desiredPriceLabel)
-                        viewModel.setReceiptStrategyMap(validStrategies)
-                        viewModel.validateReceiptModelStrategy()
-                        navController.navigate(AppScreen.ANALYZING_STRATEGY.name)
-                                        },
+                    onNextButtonPress = { navController.navigate(AppScreen.ANALYZING_STRATEGY.name) },
                 )
             }
             composable(route = AppScreen.ANALYZING_STRATEGY.name) {
+                viewModel.evaluateStrategies()
                 val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
                 LoadingScreen(
                     loadingText = "Analyzing Strategies...",
                     isLoading = receiptAnalyzerState.strategies.isEmpty(),
-                    onLoadingComplete = { navController.navigate(AppScreen.CHOOSE_STRATEGY.name)}
+                    onLoadingComplete = {
+                        viewModel.validateReceiptModelStrategy()
+                        navController.navigate(AppScreen.CHOOSE_STRATEGY.name)
+                    }
                 )
             }
             composable(route = AppScreen.CHOOSE_STRATEGY.name) {

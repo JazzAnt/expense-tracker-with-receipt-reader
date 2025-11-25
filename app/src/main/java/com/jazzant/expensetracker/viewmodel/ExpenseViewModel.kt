@@ -12,11 +12,13 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.analyzer.Strategy
 import com.jazzant.expensetracker.analyzer.containsKeyword
+import com.jazzant.expensetracker.analyzer.evaluateAllPossibleStrategies
 import com.jazzant.expensetracker.database.receiptmodel.ReceiptModel
 import com.jazzant.expensetracker.database.receiptmodel.ReceiptModelRepository
 import com.jazzant.expensetracker.database.ExpenseDatabase
 import com.jazzant.expensetracker.database.expense.Expense
 import com.jazzant.expensetracker.database.expense.ExpenseRepository
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -383,5 +385,14 @@ class ExpenseViewModel(): ViewModel() {
         { setReceiptInvalidInput(false) }
         else
         { setReceiptInvalidInput(true) }
+    }
+
+    fun evaluateStrategies(){
+        viewModelScope.launch {
+            val priceLabels = _receiptAnalyzerUiState.value.priceLabelsList
+            val desiredPriceLabel = _receiptModelUiState.value.amount
+            val validStrategies = evaluateAllPossibleStrategies(priceLabels, desiredPriceLabel)
+            setReceiptStrategyMap(validStrategies)
+        }
     }
 }
