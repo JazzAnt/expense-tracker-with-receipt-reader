@@ -32,15 +32,13 @@ import kotlin.time.Duration.Companion.seconds
 
 class ExpenseViewModel(): ViewModel() {
     //DATABASE STUFF
-    lateinit var expenseRepository: ExpenseRepository
+    private lateinit var expenseRepository: ExpenseRepository
     lateinit var expenseList: StateFlow<List<Expense>>
     lateinit var categoryList: StateFlow<List<String>>
     lateinit var sumOfExpenses: StateFlow<Float>
     private val _expenseState = MutableStateFlow(ExpenseUiState())
     val expenseState: StateFlow<ExpenseUiState> = _expenseState.asStateFlow()
-    private lateinit var ADD_NEW_CATEGORY: String
-    private var expenseId = mutableIntStateOf(-1)
-    lateinit var receiptModelRepository: ReceiptModelRepository
+    private lateinit var receiptModelRepository: ReceiptModelRepository
     lateinit var receiptModelList: StateFlow<List<ReceiptModel>>
     private val _receiptAnalyzerUiState = MutableStateFlow(ReceiptAnalyzerUiState())
     val receiptAnalyzerUiState: StateFlow<ReceiptAnalyzerUiState> = _receiptAnalyzerUiState.asStateFlow()
