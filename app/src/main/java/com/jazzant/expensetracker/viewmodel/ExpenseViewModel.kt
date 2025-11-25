@@ -99,6 +99,13 @@ class ExpenseViewModel(): ViewModel() {
             )
         }
     }
+    fun insertReceiptModelToDB(){
+        viewModelScope.launch {
+            receiptModelRepository.insert(
+                receiptModelUiToEntity()
+            )
+        }
+    }
 
     //TYPE CONVERTER
     fun getExpenseEntityFromExpenseUIState(): Expense {
