@@ -271,11 +271,13 @@ fun ExpenseApp(
                         viewModel.validateReceiptModelAmount()
                     },
                     invalidInput = receiptModelState.invalidInput,
-                    onNextButtonPress = { navController.navigate(AppScreen.ANALYZING_STRATEGY.name) },
+                    onNextButtonPress = {
+                        viewModel.evaluateStrategies()
+                        navController.navigate(AppScreen.ANALYZING_STRATEGY.name)
+                                        },
                 )
             }
             composable(route = AppScreen.ANALYZING_STRATEGY.name) {
-                viewModel.evaluateStrategies()
                 val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
                 LoadingScreen(
                     loadingText = "Analyzing Strategies...",
