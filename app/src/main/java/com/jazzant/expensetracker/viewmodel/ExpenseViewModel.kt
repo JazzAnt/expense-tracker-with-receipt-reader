@@ -144,7 +144,16 @@ class ExpenseViewModel(): ViewModel() {
             amountRecognizerType = receiptUiState.strategy.ordinal,
             amountRecognizerValue1 = receiptUiState.strategyValue1,
         )
+    }
 
+    fun receiptModelUiToExpenseUi() {
+        val receiptUiState = _receiptModelUiState.value
+        setAmount(receiptUiState.amount)
+        setName(receiptUiState.name)
+        //TODO: setCategory(receiptUiState.category)
+        setDate(System.currentTimeMillis())
+        setNewCategorySwitch(false)
+        setTipping(false)
     }
     //UI STATE STUFF
     fun resetUiState(){
