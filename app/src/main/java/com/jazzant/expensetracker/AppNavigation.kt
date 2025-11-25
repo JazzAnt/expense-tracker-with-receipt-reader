@@ -304,11 +304,11 @@ fun ExpenseApp(
                     //TODO: Add high order function to manipulate RadioText
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
-                        TODO("Save values on receiptModelState to Database")
-                        TODO("Toast that alerts user")
+                        viewModel.insertReceiptModelToDB()
+                        Toast.makeText(context, "Saved new model to database", Toast.LENGTH_LONG).show()
                         navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
                         viewModel.resetUiState()
-                        TODO("pass values to ExpenseUiState")
+                        viewModel.receiptModelUiToExpenseUi()
                         viewModel.resetReceiptModelUiState()
                         navController.navigate(AppScreen.EDIT_EXPENSE.name)
                                         },
