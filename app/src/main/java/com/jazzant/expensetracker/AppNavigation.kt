@@ -20,7 +20,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -109,7 +108,6 @@ fun ExpenseApp(
             )
         }
     ) { innerPadding ->
-        val expenseState by viewModel.expenseState.collectAsState()
         NavHost(
             navController = navController,
             startDestination = AppScreen.HOME_SCREEN.name,
@@ -129,17 +127,18 @@ fun ExpenseApp(
                 )
             }
             composable(route = AppScreen.EDIT_EXPENSE.name) {
+                val expenseState by viewModel.expenseState.collectAsStateWithLifecycle()
                 val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
                 ExpenseEditorScreen(
-                    categoryList = categoryList + stringResource(R.string.addNewCategorySelection),
+                    categoryList = categoryList,
                     amount = expenseState.amount,
                     onAmountChange = { viewModel.setAmount(it) },
                     name = expenseState.name,
                     onNameChange = { viewModel.setName(it) },
                     category = expenseState.category,
                     onCategoryChange = { viewModel.setCategory(it) },
-                    newCategory = expenseState.newCategory,
-                    onNewCategoryChange = { viewModel.setNewCategory(it) },
+                    newCategorySwitch = expenseState.newCategorySwitch,
+                    onNewCategorySwitchChange = { viewModel.setNewCategorySwitch(it) },
                     tipping = expenseState.tipping,
                     onTippingChange = { viewModel.setTipping(it) },
                     tip = expenseState.tip,
@@ -147,14 +146,26 @@ fun ExpenseApp(
                     date = expenseState.date,
                     onDateChange = { viewModel.setDate(it ?: expenseState.date) },
                     onSaveButtonPress = {
-                        //TODO: Add validator for Expense Contents
-                        viewModel.insertExpenseToDB()
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.saveExpenseToast),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        navController.popBackStack()
+                        val error = viewModel.checkForErrorsInUiState(context)
+                        if (error != null)
+                        {
+                            Toast.makeText(
+                                context,
+                                error,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        else
+                        {
+                            viewModel.insertExpenseToDB()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.saveExpenseToast),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                        }
+
                     }
                 )
             }

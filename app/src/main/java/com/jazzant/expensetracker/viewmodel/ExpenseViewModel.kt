@@ -34,6 +34,8 @@ class ExpenseViewModel(): ViewModel() {
     lateinit var expenseList: StateFlow<List<Expense>>
     lateinit var categoryList: StateFlow<List<String>>
     lateinit var sumOfExpenses: StateFlow<Float>
+    private val _expenseState = MutableStateFlow(ExpenseUiState())
+    val expenseState: StateFlow<ExpenseUiState> = _expenseState.asStateFlow()
     private lateinit var ADD_NEW_CATEGORY: String
     private var expenseId = mutableIntStateOf(-1)
     lateinit var receiptModelRepository: ReceiptModelRepository
@@ -49,7 +51,6 @@ class ExpenseViewModel(): ViewModel() {
         expenseRepository = ExpenseRepository(expenseDatabase.expenseDao())
         receiptModelRepository = ReceiptModelRepository(expenseDatabase.receiptModelDao())
         //Fetch the add_new_category string
-        ADD_NEW_CATEGORY = context.getString(R.string.addNewCategorySelection)
         //Pass the flows
         expenseList = expenseRepository.getAllExpenses()
             .stateIn(
@@ -78,7 +79,7 @@ class ExpenseViewModel(): ViewModel() {
     }
 
     fun insertExpenseToDB(){
-        if(expenseId.intValue < 0)
+        if(_expenseState.value.id < 0)
             createExpenseOnDB()
         else
             updateExpenseOnDB()
@@ -87,60 +88,74 @@ class ExpenseViewModel(): ViewModel() {
     fun createExpenseOnDB(){
         viewModelScope.launch {
             expenseRepository.insert(
-                expenseUiToExpenseEntity(
-                    expenseUiState = _expenseState.value,
-                )
+                getExpenseEntityFromExpenseUIState()
             )
         }
     }
     fun updateExpenseOnDB(){
-        val expense = expenseUiToExpenseEntity(_expenseState.value)
-        expense.expenseId = expenseId.intValue
         viewModelScope.launch {
             expenseRepository.update(
-                expense
+                getExpenseEntityFromExpenseUIState()
             )
         }
     }
 
     //TYPE CONVERTER
-    fun expenseUiToExpenseEntity(expenseUiState: ExpenseUiState): Expense {
-        val amount = if(expenseUiState.tipping){
-            expenseUiState.amount + expenseUiState.tip
+    fun getExpenseEntityFromExpenseUIState(): Expense {
+        _expenseState.value
+        val amount = if(_expenseState.value.tipping){
+            _expenseState.value.amount + _expenseState.value.tip
         } else {
-            expenseUiState.amount
+            _expenseState.value.amount
         }
 
-        val category = if(expenseUiState.category == ADD_NEW_CATEGORY){
-            expenseUiState.newCategory
-        } else {
-            expenseUiState.category
-        }
-
-        return Expense(
+        val expense = Expense(
             amount = amount,
-            category = category,
-            name = expenseUiState.name,
-            date = expenseUiState.date
+            category = _expenseState.value.category,
+            name = _expenseState.value.name,
+            date = _expenseState.value.date
         )
+        if (_expenseState.value.id >= 0){
+            expense.expenseId = _expenseState.value.id
+        }
+        return expense
     }
     fun expenseEntityToUi(expense: Expense){
         resetUiState()
+        setId(expense.expenseId)
         setAmount(expense.amount)
         setCategory(expense.category)
         setName(expense.name)
         setDate(expense.date)
-        expenseId.intValue = expense.expenseId
     }
     //UI STATE STUFF
-    private val _expenseState = MutableStateFlow(ExpenseUiState())
-    val expenseState: StateFlow<ExpenseUiState> = _expenseState.asStateFlow()
-
     fun resetUiState(){
         _expenseState.value = ExpenseUiState()
-        expenseId.intValue = -1
     }
 
+    /**
+     * Returns either an error message or null. This weird implementation
+     * (returning String? instead of Boolean) is done so that in addition to
+     * knowing that there's an error, the UI can also know which value is
+     * problematic. The intended use is for the UI to check if this returns
+     * a null: if it does proceed with Insert/Update the DB, if it doesn't
+     * then show the user the error message e.g. with a Toast.
+     * @return an error message as a String or null if there's no errors
+     */
+    fun checkForErrorsInUiState(context: Context): String?{
+        if (_expenseState.value.amount + _expenseState.value.tip < 0)
+        { return context.getString(R.string.expenseUiError_invalidAmount) }
+        if (_expenseState.value.category.isBlank())
+        { return context.getString(R.string.expenseUiError_invalidCategory) }
+        if (_expenseState.value.name.isBlank())
+        { return context.getString(R.string.expenseUiError_invalidName) }
+        return null
+    }
+    fun setId(expenseId: Int){
+        _expenseState.update { currentState ->
+            currentState.copy(id = expenseId)
+        }
+    }
     fun setAmount(expenseAmount: Float){
         _expenseState.update { currentState ->
             currentState.copy(amount = expenseAmount)
@@ -162,9 +177,9 @@ class ExpenseViewModel(): ViewModel() {
         }
     }
 
-    fun setNewCategory(expenseNewCategory: String){
+    fun setNewCategorySwitch(expenseNewCategorySwitchState: Boolean){
         _expenseState.update { currentState ->
-            currentState.copy(newCategory = expenseNewCategory)
+            currentState.copy(newCategorySwitch = expenseNewCategorySwitchState)
         }
     }
 
