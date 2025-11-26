@@ -29,8 +29,7 @@ fun ChooseStrategyScreen(
             radioOptions = strategyList,
             selectedOption = strategy,
             onOptionChange = onStrategyChange,
-            radioText = { strategy.toString()
-                TODO("Create a stringArray resource and fetch strategy text from there")}
+            radioText = { strategy.toString() } //TODO: Create StringArray to store text
         )
         if (invalidInput)
         {
