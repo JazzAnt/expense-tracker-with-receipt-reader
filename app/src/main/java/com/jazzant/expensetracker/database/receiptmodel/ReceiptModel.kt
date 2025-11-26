@@ -9,6 +9,7 @@ data class ReceiptModel(
     @PrimaryKey
     @ColumnInfo(name = "keyword") val keyword: String,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "amountRecognizerType") val amountRecognizerType: Int,
-    @ColumnInfo(name = "amountRecognizerValue1") val amountRecognizerValue1: Int
+    @ColumnInfo(name = "category") val category: String,
+    @ColumnInfo(name = "parserStrategyId") val parserStrategyId: Int,
+    @ColumnInfo(name = "parserStrategyValue1") val parserStrategyValue1: Int
 )

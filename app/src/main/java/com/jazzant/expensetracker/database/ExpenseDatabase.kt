@@ -10,7 +10,7 @@ import com.jazzant.expensetracker.database.receiptmodel.ReceiptModel
 import com.jazzant.expensetracker.database.receiptmodel.ReceiptModelDao
 
 @Database(
-    version = 2,
+    version = 3,
     entities = [Expense::class, ReceiptModel::class],
     exportSchema = true
 )

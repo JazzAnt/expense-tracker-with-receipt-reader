@@ -141,8 +141,9 @@ class ExpenseViewModel(): ViewModel() {
         return ReceiptModel(
             keyword = receiptUiState.keyword,
             name = receiptUiState.name,
-            amountRecognizerType = receiptUiState.strategy.ordinal,
-            amountRecognizerValue1 = receiptUiState.strategyValue1,
+            category = "",//TODO: pass category once receiptModelUi has one
+            parserStrategyId = receiptUiState.strategy.ordinal,
+            parserStrategyValue1 = receiptUiState.strategyValue1,
         )
     }
 
