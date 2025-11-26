@@ -49,6 +49,15 @@
     <string name="chooseStrategy_description">Here is the strategies to find the expense amount we find to be compatible with this type of receipt. Which one would you like to choose for receipts from this shop?</string>
     <string name="chooseStrategy_radioButtonLabel">Strategy</string>
     <string name="chooseStrategy_invalidStrategyLabel">Please Choose a Strategy before Proceeding</string>
+    <!--STRATEGY NAMES (SORTED BY THEIR ENUM ORDINAL VALUE)-->
+    <string-array name="strategyNames">
+        <item>Nth Price Label from Last</item>
+        <item>Nth Highest Price Label</item>
+    </string-array>
+    <string-array name="strategyDescriptions">
+        <item>The total expense is determined to be the Nth price label from the receipt. This is good for most receipts though it might get confused by long receipts.</item>
+        <item>The total expense is determined to be the Nth highest price label from the receipt. This one might get confused if your receipt contains discounts or change.</item>
+    </string-array>
     <!--NAVIGATION ICONS-->
     <string name="homeNavIcon">Home</string>
     <string name="addExpenseNavIcon">Add Expense</string>
