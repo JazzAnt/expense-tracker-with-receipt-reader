@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.analyzer.Strategy
@@ -21,6 +22,8 @@ fun ChooseStrategyScreen(
     onNextButtonPress: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val strategyNames = stringArrayResource(R.array.strategyNames)
+    val strategyDescriptions = stringArrayResource(R.array.strategyDescriptions)
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxSize()) {
         Text(stringResource(R.string.chooseStrategy_header))
         Text(stringResource(R.string.chooseStrategy_description))
@@ -29,7 +32,8 @@ fun ChooseStrategyScreen(
             radioOptions = strategyList,
             selectedOption = strategy,
             onOptionChange = onStrategyChange,
-            radioText = { strategy.toString() } //TODO: Create StringArray to store text
+            radioText = { strategyNames[it.ordinal] }
+        //TODO: Modify RadioButtons to allow adding description text to put strategyDescriptions
         )
         if (invalidInput)
         {
