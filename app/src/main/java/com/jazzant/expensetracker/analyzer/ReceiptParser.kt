@@ -25,7 +25,8 @@ private fun nthPriceLabelFromLast(
     n: Int
 ): Float
 {
-    return priceLabels[priceLabels.size - n]
+    val lastIndex = priceLabels.size - 1
+    return priceLabels[lastIndex - n]
 }
 
 private fun nthHighestPriceLabel(
@@ -34,5 +35,5 @@ private fun nthHighestPriceLabel(
 ): Float
 {
     val sortedList = priceLabels.sortedDescending()
-    return sortedList[n-1]
+    return sortedList[n]
 }
