@@ -13,6 +13,8 @@ import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.analyzer.Strategy
 import com.jazzant.expensetracker.analyzer.containsKeyword
 import com.jazzant.expensetracker.analyzer.evaluateAllPossibleStrategies
+import com.jazzant.expensetracker.analyzer.parseReceipt
+import com.jazzant.expensetracker.analyzer.toPriceLabelsList
 import com.jazzant.expensetracker.database.receiptmodel.ReceiptModel
 import com.jazzant.expensetracker.database.receiptmodel.ReceiptModelRepository
 import com.jazzant.expensetracker.database.ExpenseDatabase
@@ -290,6 +292,32 @@ class ExpenseViewModel(): ViewModel() {
             }
         }
         setAnalyzerModelIndex(index)
+    }
+
+    /**
+     * Parses the recognized text using the given model.
+     * @return an Expense entity containing the parsed data.
+     */
+    fun parseRecognizedTextFromModel(model: ReceiptModel): Expense
+    {
+        //Parse Strategy and Value
+        val strategy = Strategy.entries[model.parserStrategyId]
+        val value1 = model.parserStrategyValue1
+        //Parse Amount
+        val priceLabels = _receiptAnalyzerUiState.value.recognizedText!!.toPriceLabelsList()
+        val amount = parseReceipt(
+            strategy = strategy,
+            priceLabels = priceLabels,
+            n = value1
+        )
+        //Generate Expense()
+        val expense = Expense(
+            amount = amount,
+            category = model.category,
+            name = model.name,
+            date = System.currentTimeMillis()
+        )
+        return expense
     }
 
     //Receipt Model Ui State Stuff
