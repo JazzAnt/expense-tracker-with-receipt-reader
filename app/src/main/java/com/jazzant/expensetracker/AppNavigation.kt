@@ -39,6 +39,7 @@ import com.jazzant.expensetracker.analyzer.toPriceLabelsList
 import com.jazzant.expensetracker.screens.CameraPermissionScreen
 import com.jazzant.expensetracker.screens.CameraPreviewScreen
 import com.jazzant.expensetracker.screens.ChooseAmountScreen
+import com.jazzant.expensetracker.screens.ChooseCategoryScreen
 import com.jazzant.expensetracker.screens.ChooseKeywordScreen
 import com.jazzant.expensetracker.screens.ChooseNameScreen
 import com.jazzant.expensetracker.screens.ChooseStrategyScreen
@@ -59,6 +60,7 @@ enum class AppScreen(){
     CHOOSE_KEYWORD,
     CHOOSE_NAME,
     CHOOSE_AMOUNT,
+    CHOOSE_CATEGORY,
     ANALYZING_STRATEGY,
     CHOOSE_STRATEGY
 }
@@ -233,7 +235,6 @@ fun ExpenseApp(
                                       },
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
-                        //validator called here to synchronize the InvalidInput state to the name variable instead of the keyword variable
                         viewModel.validateReceiptModelName()
                         navController.navigate(AppScreen.CHOOSE_NAME.name)
                                         },
@@ -272,9 +273,25 @@ fun ExpenseApp(
                     },
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
+                        viewModel.validateReceiptModelCategory()
+                        navController.navigate(AppScreen.CHOOSE_CATEGORY.name)
+                                        },
+                )
+            }
+            composable(route = AppScreen.CHOOSE_CATEGORY.name) {
+                val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
+                val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
+                ChooseCategoryScreen(
+                    newCategorySwitch = receiptModelState.newCategorySwitch,
+                    onNewCategorySwitchChange = { viewModel.setReceiptNewCategorySwitch(it) },
+                    category = receiptModelState.category,
+                    onCategoryChange = { viewModel.setReceiptCategory(it) },
+                    categoryList = categoryList,
+                    invalidInput = receiptModelState.invalidInput,
+                    onNextButtonPress = {
                         viewModel.evaluateStrategies()
                         navController.navigate(AppScreen.ANALYZING_STRATEGY.name)
-                                        },
+                    },
                 )
             }
             composable(route = AppScreen.ANALYZING_STRATEGY.name) {
