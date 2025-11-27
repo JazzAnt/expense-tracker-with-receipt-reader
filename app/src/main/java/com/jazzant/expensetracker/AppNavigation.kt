@@ -198,6 +198,12 @@ fun ExpenseApp(
                     bitmap = receiptAnalyzerState.capturedBitmap!!,
                     onTextRecognized = {
                         viewModel.findKeyword(receiptModelList)
+                        val index = receiptAnalyzerState.receiptModelIndex
+                        if (index >= 0){
+                            val model = receiptModelList[index]
+                            val expense = viewModel.parseRecognizedTextFromModel(model)
+                            viewModel.setAnalyzedExpense(expense)
+                        }
                         navController.navigate(AppScreen.TEXT_ANALYZER.name)
                     },
                     onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
@@ -206,7 +212,6 @@ fun ExpenseApp(
             }
             composable(route = AppScreen.TEXT_ANALYZER.name) {
                 val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
-                val receiptModelList by viewModel.receiptModelList.collectAsStateWithLifecycle()
                 TextAnalyzerScreen(
                     receiptModelIndex = receiptAnalyzerState.receiptModelIndex,
                     bitmap = receiptAnalyzerState.capturedBitmap!!,
@@ -232,19 +237,15 @@ fun ExpenseApp(
                         navController.navigate(AppScreen.EDIT_EXPENSE.name)
                                                         },
                     onUseAnalyzedExpenseButtonPress = {
-                        val model = receiptModelList[receiptAnalyzerState.receiptModelIndex]
-                        val expense = viewModel.parseRecognizedTextFromModel(model)
-                        viewModel.expenseEntityToUi(expense)
+                        viewModel.expenseEntityToUi(receiptAnalyzerState.analyzedExpense!!)
                         navController.navigate(AppScreen.EDIT_EXPENSE.name)
                     },
                     onEditAnalyzedExpenseButtonPress = {
-                        val model = receiptModelList[receiptAnalyzerState.receiptModelIndex]
-                        val expense = viewModel.parseRecognizedTextFromModel(model)
-                        viewModel.expenseEntityToUi(expense)
+                        viewModel.expenseEntityToUi(receiptAnalyzerState.analyzedExpense!!)
                         viewModel.insertExpenseToDB()
                         navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
                     },
-                    analyzedExpense = null, //TODO
+                    analyzedExpense = receiptAnalyzerState.analyzedExpense,
                     onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
                     onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
                 )
