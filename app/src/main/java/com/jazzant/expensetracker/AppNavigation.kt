@@ -209,7 +209,6 @@ fun ExpenseApp(
                 val receiptModelList by viewModel.receiptModelList.collectAsStateWithLifecycle()
                 TextAnalyzerScreen(
                     receiptModelIndex = receiptAnalyzerState.receiptModelIndex,
-                    receiptModelList = receiptModelList,
                     bitmap = receiptAnalyzerState.capturedBitmap!!,
                     onCreateNewReceiptModelButtonPress = {
                         viewModel.resetReceiptModelUiState()
@@ -245,6 +244,7 @@ fun ExpenseApp(
                         viewModel.insertExpenseToDB()
                         navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
                     },
+                    analyzedExpense = null, //TODO
                     onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
                     onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
                 )

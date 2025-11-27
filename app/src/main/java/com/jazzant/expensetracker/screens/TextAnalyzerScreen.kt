@@ -17,19 +17,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import com.google.mlkit.vision.text.Text
 import com.jazzant.expensetracker.R
-import com.jazzant.expensetracker.database.receiptmodel.ReceiptModel
+import com.jazzant.expensetracker.database.expense.Expense
+import com.jazzant.expensetracker.ui.ExpenseCard
 
 @Composable
 fun TextAnalyzerScreen(
-    receiptModelList: List<ReceiptModel>,
     receiptModelIndex: Int,
     bitmap: Bitmap,
     onCreateNewReceiptModelButtonPress: () -> Unit,
     onInputExpenseManuallyButtonPress: () -> Unit,
     onUseAnalyzedExpenseButtonPress: () -> Unit,
     onEditAnalyzedExpenseButtonPress: () -> Unit,
+    analyzedExpense: Expense?,
     onRetakeImageButtonPress: () -> Unit,
     onCancelButtonPress: () -> Unit,
     modifier: Modifier = Modifier
@@ -54,7 +54,13 @@ fun TextAnalyzerScreen(
         }
         else
         {
-            //TODO: Display Analyzed Expense as ExpenseCard
+            if (analyzedExpense != null){
+                ExpenseCard(
+                    expense = analyzedExpense,
+                    onCardClick = {}
+                )
+            }
+
             Button(onClick = onUseAnalyzedExpenseButtonPress)
             { Text(stringResource(R.string.useAnalyzedExpenseButton)) }
             Button(onClick = onEditAnalyzedExpenseButtonPress)
