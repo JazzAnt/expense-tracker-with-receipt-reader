@@ -48,6 +48,8 @@ fun TextAnalyzerScreen(
         {
             Button(onClick = onCreateNewReceiptModelButtonPress)
             { Text(stringResource(R.string.createNewReceiptModelButton)) }
+            Button(onClick = onInputExpenseManuallyButtonPress)
+            { Text(stringResource(R.string.inputExpenseManuallyButton))}
         }
         else
         {
@@ -55,8 +57,6 @@ fun TextAnalyzerScreen(
             Button(onClick = onUseAnalyzedExpenseButtonPress)
             { Text(stringResource(R.string.useAnalyzedExpenseButton)) }
         }
-        Button(onClick = onInputExpenseManuallyButtonPress)
-        { Text(stringResource(R.string.inputExpenseManuallyButton))}
         Button(onClick = onRetakeImageButtonPress)
         { Text(stringResource(R.string.retakeImageButton)) }
         Button(onClick = onCancelButtonPress)
