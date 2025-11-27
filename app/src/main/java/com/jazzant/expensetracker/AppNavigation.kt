@@ -215,7 +215,12 @@ fun ExpenseApp(
                         )
                         navController.navigate(AppScreen.CHOOSE_KEYWORD.name)
                                                          },
-                    onUseAnalyzedExpenseButtonPress = { TODO("Store analyzed values to ExpenseUiState and navigate to ExpenseEditorScreen") },
+                    onUseAnalyzedExpenseButtonPress = {
+                        val model = receiptModelList[receiptAnalyzerState.receiptModelIndex]
+                        val expense = viewModel.parseRecognizedTextFromModel(model)
+                        viewModel.expenseEntityToUi(expense)
+                        navController.navigate(AppScreen.EDIT_EXPENSE.name)
+                                                      },
                     onInputExpenseManuallyButtonPress = { TODO("Parse highest amount to ExpenseUiState and navigate to ExpenseEditorScreen") },
                     onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
                     onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
