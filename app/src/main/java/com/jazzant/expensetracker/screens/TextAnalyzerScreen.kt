@@ -27,8 +27,9 @@ fun TextAnalyzerScreen(
     receiptModelIndex: Int,
     bitmap: Bitmap,
     onCreateNewReceiptModelButtonPress: () -> Unit,
-    onUseAnalyzedExpenseButtonPress: () -> Unit,
     onInputExpenseManuallyButtonPress: () -> Unit,
+    onUseAnalyzedExpenseButtonPress: () -> Unit,
+    onEditAnalyzedExpenseButtonPress: () -> Unit,
     onRetakeImageButtonPress: () -> Unit,
     onCancelButtonPress: () -> Unit,
     modifier: Modifier = Modifier
@@ -56,6 +57,8 @@ fun TextAnalyzerScreen(
             //TODO: Display Analyzed Expense as ExpenseCard
             Button(onClick = onUseAnalyzedExpenseButtonPress)
             { Text(stringResource(R.string.useAnalyzedExpenseButton)) }
+            Button(onClick = onEditAnalyzedExpenseButtonPress)
+            { Text(stringResource(R.string.editAnalyzedExpenseButton)) }
         }
         Button(onClick = onRetakeImageButtonPress)
         { Text(stringResource(R.string.retakeImageButton)) }

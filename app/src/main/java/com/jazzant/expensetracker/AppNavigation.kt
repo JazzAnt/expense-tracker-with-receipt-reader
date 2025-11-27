@@ -238,6 +238,7 @@ fun ExpenseApp(
                         Toast.makeText(context, "Selected most likely values", Toast.LENGTH_SHORT).show()
                         navController.navigate(AppScreen.EDIT_EXPENSE.name)
                                                         },
+                    onEditAnalyzedExpenseButtonPress = {},
                     onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
                     onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
                 )
