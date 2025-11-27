@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import kotlin.time.Duration.Companion.seconds
 
 
@@ -272,7 +273,7 @@ class ExpenseViewModel(): ViewModel() {
             .addOnSuccessListener { visionText ->
                 setAnalyzerText(visionText)
             }
-            .addOnFailureListener { e -> TODO("Maybe throw exception here idk")}
+            .addOnFailureListener { e -> throw ViewModelException("ERROR: Recognizer Fails to Find Text on Image") }
     }
 
     /**

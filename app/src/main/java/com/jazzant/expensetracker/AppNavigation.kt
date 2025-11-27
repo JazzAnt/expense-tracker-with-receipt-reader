@@ -52,6 +52,7 @@ import com.jazzant.expensetracker.screens.LoadingScreen
 import com.jazzant.expensetracker.screens.TextAnalyzerScreen
 import com.jazzant.expensetracker.screens.TextRecognizerScreen
 import com.jazzant.expensetracker.viewmodel.ExpenseViewModel
+import com.jazzant.expensetracker.viewmodel.ViewModelException
 
 enum class AppScreen(){
     HOME_SCREEN,
@@ -185,8 +186,16 @@ fun ExpenseApp(
                 CameraPreviewScreen(
                     onImageCapture = { imageProxy ->
                         viewModel.resetReceiptAnalyzerUiState()
-                        viewModel.recognizeText(imageProxy.toBitmap())
-                        navController.navigate(AppScreen.TEXT_RECOGNIZER.name)
+                        try {
+                            viewModel.recognizeText(imageProxy.toBitmap())
+                            navController.navigate(AppScreen.TEXT_RECOGNIZER.name)
+                        } catch (e: ViewModelException){
+                            Toast.makeText(
+                                context,
+                                e.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 )
             }
