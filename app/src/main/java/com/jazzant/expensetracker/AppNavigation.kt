@@ -218,12 +218,6 @@ fun ExpenseApp(
                         )
                         navController.navigate(AppScreen.CHOOSE_KEYWORD.name)
                                                          },
-                    onUseAnalyzedExpenseButtonPress = {
-                        val model = receiptModelList[receiptAnalyzerState.receiptModelIndex]
-                        val expense = viewModel.parseRecognizedTextFromModel(model)
-                        viewModel.expenseEntityToUi(expense)
-                        navController.navigate(AppScreen.EDIT_EXPENSE.name)
-                                                      },
                     onInputExpenseManuallyButtonPress = {
                         val text = receiptAnalyzerState.recognizedText!!
                         viewModel.resetUiState()
@@ -238,7 +232,19 @@ fun ExpenseApp(
                         Toast.makeText(context, "Selected most likely values", Toast.LENGTH_SHORT).show()
                         navController.navigate(AppScreen.EDIT_EXPENSE.name)
                                                         },
-                    onEditAnalyzedExpenseButtonPress = {},
+                    onUseAnalyzedExpenseButtonPress = {
+                        val model = receiptModelList[receiptAnalyzerState.receiptModelIndex]
+                        val expense = viewModel.parseRecognizedTextFromModel(model)
+                        viewModel.expenseEntityToUi(expense)
+                        navController.navigate(AppScreen.EDIT_EXPENSE.name)
+                    },
+                    onEditAnalyzedExpenseButtonPress = {
+                        val model = receiptModelList[receiptAnalyzerState.receiptModelIndex]
+                        val expense = viewModel.parseRecognizedTextFromModel(model)
+                        viewModel.expenseEntityToUi(expense)
+                        viewModel.insertExpenseToDB()
+                        navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                    },
                     onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
                     onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
                 )
