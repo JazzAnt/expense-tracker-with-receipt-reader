@@ -33,8 +33,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.jazzant.expensetracker.analyzer.Strategy
 import com.jazzant.expensetracker.analyzer.evaluateAllPossibleStrategies
+import com.jazzant.expensetracker.analyzer.parseReceipt
 import com.jazzant.expensetracker.analyzer.toBlockList
+import com.jazzant.expensetracker.analyzer.toLineList
 import com.jazzant.expensetracker.analyzer.toPriceLabelsList
 import com.jazzant.expensetracker.screens.CameraPermissionScreen
 import com.jazzant.expensetracker.screens.CameraPreviewScreen
@@ -221,7 +224,20 @@ fun ExpenseApp(
                         viewModel.expenseEntityToUi(expense)
                         navController.navigate(AppScreen.EDIT_EXPENSE.name)
                                                       },
-                    onInputExpenseManuallyButtonPress = { TODO("Parse highest amount to ExpenseUiState and navigate to ExpenseEditorScreen") },
+                    onInputExpenseManuallyButtonPress = {
+                        val text = receiptAnalyzerState.recognizedText!!
+                        viewModel.resetUiState()
+                        viewModel.setName(text.toLineList()[0])
+                        viewModel.setAmount(
+                            parseReceipt(
+                                strategy = Strategy.NTH_HIGHEST_PRICE_LABEL,
+                                priceLabels = text.toPriceLabelsList(),
+                                n = 0
+                            )
+                        )
+                        Toast.makeText(context, "Selected most likely values", Toast.LENGTH_SHORT).show()
+                        navController.navigate(AppScreen.EDIT_EXPENSE.name)
+                                                        },
                     onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
                     onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
                 )
