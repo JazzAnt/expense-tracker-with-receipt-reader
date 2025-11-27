@@ -243,6 +243,11 @@ class ExpenseViewModel(): ViewModel() {
             currentState.copy(receiptModelIndex = index)
         }
     }
+    fun setAnalyzedExpense(expense: Expense){
+        _receiptAnalyzerUiState.update { currentState ->
+            currentState.copy(analyzedExpense = expense)
+        }
+    }
     fun setAnalyzerTextStringList(list: List<String>){
         _receiptAnalyzerUiState.update { currentState ->
             currentState.copy(recognizedTextStringList = list)
