@@ -144,7 +144,7 @@ class ExpenseViewModel(): ViewModel() {
         return ReceiptModel(
             keyword = receiptUiState.keyword,
             name = receiptUiState.name,
-            category = "",//TODO: pass category once receiptModelUi has one
+            category = receiptUiState.category,
             parserStrategyId = receiptUiState.strategy.ordinal,
             parserStrategyValue1 = receiptUiState.strategyValue1,
         )
@@ -154,7 +154,7 @@ class ExpenseViewModel(): ViewModel() {
         val receiptUiState = _receiptModelUiState.value
         setAmount(receiptUiState.amount)
         setName(receiptUiState.name)
-        //TODO: setCategory(receiptUiState.category)
+        setCategory(receiptUiState.category)
         setDate(System.currentTimeMillis())
         setNewCategorySwitch(false)
         setTipping(false)
