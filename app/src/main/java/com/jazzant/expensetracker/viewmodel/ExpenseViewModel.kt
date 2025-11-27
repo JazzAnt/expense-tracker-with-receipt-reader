@@ -333,6 +333,16 @@ class ExpenseViewModel(): ViewModel() {
         }
     }
 
+    fun setReceiptCategory(category: String){
+        _receiptModelUiState.update { currentState ->
+            currentState.copy(category = category)
+        }
+    }
+    fun setReceiptNewCategorySwitch(state: Boolean){
+        _receiptModelUiState.update { currentState ->
+            currentState.copy(newCategorySwitch = state)
+        }
+    }
     fun setReceiptStrategy(strategy: Strategy){
         _receiptModelUiState.update { currentState ->
             currentState.copy(strategy = strategy)
@@ -400,6 +410,26 @@ class ExpenseViewModel(): ViewModel() {
         setReceiptInvalidInput(
             !priceLabelFloatList.contains(amountFloat)
         )
+    }
+
+    fun validateReceiptModelCategory(){
+        val category = _receiptModelUiState.value.category
+        val newCategorySwitch = _receiptModelUiState.value.newCategorySwitch
+        if (newCategorySwitch)
+        {
+            if (category.isNotBlank())
+            { setReceiptInvalidInput(true) }
+            else
+            { setReceiptInvalidInput(false) }
+        }
+        else
+        {
+            val categoryList = _receiptModelUiState.value.category
+            if (categoryList.contains(category))
+            { setReceiptInvalidInput(false) }
+            else
+            { setReceiptInvalidInput(true) }
+        }
     }
 
     fun validateReceiptModelStrategy(){
