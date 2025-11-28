@@ -23,6 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -32,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,7 +51,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -252,6 +253,85 @@ fun DatePickerModal(
         DatePicker(state = datePickerState)
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DateRangePickerField(label: String, dateRange: Pair<Long, Long>, onDateRangeChange: (Pair<Long?,Long?>)->Unit){
+    var showDateRangePicker by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ){
+        OutlinedTextField(
+            value = "${convertMillisToDate(dateRange.first)} - ${convertMillisToDate(dateRange.second)}",
+            onValueChange = { },
+            label = {Text(label)},
+            placeholder = {Text("DD/MM/YYYY")},
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = stringResource(R.string.datePickerContentDescription)
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .pointerInput(true){
+                    awaitEachGesture {
+                        awaitFirstDown(pass = PointerEventPass.Initial)
+                        val upEvent = waitForUpOrCancellation(pass = PointerEventPass.Initial)
+                        if(upEvent != null) {showDateRangePicker = true}
+                    }
+                }
+        )
+        if (showDateRangePicker){
+            DateRangePickerModal(
+                dateRange = dateRange,
+                onDateRangeSelected = onDateRangeChange,
+                onDismiss = {showDateRangePicker = false},
+            )
+        }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DateRangePickerModal(
+    dateRange: Pair<Long, Long>,
+    onDateRangeSelected: (Pair<Long?, Long?>) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val dateRangePickerState = rememberDateRangePickerState(
+        initialSelectedStartDateMillis = dateRange.first,
+        initialSelectedEndDateMillis = dateRange.second,
+    )
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onDateRangeSelected(
+                        Pair(
+                            first = dateRangePickerState.selectedStartDateMillis,
+                            second = dateRangePickerState.selectedEndDateMillis
+                        )
+                    )
+                    onDismiss()
+                }
+            ) { Text(stringResource(R.string.okButton)) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancelButton))
+            }
+        },
+    ) {
+        DateRangePicker(
+            state = dateRangePickerState,
+            title = { Text(stringResource(R.string.datePickerLabel)) },
+            showModeToggle = false,
+            modifier = Modifier.fillMaxWidth().height(500.dp).padding(16.dp)
+        )
+    }
+}
 @Composable
 fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
     Card (
@@ -314,11 +394,3 @@ fun convertMillisToDate(millis: Long): String{
     return formatter.format(Date(millis))
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CardPreview() {
-    ExpenseCard(
-        Expense(100f, "Food", "Burger", System.currentTimeMillis()),
-        onCardClick = {}
-    )
-}
