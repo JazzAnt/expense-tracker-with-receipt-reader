@@ -47,6 +47,8 @@ class ExpenseViewModel(): ViewModel() {
     val receiptAnalyzerUiState: StateFlow<ReceiptAnalyzerUiState> = _receiptAnalyzerUiState.asStateFlow()
     private val _receiptModelUiState = MutableStateFlow(ReceiptModelUiState())
     val receiptModelUiState: StateFlow<ReceiptModelUiState> = _receiptModelUiState.asStateFlow()
+    private val _homeNavUiState = MutableStateFlow(HomeNavUiState())
+    val homeNavUiState: StateFlow<HomeNavUiState> = _homeNavUiState
 
     fun initializeViewModel(context: Context){
         //Set the Repository
@@ -68,6 +70,102 @@ class ExpenseViewModel(): ViewModel() {
                 initialValue = emptyList()
             )
         receiptModelList = receiptModelRepository.getAllReceiptModels()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5.seconds),
+                initialValue = emptyList()
+            )
+        sumOfExpenses = expenseRepository.getSumOfExpenses()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5.seconds),
+                initialValue = 0f
+            )
+    }
+
+    /**
+     * Checks the value of HomeNavUiState and re-Query the expenseList based on the
+     * availability of the Query values (e.g. if DateRange is not null then Query based
+     * on dateRange).
+     * If no query value are valid then Query all expenses.
+     */
+    fun updateExpenseList(){
+        val navState = _homeNavUiState.value
+        if (navState.isSearching){
+            expenseList = expenseRepository.searchExpensesByName(navState.searchValue)
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = emptyList()
+                )
+            sumOfExpenses = expenseRepository.sumOfExpensesByName(navState.searchValue)
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = 0f
+                )
+            return
+        }
+        if (navState.selectedCategory.isNotBlank() && navState.dateRange.first != null && navState.dateRange.second != null){
+            expenseList = expenseRepository.getAllExpenses(
+                category = navState.selectedCategory,
+                dateRange = navState.dateRange as Pair<Long, Long>
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = emptyList()
+                )
+            sumOfExpenses = expenseRepository.getSumOfExpenses(
+                category = navState.selectedCategory,
+                dateRange = navState.dateRange
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = 0f
+                )
+            return
+        }
+        if (navState.selectedCategory.isNotBlank()){
+            expenseList = expenseRepository.getAllExpenses(
+                category = navState.selectedCategory,
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = emptyList()
+                )
+            sumOfExpenses = expenseRepository.getSumOfExpenses(
+                category = navState.selectedCategory,
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = 0f
+                )
+            return
+        }
+        if (navState.dateRange.first != null && navState.dateRange.second != null){
+            expenseList = expenseRepository.getAllExpenses(
+                dateRange = navState.dateRange as Pair<Long, Long>
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = emptyList()
+                )
+            sumOfExpenses = expenseRepository.getSumOfExpenses(
+                dateRange = navState.dateRange
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = 0f
+                )
+            return
+        }
+        expenseList = expenseRepository.getAllExpenses()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5.seconds),
@@ -158,6 +256,35 @@ class ExpenseViewModel(): ViewModel() {
         setDate(System.currentTimeMillis())
         setNewCategorySwitch(false)
         setTipping(false)
+    }
+    //HOME NAV UI STATE STUFF
+    fun resetHomeNavUiSTate(){
+        _homeNavUiState.value = HomeNavUiState()
+    }
+    fun setHomeNavTitleText(value: String){
+        _homeNavUiState.update { currentState ->
+            currentState.copy(titleText = value)
+        }
+    }
+    fun setHomeNavSearching(value: Boolean){
+        _homeNavUiState.update { currentState ->
+            currentState.copy(isSearching = value)
+        }
+    }
+    fun setHomeNavSearchValue(value: String){
+        _homeNavUiState.update { currentState ->
+            currentState.copy(searchValue = value)
+        }
+    }
+    fun setHomeNavDateRange(value: Pair<Long?, Long?>){
+        _homeNavUiState.update { currentState ->
+            currentState.copy(dateRange =  value)
+        }
+    }
+    fun setHomeNavCategory(value: String){
+        _homeNavUiState.update { currentState ->
+            currentState.copy(selectedCategory = value)
+        }
     }
     //UI STATE STUFF
     fun resetUiState(){
