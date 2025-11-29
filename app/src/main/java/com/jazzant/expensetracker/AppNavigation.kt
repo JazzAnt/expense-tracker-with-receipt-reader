@@ -489,13 +489,25 @@ fun HomeNavBar(
                     selectedCategory = selectedCategory,
                     onSelectionChange = onSelectionChange
                 )
-                IconButton(onClick = { showDatePicker = true }) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = "Filter by Date",
-                        tint = Color.Black
-                    )
+                if (dateRange.first == null || dateRange.second == null){
+                    IconButton(onClick = { showDatePicker = true }) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Filter by Date",
+                            tint = Color.Black
+                        )
+                    }
                 }
+                else{
+                    IconButton(onClick = { onDateRangeChanged(Pair(null,null)) }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Reset Date",
+                            tint = Color.Black
+                        )
+                    }
+                }
+
                 IconButton(onClick = { setIsSearching(true) }) {
                     Icon(
                         imageVector = Icons.Default.Search,
