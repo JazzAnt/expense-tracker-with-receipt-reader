@@ -97,11 +97,31 @@ fun ExpenseApp(
     val currentScreen = AppScreen.valueOf(
         backStackEntry?.destination?.route?: AppScreen.HOME_SCREEN.name
     )
+    //TODO: figure out how to connect these to specifically the home screen state instead of all
+    val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
+    val homeNavState by viewModel.homeNavUiState.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
-            TopNavBar(
-                currentRoute = currentScreen.name
-            )
+            if (currentScreen == AppScreen.HOME_SCREEN) {
+               HomeNavBar(
+                   titleText = homeNavState.titleText,
+                   isSearching = homeNavState.isSearching,
+                   setIsSearching = { viewModel.setHomeNavSearching(it) },
+                   searchValue = homeNavState.searchValue,
+                   onSearchValueChange = { viewModel.setHomeNavSearchValue(it) },
+                   dateRange = homeNavState.dateRange,
+                   onDateRangeChanged = { viewModel.setHomeNavDateRange(it) },
+                   categoryList = categoryList,
+                   selectedCategory = homeNavState.selectedCategory,
+                   onSelectionChange = { viewModel.setHomeNavCategory(it) }
+               )
+            }
+            else {
+                TopNavBar(
+                    currentRoute = currentScreen.name
+                )
+            }
+
         },
         bottomBar = {
             BottomNavBar(
