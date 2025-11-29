@@ -295,7 +295,7 @@ fun DateRangePickerField(label: String, dateRange: Pair<Long, Long>, onDateRange
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateRangePickerModal(
-    dateRange: Pair<Long, Long>,
+    dateRange: Pair<Long?, Long?>,
     onDateRangeSelected: (Pair<Long?, Long?>) -> Unit,
     onDismiss: () -> Unit
 ) {
