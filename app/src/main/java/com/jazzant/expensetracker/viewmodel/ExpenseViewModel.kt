@@ -83,6 +83,102 @@ class ExpenseViewModel(): ViewModel() {
             )
     }
 
+    /**
+     * Checks the value of HomeNavUiState and re-Query the expenseList based on the
+     * availability of the Query values (e.g. if DateRange is not null then Query based
+     * on dateRange).
+     * If no query value are valid then Query all expenses.
+     */
+    fun updateExpenseList(){
+        val navState = _homeNavUiState.value
+        if (navState.isSearching){
+            expenseList = expenseRepository.searchExpensesByName(navState.searchValue)
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = emptyList()
+                )
+            sumOfExpenses = expenseRepository.sumOfExpensesByName(navState.searchValue)
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = 0f
+                )
+            return
+        }
+        if (navState.selectedCategory.isNotBlank() && navState.dateRange.first != null && navState.dateRange.second != null){
+            expenseList = expenseRepository.getAllExpenses(
+                category = navState.selectedCategory,
+                dateRange = navState.dateRange as Pair<Long, Long>
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = emptyList()
+                )
+            sumOfExpenses = expenseRepository.getSumOfExpenses(
+                category = navState.selectedCategory,
+                dateRange = navState.dateRange
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = 0f
+                )
+            return
+        }
+        if (navState.selectedCategory.isNotBlank()){
+            expenseList = expenseRepository.getAllExpenses(
+                category = navState.selectedCategory,
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = emptyList()
+                )
+            sumOfExpenses = expenseRepository.getSumOfExpenses(
+                category = navState.selectedCategory,
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = 0f
+                )
+            return
+        }
+        if (navState.dateRange.first != null && navState.dateRange.second != null){
+            expenseList = expenseRepository.getAllExpenses(
+                dateRange = navState.dateRange as Pair<Long, Long>
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = emptyList()
+                )
+            sumOfExpenses = expenseRepository.getSumOfExpenses(
+                dateRange = navState.dateRange
+            )
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5.seconds),
+                    initialValue = 0f
+                )
+            return
+        }
+        expenseList = expenseRepository.getAllExpenses()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5.seconds),
+                initialValue = emptyList()
+            )
+        sumOfExpenses = expenseRepository.getSumOfExpenses()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5.seconds),
+                initialValue = 0f
+            )
+    }
+
     fun insertExpenseToDB(){
         if(_expenseState.value.id < 0)
             createExpenseOnDB()
