@@ -7,6 +7,7 @@ class ExpenseRepository (private val expenseDao: ExpenseDao){
     fun getAllExpenses(category: String, dateRange: Pair<Long, Long>) = expenseDao.getAllExpenses(category = category, startDate = dateRange.first, endDate = dateRange.second)
 
     fun searchExpensesByName(name: String) = expenseDao.searchExpensesByName(name)
+    fun sumOfExpensesByName(name: String) = expenseDao.sumOfExpensesByName(name)
     fun getAllCategories() = expenseDao.getAllCategories()
 
     fun getSumOfExpenses() = expenseDao.getSumOfExpenses()

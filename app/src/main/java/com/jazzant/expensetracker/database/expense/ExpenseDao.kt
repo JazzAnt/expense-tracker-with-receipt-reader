@@ -30,6 +30,9 @@ interface ExpenseDao {
     @Query("SELECT * FROM expense_table WHERE LOWER(name) LIKE LOWER(:name)")
     fun searchExpensesByName(name: String): Flow<List<Expense>>
 
+    @Query("SELECT SUM(amount) FROM expense_table WHERE LOWER(name) LIKE LOWER(:name)")
+    fun sumOfExpensesByName(name: String): Flow<Float>
+
     @Query("SELECT DISTINCT category FROM expense_table ORDER BY category ASC")
     fun getAllCategories(): Flow<List<String>>
 
