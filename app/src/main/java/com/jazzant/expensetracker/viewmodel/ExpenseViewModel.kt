@@ -47,6 +47,8 @@ class ExpenseViewModel(): ViewModel() {
     val receiptAnalyzerUiState: StateFlow<ReceiptAnalyzerUiState> = _receiptAnalyzerUiState.asStateFlow()
     private val _receiptModelUiState = MutableStateFlow(ReceiptModelUiState())
     val receiptModelUiState: StateFlow<ReceiptModelUiState> = _receiptModelUiState.asStateFlow()
+    private val _homeNavUiState = MutableStateFlow(HomeNavUiState())
+    val homeNavUiState: StateFlow<HomeNavUiState> = _homeNavUiState
 
     fun initializeViewModel(context: Context){
         //Set the Repository
@@ -158,6 +160,35 @@ class ExpenseViewModel(): ViewModel() {
         setDate(System.currentTimeMillis())
         setNewCategorySwitch(false)
         setTipping(false)
+    }
+    //HOME NAV UI STATE STUFF
+    fun resetHomeNavUiSTate(){
+        _homeNavUiState.value = HomeNavUiState()
+    }
+    fun setHomeNavTitleText(value: String){
+        _homeNavUiState.update { currentState ->
+            currentState.copy(titleText = value)
+        }
+    }
+    fun setHomeNavSearching(value: Boolean){
+        _homeNavUiState.update { currentState ->
+            currentState.copy(isSearching = value)
+        }
+    }
+    fun setHomeNavSearchValue(value: String){
+        _homeNavUiState.update { currentState ->
+            currentState.copy(searchValue = value)
+        }
+    }
+    fun setHomeNavDateRange(value: Pair<Long?, Long?>){
+        _homeNavUiState.update { currentState ->
+            currentState.copy(dateRange =  value)
+        }
+    }
+    fun setHomeNavCategory(value: String){
+        _homeNavUiState.update { currentState ->
+            currentState.copy(selectedCategory = value)
+        }
     }
     //UI STATE STUFF
     fun resetUiState(){
