@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
@@ -104,6 +105,7 @@ fun ExpenseApp(
         topBar = {
             if (currentScreen == AppScreen.HOME_SCREEN) {
                HomeNavBar(
+                   onResetButtonPress = { viewModel.resetHomeNavUiSTate() },
                    titleText = homeNavState.titleText,
                    isSearching = homeNavState.isSearching,
                    setIsSearching = { viewModel.setHomeNavSearching(it) },
@@ -437,6 +439,7 @@ fun TopNavBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavBar(
+    onResetButtonPress: () -> Unit,
     titleText: String,
     isSearching: Boolean,
     setIsSearching: (Boolean) -> Unit,
@@ -473,6 +476,9 @@ fun HomeNavBar(
                 Text(titleText)
             }
                 },
+        navigationIcon = {
+            SettingDropDownMenu(onResetButtonPress)
+        },
         actions = {
             if (isSearching) {
                 IconButton(onClick = { setIsSearching(false) }) {
@@ -526,6 +532,32 @@ fun HomeNavBar(
             onDateRangeSelected = onDateRangeChanged,
             onDismiss = { showDatePicker = false }
         )
+    }
+}
+
+@Composable
+fun SettingDropDownMenu(
+    onResetButtonPress: () -> Unit,
+){
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        IconButton( onClick = { expanded = !expanded }) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = "Settings"
+            )
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = {
+                    Text("Reset Query")
+                },
+                onClick = {onResetButtonPress()}
+            )
+        }
     }
 }
 
