@@ -87,6 +87,19 @@ enum class AppScreen(){
     CHOOSE_STRATEGY
 }
 
+val CAMERA_ANALYZE_SCREENS = arrayOf(
+    AppScreen.CAMERA_PREVIEW,
+    AppScreen.TEXT_RECOGNIZER,
+    AppScreen.TEXT_ANALYZER,
+)
+val RECEIPT_MODELING_SCREENS = arrayOf(
+    AppScreen.CHOOSE_KEYWORD,
+    AppScreen.CHOOSE_NAME,
+    AppScreen.CHOOSE_AMOUNT,
+    AppScreen.CHOOSE_CATEGORY,
+    AppScreen.CHOOSE_STRATEGY,
+)
+
 @Composable
 fun ExpenseApp(
     viewModel: ExpenseViewModel = viewModel(),
@@ -103,7 +116,8 @@ fun ExpenseApp(
     val homeNavState by viewModel.homeNavUiState.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
-            if (currentScreen == AppScreen.HOME_SCREEN) {
+            if (currentScreen == AppScreen.HOME_SCREEN)
+            {
                HomeNavBar(
                    onResetButtonPress = { viewModel.resetHomeNavUiSTate() },
                    titleText = homeNavState.titleText,
@@ -118,10 +132,21 @@ fun ExpenseApp(
                    onSelectionChange = { viewModel.setHomeNavCategory(it) }
                )
             }
-            else {
-                TopNavBar(
-                    currentRoute = currentScreen.name
-                )
+            else if (currentScreen == AppScreen.EDIT_EXPENSE)
+            {
+                TopNavBar(currentRoute = currentScreen.name)
+            }
+            else if (CAMERA_ANALYZE_SCREENS.contains(currentScreen))
+            {
+                TopNavBar(currentRoute = currentScreen.name)
+            }
+            else if (RECEIPT_MODELING_SCREENS.contains(currentScreen))
+            {
+                TopNavBar(currentRoute = currentScreen.name)
+            }
+            else
+            {
+                TopNavBar(currentRoute = currentScreen.name)
             }
 
         },
