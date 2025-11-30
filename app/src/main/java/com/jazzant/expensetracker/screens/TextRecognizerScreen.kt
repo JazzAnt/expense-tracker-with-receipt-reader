@@ -5,7 +5,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,14 +30,17 @@ fun TextRecognizerScreen(
     onTextRecognized:() -> Unit,
     onRetakeImageButtonPress: () -> Unit,
     onCancelButtonPress: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    receiptNotFoundOnImage: Boolean = false,
 ){
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxSize()) {
-        Text(
-            text = stringResource(R.string.analyzingImageText),
-            fontSize = TextUnit(5f, TextUnitType.Em),
-            fontWeight = FontWeight.Bold
-        )
+        if (recognizedText == null){
+            Text(
+                text = stringResource(R.string.analyzingImageText),
+                fontSize = TextUnit(5f, TextUnitType.Em),
+                fontWeight = FontWeight.Bold
+            )
+        }
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = stringResource(R.string.capturedImageBitmapContentDescription),
@@ -42,6 +48,19 @@ fun TextRecognizerScreen(
         )
         if (recognizedText == null)
         { Text(stringResource(R.string.noTextRecognizedText)) }
+        else if (receiptNotFoundOnImage)
+        {
+            Icon(
+                Icons.Default.Warning,
+                tint = Color.Red,
+                contentDescription = "Error Sign"
+            )
+            Text(text = "No Receipt Recognized on Image!",
+                color = Color.Red,
+                fontSize = TextUnit(5f, TextUnitType.Em),
+                fontWeight = FontWeight.Bold
+            )
+        }
         else
         { onTextRecognized() }
         Button(onClick = onRetakeImageButtonPress)
