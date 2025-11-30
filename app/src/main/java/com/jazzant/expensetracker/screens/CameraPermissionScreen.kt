@@ -16,17 +16,24 @@ import androidx.core.content.ContextCompat
 import com.jazzant.expensetracker.R
 
 @Composable
-fun CameraPermissionScreen(onCameraPermissionGranted: () -> Unit){
+fun CameraPermissionScreen(
+    onCameraPermissionGranted: () -> Unit,
+    onCameraPermissionDenied: () -> Unit
+){
     var permissionGranted by remember { mutableStateOf(false) }
     CameraPermissionHandler(
-        onPermissionGranted = { permissionGranted = true }
+        onPermissionGranted = { permissionGranted = true },
+        onPermissionDenied = onCameraPermissionDenied
     )
     if (permissionGranted)
     { onCameraPermissionGranted() }
 }
 
 @Composable
-fun CameraPermissionHandler(onPermissionGranted: () -> Unit){
+fun CameraPermissionHandler(
+    onPermissionGranted: () -> Unit,
+    onPermissionDenied: () -> Unit
+){
     val cameraPermission = Manifest.permission.CAMERA
     val context = LocalContext.current
 
@@ -36,7 +43,10 @@ fun CameraPermissionHandler(onPermissionGranted: () -> Unit){
             if (isGranted)
             { onPermissionGranted() }
             else
-            { Toast.makeText(context, context.getString(R.string.cameraPermissionDeniedToast), Toast.LENGTH_SHORT).show() }
+            {
+                Toast.makeText(context, context.getString(R.string.cameraPermissionDeniedToast), Toast.LENGTH_SHORT).show()
+                onPermissionDenied()
+            }
         }
     )
 

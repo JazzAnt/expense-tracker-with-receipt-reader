@@ -162,6 +162,10 @@ fun ExpenseApp(
                     onResetButtonPress = { resetAllCameraStatesAndGoBackToCamera() }
                 )
             }
+            else if (currentScreen == AppScreen.REQUEST_CAMERA_PERMISSION)
+            {
+                TopNavBar(currentRoute = "Checking Camera Permission")
+            }
             else
             {
                 TopNavBar(currentRoute = currentScreen.name)
@@ -244,7 +248,8 @@ fun ExpenseApp(
             }
             composable(route = AppScreen.REQUEST_CAMERA_PERMISSION.name){
                 CameraPermissionScreen(
-                    onCameraPermissionGranted = { navController.navigate(AppScreen.CAMERA_PREVIEW.name) }
+                    onCameraPermissionGranted = { navController.navigate(AppScreen.CAMERA_PREVIEW.name) },
+                    onCameraPermissionDenied = { navController.popBackStack() }
                 )
             }
             composable(route = AppScreen.CAMERA_PREVIEW.name) {
