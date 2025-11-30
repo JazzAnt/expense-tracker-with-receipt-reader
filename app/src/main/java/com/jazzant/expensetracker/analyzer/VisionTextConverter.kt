@@ -3,6 +3,12 @@ package com.jazzant.expensetracker.analyzer
 import com.google.mlkit.vision.text.Text
 
 /**
+ * @return true if the text contains price labels
+ */
+fun Text.containsPriceLabels(): Boolean
+{ return this.toPriceLabelsList().isNotEmpty() }
+
+/**
  * @return true if the text contains the keyword (case insensitive)
  */
 fun Text.containsKeyword(keyword: String): Boolean {
