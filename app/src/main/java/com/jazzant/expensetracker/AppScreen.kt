@@ -27,3 +27,15 @@ val RECEIPT_MODELING_SCREENS = arrayOf(
     AppScreen.CHOOSE_CATEGORY,
     AppScreen.CHOOSE_STRATEGY,
 )
+
+fun getReceiptModelingScreenTitle(appScreen: AppScreen): String{
+    return when (appScreen) {
+        AppScreen.CHOOSE_KEYWORD -> "Select the Keyword"
+        AppScreen.CHOOSE_NAME -> "Select the Name"
+        AppScreen.CHOOSE_AMOUNT -> "Select the Expense Amount"
+        AppScreen.CHOOSE_CATEGORY -> "Select the Category"
+        AppScreen.CHOOSE_STRATEGY -> "Select the Strategy"
+        else -> "(if you see this the dev did something wrong)"
+    }
+
+}

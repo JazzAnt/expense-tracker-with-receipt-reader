@@ -156,7 +156,11 @@ fun ExpenseApp(
             }
             else if (RECEIPT_MODELING_SCREENS.contains(currentScreen))
             {
-                TopNavBar(currentRoute = currentScreen.name)
+                ReceiptCreatorNavBar(
+                    titleText = getReceiptModelingScreenTitle(currentScreen),
+                    onBackButtonPress = { navController.popBackStack() },
+                    onResetButtonPress = { resetAllCameraStatesAndGoBackToCamera() }
+                )
             }
             else
             {
