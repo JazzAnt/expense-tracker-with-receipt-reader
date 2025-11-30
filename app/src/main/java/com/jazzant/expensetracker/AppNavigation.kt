@@ -147,7 +147,12 @@ fun ExpenseApp(
             }
             else if (CAMERA_ANALYZE_SCREENS.contains(currentScreen))
             {
-                TopNavBar(currentRoute = currentScreen.name)
+                CameraNavBar(
+                    onBackButtonPress = {
+                        viewModel.resetReceiptAnalyzerUiState()
+                        navController.popBackStack(route = AppScreen.EDIT_EXPENSE.name, inclusive = false)
+                    }
+                )
             }
             else if (RECEIPT_MODELING_SCREENS.contains(currentScreen))
             {
