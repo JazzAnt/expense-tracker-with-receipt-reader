@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Menu
@@ -72,6 +73,7 @@ import com.jazzant.expensetracker.screens.ExpenseListScreen
 import com.jazzant.expensetracker.screens.LoadingScreen
 import com.jazzant.expensetracker.screens.TextAnalyzerScreen
 import com.jazzant.expensetracker.screens.TextRecognizerScreen
+import com.jazzant.expensetracker.ui.AlertDialog
 import com.jazzant.expensetracker.ui.DateRangePickerModal
 import com.jazzant.expensetracker.ui.TextInput
 import com.jazzant.expensetracker.viewmodel.ExpenseViewModel
@@ -128,10 +130,11 @@ fun ExpenseApp(
             else if (currentScreen == AppScreen.EDIT_EXPENSE)
             {
                 val expenseState = viewModel.expenseState.collectAsStateWithLifecycle()
+                val openAlertDialog = remember { mutableStateOf(false) }
                 EditorNavBar(
                     isCreatingNewExpense = expenseState.value.id < 0,
                     onBackButtonPress = { navController.popBackStack() },
-                    onResetButtonPress = { viewModel.resetUiState() },
+                    onResetButtonPress = { openAlertDialog.value = true },
                     onSaveButtonPress = {
                         val error = viewModel.checkForErrorsInUiState(context)
                         if (error != null)
@@ -144,6 +147,15 @@ fun ExpenseApp(
                         }
                     }
                 )
+                when {
+                    openAlertDialog.value -> { AlertDialog(
+                        onDismissRequest = { openAlertDialog.value = false},
+                        onConfirmation = { viewModel.resetUiState() },
+                        dialogTitle = "Reset Input Values",
+                        dialogText = "Remove all Input Values?",
+                        icon = Icons.Default.Info
+                    ) }
+                }
             }
             else if (CAMERA_ANALYZE_SCREENS.contains(currentScreen))
             {
