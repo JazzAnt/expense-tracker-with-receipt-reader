@@ -11,9 +11,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -23,6 +25,8 @@ import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
@@ -80,9 +84,11 @@ fun ExpenseApp(
 ){
     viewModel.initializeViewModel(context)
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = AppScreen.valueOf(
-        backStackEntry?.destination?.route?: AppScreen.HOME_SCREEN.name
-    )
+    val currentScreen = AppScreen.valueOf(value = backStackEntry?.destination?.route?: AppScreen.HOME_SCREEN.name)
+    var fabPosition: FabPosition = FabPosition.End
+    if (currentScreen == AppScreen.EDIT_EXPENSE)
+    { fabPosition = FabPosition.Center }
+
     //TODO: figure out how to connect these to specifically the home screen state instead of all
     val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
     val homeNavState by viewModel.homeNavUiState.collectAsStateWithLifecycle()
@@ -122,35 +128,37 @@ fun ExpenseApp(
             }
 
         },
-        bottomBar = {
-            BottomNavBar(
-                items = listOf(
-                    BottomNavItem(
-                        name = stringResource(R.string.homeNavIcon),
-                        route = AppScreen.HOME_SCREEN.name,
-                        icon = Icons.Default.Home
-                    ),
-
-                    BottomNavItem(
-                        name = "camera",
-                        route = AppScreen.REQUEST_CAMERA_PERMISSION.name,
-                        icon = Icons.Default.ShoppingCart
-                    ),
-
-                    BottomNavItem(
-                        name = stringResource(R.string.addExpenseNavIcon),
-                        route = AppScreen.EDIT_EXPENSE.name,
-                        icon = Icons.Default.Add,
-                        floating = true,
-                        onNavButtonClick = {
-                            viewModel.resetUiState()
-                        }
+        floatingActionButtonPosition = fabPosition,
+        floatingActionButton = {
+            if (currentScreen == AppScreen.EDIT_EXPENSE)
+            {
+                ExtendedFloatingActionButton(
+                    onClick = { navController.navigate(AppScreen.REQUEST_CAMERA_PERMISSION.name) },
+                    containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                    elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Analyze Receipt with Camera",
                     )
-                ),
-                onItemClick = {navController.navigate(it.route)},
-                currentRoute = currentScreen.name
-            )
+                    Text("Analyze with Camera")
+                }
+            }
+            else if (currentScreen == AppScreen.HOME_SCREEN)
+            {
+                FloatingActionButton(
+                    onClick = { navController.navigate(AppScreen.EDIT_EXPENSE.name) },
+                    containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                    elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Create,
+                        contentDescription = "Create New Expense",
+                    )
+                }
+            }
         }
+
     ) { innerPadding ->
         NavHost(
             navController = navController,
