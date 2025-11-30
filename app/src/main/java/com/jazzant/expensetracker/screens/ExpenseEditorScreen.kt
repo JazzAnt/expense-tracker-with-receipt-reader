@@ -36,7 +36,6 @@ fun ExpenseEditorScreen(
     onTipChange: (Float) -> Unit,
     date: Long,
     onDateChange: (Long?) -> Unit,
-    onSaveButtonPress: () -> Unit,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -88,7 +87,6 @@ fun ExpenseEditorScreen(
             )
         }
 
-
         CheckBoxField(
             text = stringResource(R.string.addTipCheckboxLabel),
             state = tipping,
@@ -126,13 +124,6 @@ fun ExpenseEditorScreen(
                 Text("Date\t: ${convertMillisToDate(date)}")
 
             }
-        }
-
-        Button(
-            onClick = onSaveButtonPress,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Save")
         }
     }
 }

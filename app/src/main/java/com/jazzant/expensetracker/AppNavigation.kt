@@ -270,9 +270,6 @@ fun ExpenseApp(
                     onTipChange = { viewModel.setTip(it) },
                     date = expenseState.date,
                     onDateChange = { viewModel.setDate(it ?: expenseState.date) },
-                    onSaveButtonPress = {
-                        //TODO: Remove SaveButton since it's on the top bar now
-                    }
                 )
             }
             composable(route = AppScreen.REQUEST_CAMERA_PERMISSION.name){
