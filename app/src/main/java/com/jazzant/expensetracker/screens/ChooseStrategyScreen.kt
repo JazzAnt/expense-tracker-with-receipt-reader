@@ -19,7 +19,7 @@ fun ChooseStrategyScreen(
     strategy: Strategy,
     onStrategyChange: (Strategy) -> Unit,
     invalidInput: Boolean,
-    onNextButtonPress: () -> Unit,
+    onSaveButtonPress: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val strategyNames = stringArrayResource(R.array.strategyNames)
@@ -41,7 +41,7 @@ fun ChooseStrategyScreen(
         }
         else
         {
-            Button(onClick = onNextButtonPress) {
+            Button(onClick = onSaveButtonPress) {
                 Text(stringResource(R.string.nextButton))
             }
         }

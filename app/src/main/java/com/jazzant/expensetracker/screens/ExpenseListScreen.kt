@@ -59,7 +59,7 @@ fun ExpenseSumCard(sum: Float, modifier: Modifier = Modifier){
         .fillMaxWidth()
         .height(50.dp)
         .zIndex(1f)) {
-        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
             Text(
                 stringResource(R.string.sumOfExpensesLabel) +": $%.2f".format(sum),
                 fontSize = TextUnit(5f, TextUnitType.Em),

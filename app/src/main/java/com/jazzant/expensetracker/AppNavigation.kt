@@ -2,46 +2,27 @@ package com.jazzant.expensetracker
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.BottomAppBarDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -50,7 +31,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jazzant.expensetracker.analyzer.Strategy
-import com.jazzant.expensetracker.analyzer.evaluateAllPossibleStrategies
 import com.jazzant.expensetracker.analyzer.parseReceipt
 import com.jazzant.expensetracker.analyzer.toBlockList
 import com.jazzant.expensetracker.analyzer.toLineList
@@ -67,25 +47,9 @@ import com.jazzant.expensetracker.screens.ExpenseListScreen
 import com.jazzant.expensetracker.screens.LoadingScreen
 import com.jazzant.expensetracker.screens.TextAnalyzerScreen
 import com.jazzant.expensetracker.screens.TextRecognizerScreen
-import com.jazzant.expensetracker.ui.DateRangePickerModal
-import com.jazzant.expensetracker.ui.TextInput
+import com.jazzant.expensetracker.ui.AlertDialog
 import com.jazzant.expensetracker.viewmodel.ExpenseViewModel
 import com.jazzant.expensetracker.viewmodel.ViewModelException
-
-enum class AppScreen(){
-    HOME_SCREEN,
-    EDIT_EXPENSE,
-    REQUEST_CAMERA_PERMISSION,
-    CAMERA_PREVIEW,
-    TEXT_RECOGNIZER,
-    TEXT_ANALYZER,
-    CHOOSE_KEYWORD,
-    CHOOSE_NAME,
-    CHOOSE_AMOUNT,
-    CHOOSE_CATEGORY,
-    ANALYZING_STRATEGY,
-    CHOOSE_STRATEGY
-}
 
 @Composable
 fun ExpenseApp(
@@ -93,17 +57,34 @@ fun ExpenseApp(
     navController: NavHostController = rememberNavController(),
     context: Context = LocalContext.current
 ){
+    //INITIALIZE VARIABLES
     viewModel.initializeViewModel(context)
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = AppScreen.valueOf(
-        backStackEntry?.destination?.route?: AppScreen.HOME_SCREEN.name
-    )
-    //TODO: figure out how to connect these to specifically the home screen state instead of all
+    val currentScreen = AppScreen.valueOf(value = backStackEntry?.destination?.route?: AppScreen.HOME_SCREEN.name)
+    var fabPosition: FabPosition = FabPosition.End
+    if (currentScreen == AppScreen.EDIT_EXPENSE)
+    { fabPosition = FabPosition.Center }
+    //TODO: figure out how to make these aware of the HomeScreen Lifecycle only instead of ExpenseApp
     val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
     val homeNavState by viewModel.homeNavUiState.collectAsStateWithLifecycle()
+
+    //NAVIGATION FUNCTIONS
+    fun resetAllCameraStatesAndGoBackToHome(){
+        viewModel.resetReceiptAnalyzerUiState()
+        viewModel.resetReceiptModelUiState()
+        navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+    }
+    fun resetAllCameraStatesAndGoBackToCamera(){
+        viewModel.resetReceiptAnalyzerUiState()
+        viewModel.resetReceiptModelUiState()
+        navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false)
+    }
+
+    //ACTUAL COMPOSE SCREEN
     Scaffold(
         topBar = {
-            if (currentScreen == AppScreen.HOME_SCREEN) {
+            if (currentScreen == AppScreen.HOME_SCREEN)
+            {
                HomeNavBar(
                    onResetButtonPress = { viewModel.resetHomeNavUiSTate() },
                    titleText = homeNavState.titleText,
@@ -118,42 +99,110 @@ fun ExpenseApp(
                    onSelectionChange = { viewModel.setHomeNavCategory(it) }
                )
             }
-            else {
-                TopNavBar(
-                    currentRoute = currentScreen.name
+            else if (currentScreen == AppScreen.EDIT_EXPENSE)
+            {
+                val expenseState = viewModel.expenseState.collectAsStateWithLifecycle()
+                val openAlertDialog = remember { mutableStateOf(false) }
+                EditorNavBar(
+                    isCreatingNewExpense = expenseState.value.id < 0,
+                    onBackButtonPress = { navController.popBackStack() },
+                    onResetButtonPress = { openAlertDialog.value = true },
+                    onSaveButtonPress = {
+                        val error = viewModel.checkForErrorsInUiState(context)
+                        if (error != null)
+                        { Toast.makeText(context,error,Toast.LENGTH_LONG).show() }
+                        else
+                        {
+                            viewModel.insertExpenseToDB()
+                            Toast.makeText(context,context.getString(R.string.saveExpenseToast),Toast.LENGTH_SHORT).show()
+                            navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                        }
+                    }
                 )
+                when {
+                    openAlertDialog.value -> { AlertDialog(
+                        onDismissRequest = { openAlertDialog.value = false},
+                        onConfirmation = { viewModel.resetUiState() },
+                        dialogTitle = "Reset Input Values",
+                        dialogText = "Remove all Input Values?",
+                        icon = Icons.Default.Info
+                    ) }
+                }
+            }
+            else if (CAMERA_ANALYZE_SCREENS.contains(currentScreen))
+            {
+                CameraNavBar(
+                    onBackButtonPress = {
+                        viewModel.resetReceiptAnalyzerUiState()
+                        navController.popBackStack(route = AppScreen.EDIT_EXPENSE.name, inclusive = false)
+                    }
+                )
+            }
+            else if (RECEIPT_MODELING_SCREENS.contains(currentScreen))
+            {
+                val openAlertDialog = remember { mutableStateOf(false) }
+                ReceiptCreatorNavBar(
+                    titleText = getReceiptModelingScreenTitle(currentScreen),
+                    onBackButtonPress = {
+                        // This is done because the screen before ChooseStrategy is the loading screen which should be skipped if you click back
+                        if (currentScreen == AppScreen.CHOOSE_STRATEGY)
+                        { navController.popBackStack(route = AppScreen.CHOOSE_AMOUNT.name, inclusive = false) }
+                        else
+                        { navController.popBackStack() }
+                                        },
+                    onResetButtonPress = { openAlertDialog.value = true }
+                )
+                when {
+                    openAlertDialog.value -> { AlertDialog(
+                        onDismissRequest = { openAlertDialog.value = false},
+                        onConfirmation = { resetAllCameraStatesAndGoBackToCamera() },
+                        dialogTitle = "Cancel Creating Model",
+                        dialogText = "Discard All Values and Go Back to the Camera?",
+                        icon = Icons.Default.Warning
+                    ) }
+                }
+            }
+            else if (currentScreen == AppScreen.REQUEST_CAMERA_PERMISSION)
+            {
+                TopNavBar(currentRoute = "Checking Camera Permission")
+            }
+            else
+            {
+                TopNavBar(currentRoute = currentScreen.name)
             }
 
         },
-        bottomBar = {
-            BottomNavBar(
-                items = listOf(
-                    BottomNavItem(
-                        name = stringResource(R.string.homeNavIcon),
-                        route = AppScreen.HOME_SCREEN.name,
-                        icon = Icons.Default.Home
-                    ),
-
-                    BottomNavItem(
-                        name = "camera",
-                        route = AppScreen.REQUEST_CAMERA_PERMISSION.name,
-                        icon = Icons.Default.ShoppingCart
-                    ),
-
-                    BottomNavItem(
-                        name = stringResource(R.string.addExpenseNavIcon),
-                        route = AppScreen.EDIT_EXPENSE.name,
-                        icon = Icons.Default.Add,
-                        floating = true,
-                        onNavButtonClick = {
-                            viewModel.resetUiState()
-                        }
+        floatingActionButtonPosition = fabPosition,
+        floatingActionButton = {
+            if (currentScreen == AppScreen.EDIT_EXPENSE)
+            {
+                ExtendedFloatingActionButton(
+                    onClick = { navController.navigate(AppScreen.REQUEST_CAMERA_PERMISSION.name) },
+                    containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                    elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Analyze Receipt with Camera",
                     )
-                ),
-                onItemClick = {navController.navigate(it.route)},
-                currentRoute = currentScreen.name
-            )
+                    Text("Analyze with Camera")
+                }
+            }
+            else if (currentScreen == AppScreen.HOME_SCREEN)
+            {
+                FloatingActionButton(
+                    onClick = { navController.navigate(AppScreen.EDIT_EXPENSE.name) },
+                    containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                    elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Create,
+                        contentDescription = "Create New Expense",
+                    )
+                }
+            }
         }
+
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -192,33 +241,12 @@ fun ExpenseApp(
                     onTipChange = { viewModel.setTip(it) },
                     date = expenseState.date,
                     onDateChange = { viewModel.setDate(it ?: expenseState.date) },
-                    onSaveButtonPress = {
-                        val error = viewModel.checkForErrorsInUiState(context)
-                        if (error != null)
-                        {
-                            Toast.makeText(
-                                context,
-                                error,
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                        else
-                        {
-                            viewModel.insertExpenseToDB()
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.saveExpenseToast),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
-                        }
-
-                    }
                 )
             }
             composable(route = AppScreen.REQUEST_CAMERA_PERMISSION.name){
                 CameraPermissionScreen(
-                    onCameraPermissionGranted = { navController.navigate(AppScreen.CAMERA_PREVIEW.name) }
+                    onCameraPermissionGranted = { navController.navigate(AppScreen.CAMERA_PREVIEW.name) },
+                    onCameraPermissionDenied = { navController.popBackStack() }
                 )
             }
             composable(route = AppScreen.CAMERA_PREVIEW.name) {
@@ -254,8 +282,8 @@ fun ExpenseApp(
                         }
                         navController.navigate(AppScreen.TEXT_ANALYZER.name)
                     },
-                    onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
-                    onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
+                    onRetakeImageButtonPress = { resetAllCameraStatesAndGoBackToCamera() },
+                    onCancelButtonPress = { resetAllCameraStatesAndGoBackToHome() }
                 )
             }
             composable(route = AppScreen.TEXT_ANALYZER.name) {
@@ -291,11 +319,11 @@ fun ExpenseApp(
                     onEditAnalyzedExpenseButtonPress = {
                         viewModel.expenseEntityToUi(receiptAnalyzerState.analyzedExpense!!)
                         viewModel.insertExpenseToDB()
-                        navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                        resetAllCameraStatesAndGoBackToHome()
                     },
                     analyzedExpense = receiptAnalyzerState.analyzedExpense,
-                    onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
-                    onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
+                    onRetakeImageButtonPress = { resetAllCameraStatesAndGoBackToCamera() },
+                    onCancelButtonPress = { resetAllCameraStatesAndGoBackToHome() }
                 )
             }
             composable(route = AppScreen.CHOOSE_KEYWORD.name) {
@@ -397,266 +425,18 @@ fun ExpenseApp(
                     },
                     //TODO: Add high order function to manipulate RadioText
                     invalidInput = receiptModelState.invalidInput,
-                    onNextButtonPress = {
+                    onSaveButtonPress = {
                         viewModel.insertReceiptModelToDB()
-                        Toast.makeText(context, "Saved new model to database", Toast.LENGTH_LONG).show()
-                        navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                        Toast.makeText(context, "Saved Model to Database", Toast.LENGTH_SHORT).show()
                         viewModel.resetUiState()
                         viewModel.receiptModelUiToExpenseUi()
                         viewModel.resetReceiptModelUiState()
-                        navController.navigate(AppScreen.EDIT_EXPENSE.name)
+                        viewModel.resetReceiptAnalyzerUiState()
+                        navController.popBackStack(route= AppScreen.EDIT_EXPENSE.name, inclusive = false)
                                         },
                 )
             }
         }
     }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopNavBar(
-    currentRoute: String,
-    modifier: Modifier = Modifier
-){
-    TopAppBar(
-        title = { Text(currentRoute) },
-        modifier = modifier,
-        navigationIcon = {
-
-            IconButton(
-                onClick = {
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = stringResource(R.string.menuNavIcon),
-                    tint = Color.Gray
-                )
-            }
-        }
-    )
-}
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HomeNavBar(
-    onResetButtonPress: () -> Unit,
-    titleText: String,
-    isSearching: Boolean,
-    setIsSearching: (Boolean) -> Unit,
-    searchValue: String,
-    onSearchValueChange: (String)->Unit,
-    dateRange: Pair<Long?, Long?>,
-    onDateRangeChanged: (Pair<Long?, Long?>) -> Unit,
-    categoryList: List<String>,
-    selectedCategory: String,
-    onSelectionChange: (String) -> Unit,
-){
-    var showDatePicker by remember { mutableStateOf(false) }
-    TopAppBar(
-        title = {
-            if (isSearching) {
-                TextField(
-                    value = searchValue,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    singleLine = true,
-                    onValueChange = onSearchValueChange,
-                    modifier = Modifier.fillMaxWidth(),
-                    trailingIcon = {
-                        IconButton(onClick = { onSearchValueChange("") }) {
-                            Icon(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = "Clear Search",
-                                tint = Color.Gray
-                            )
-                        }
-                    }
-                )
-            }
-            else {
-                Text(titleText)
-            }
-                },
-        navigationIcon = {
-            SettingDropDownMenu(onResetButtonPress)
-        },
-        actions = {
-            if (isSearching) {
-                IconButton(onClick = { setIsSearching(false) }) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close Search",
-                        tint = Color.Black
-                    )
-                }
-            }
-            else {
-                CategoryDropDownMenu(
-                    categoryList = categoryList,
-                    selectedCategory = selectedCategory,
-                    onSelectionChange = onSelectionChange
-                )
-                if (dateRange.first == null || dateRange.second == null){
-                    IconButton(onClick = { showDatePicker = true }) {
-                        Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = "Filter by Date",
-                            tint = Color.Black
-                        )
-                    }
-                }
-                else{
-                    IconButton(onClick = { onDateRangeChanged(Pair(null,null)) }) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Reset Date",
-                            tint = Color.Black
-                        )
-                    }
-                }
-
-                IconButton(onClick = { setIsSearching(true) }) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search",
-                        tint = Color.Black
-                    )
-                }
-            }
-
-        }
-
-    )
-    if (showDatePicker) {
-        DateRangePickerModal(
-            dateRange = dateRange,
-            onDateRangeSelected = onDateRangeChanged,
-            onDismiss = { showDatePicker = false }
-        )
-    }
-}
-
-@Composable
-fun SettingDropDownMenu(
-    onResetButtonPress: () -> Unit,
-){
-    var expanded by remember { mutableStateOf(false) }
-    Box {
-        IconButton( onClick = { expanded = !expanded }) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = "Settings"
-            )
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            DropdownMenuItem(
-                text = {
-                    Text("Reset Query")
-                },
-                onClick = {onResetButtonPress()}
-            )
-        }
-    }
-}
-
-@Composable
-fun CategoryDropDownMenu(
-    categoryList: List<String>,
-    selectedCategory: String,
-    onSelectionChange: (String) -> Unit,
-){
-    var expanded by remember { mutableStateOf(false) }
-    Box {
-        IconButton( onClick = { expanded = !expanded }) {
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowDown,
-                contentDescription = "Filter by Category"
-                )
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            DropdownMenuItem(
-                text = {
-                    Text("No Category", color = Color.Red)
-                       },
-                onClick = {onSelectionChange("")}
-            )
-            categoryList.forEach {
-                DropdownMenuItem(
-                    text = {
-                        Text(it, color = selectedColor(selectedCategory == it))
-                    },
-                    onClick = {onSelectionChange(it)}
-                )
-            }
-        }
-    }
-}
-
-fun selectedColor(selected: Boolean): Color {
-    return if (selected)
-        Color.Blue
-    else
-        Color.Black
-}
-
-data class BottomNavItem(
-    val name: String,
-    val route: String,
-    val icon: ImageVector,
-    val floating: Boolean = false,
-    val onNavButtonClick: () -> Unit = {}
-)
-
-@Composable
-fun BottomNavBar(
-    items: List<BottomNavItem>,
-    onItemClick: (BottomNavItem) -> Unit,
-    currentRoute: String,
-    modifier: Modifier = Modifier
-) {
-    BottomAppBar(
-        modifier = modifier,
-        actions = {
-            items.forEach {
-                if(it.floating) { return@forEach }
-                val selected = it.route == currentRoute
-                IconButton(
-                    onClick = {
-                        it.onNavButtonClick()
-                        onItemClick(it)
-                              },
-                    enabled = !selected
-                ) {
-                    Icon(
-                        imageVector = it.icon,
-                        contentDescription = it.name,
-                        tint = if (selected) { Color.Red } else { Color.Gray }
-                    )
-                }
-            }
-        },
-        floatingActionButton = {
-            items.forEach {
-                if (!it.floating){ return@forEach }
-                FloatingActionButton(
-                    onClick = {
-                        it.onNavButtonClick()
-                        onItemClick(it)
-                              },
-                    containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                    elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-                ) {
-                    Icon(
-                        imageVector = it.icon,
-                        contentDescription = it.name,
-                    )
-                }
-            }
-        }
-    )
 }
