@@ -53,6 +53,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.jazzant.expensetracker.analyzer.Strategy
 import com.jazzant.expensetracker.analyzer.evaluateAllPossibleStrategies
 import com.jazzant.expensetracker.analyzer.parseReceipt
@@ -82,16 +83,30 @@ fun ExpenseApp(
     navController: NavHostController = rememberNavController(),
     context: Context = LocalContext.current
 ){
+    //INITIALIZE VARIABLES
     viewModel.initializeViewModel(context)
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppScreen.valueOf(value = backStackEntry?.destination?.route?: AppScreen.HOME_SCREEN.name)
     var fabPosition: FabPosition = FabPosition.End
     if (currentScreen == AppScreen.EDIT_EXPENSE)
     { fabPosition = FabPosition.Center }
-
-    //TODO: figure out how to connect these to specifically the home screen state instead of all
+    //TODO: figure out how to make these aware of the HomeScreen Lifecycle only instead of ExpenseApp
     val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
     val homeNavState by viewModel.homeNavUiState.collectAsStateWithLifecycle()
+
+    //NAVIGATION FUNCTIONS
+    fun resetAllCameraStatesAndGoBackToHome(){
+        viewModel.resetReceiptAnalyzerUiState()
+        viewModel.resetReceiptModelUiState()
+        navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+    }
+    fun resetAllCameraStatesAndGoBackToCamera(){
+        viewModel.resetReceiptAnalyzerUiState()
+        viewModel.resetReceiptModelUiState()
+        navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false)
+    }
+
+    //ACTUAL COMPOSE SCREEN
     Scaffold(
         topBar = {
             if (currentScreen == AppScreen.HOME_SCREEN)
@@ -259,8 +274,8 @@ fun ExpenseApp(
                         }
                         navController.navigate(AppScreen.TEXT_ANALYZER.name)
                     },
-                    onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
-                    onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
+                    onRetakeImageButtonPress = { resetAllCameraStatesAndGoBackToCamera() },
+                    onCancelButtonPress = { resetAllCameraStatesAndGoBackToHome() }
                 )
             }
             composable(route = AppScreen.TEXT_ANALYZER.name) {
@@ -296,11 +311,11 @@ fun ExpenseApp(
                     onEditAnalyzedExpenseButtonPress = {
                         viewModel.expenseEntityToUi(receiptAnalyzerState.analyzedExpense!!)
                         viewModel.insertExpenseToDB()
-                        navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                        resetAllCameraStatesAndGoBackToHome()
                     },
                     analyzedExpense = receiptAnalyzerState.analyzedExpense,
-                    onRetakeImageButtonPress = { navController.popBackStack(route = AppScreen.CAMERA_PREVIEW.name, inclusive = false) },
-                    onCancelButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false) }
+                    onRetakeImageButtonPress = { resetAllCameraStatesAndGoBackToCamera() },
+                    onCancelButtonPress = { resetAllCameraStatesAndGoBackToHome() }
                 )
             }
             composable(route = AppScreen.CHOOSE_KEYWORD.name) {
@@ -404,15 +419,16 @@ fun ExpenseApp(
                     invalidInput = receiptModelState.invalidInput,
                     onNextButtonPress = {
                         viewModel.insertReceiptModelToDB()
-                        Toast.makeText(context, "Saved new model to database", Toast.LENGTH_LONG).show()
-                        navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                        Toast.makeText(context, "Saved Model to Database", Toast.LENGTH_SHORT).show()
                         viewModel.resetUiState()
                         viewModel.receiptModelUiToExpenseUi()
                         viewModel.resetReceiptModelUiState()
-                        navController.navigate(AppScreen.EDIT_EXPENSE.name)
+                        viewModel.resetReceiptAnalyzerUiState()
+                        navController.popBackStack(route= AppScreen.EDIT_EXPENSE.name, inclusive = false)
                                         },
                 )
             }
         }
     }
+
 }
