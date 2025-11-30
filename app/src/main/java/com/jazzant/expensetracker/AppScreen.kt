@@ -1,0 +1,29 @@
+package com.jazzant.expensetracker
+
+enum class AppScreen(){
+    HOME_SCREEN,
+    EDIT_EXPENSE,
+    REQUEST_CAMERA_PERMISSION,
+    CAMERA_PREVIEW,
+    TEXT_RECOGNIZER,
+    TEXT_ANALYZER,
+    CHOOSE_KEYWORD,
+    CHOOSE_NAME,
+    CHOOSE_AMOUNT,
+    CHOOSE_CATEGORY,
+    ANALYZING_STRATEGY,
+    CHOOSE_STRATEGY
+}
+
+val CAMERA_ANALYZE_SCREENS = arrayOf(
+    AppScreen.CAMERA_PREVIEW,
+    AppScreen.TEXT_RECOGNIZER,
+    AppScreen.TEXT_ANALYZER,
+)
+val RECEIPT_MODELING_SCREENS = arrayOf(
+    AppScreen.CHOOSE_KEYWORD,
+    AppScreen.CHOOSE_NAME,
+    AppScreen.CHOOSE_AMOUNT,
+    AppScreen.CHOOSE_CATEGORY,
+    AppScreen.CHOOSE_STRATEGY,
+)
