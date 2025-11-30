@@ -4,9 +4,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
@@ -221,4 +224,102 @@ fun selectedColor(selected: Boolean): Color {
         Color.Blue
     else
         Color.Black
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditorNavBar(
+    modifier: Modifier = Modifier,
+    isCreatingNewExpense: Boolean = true,
+    onBackButtonPress: () -> Unit,
+    onResetButtonPress: () -> Unit,
+    onSaveButtonPress: () -> Unit
+){
+    TopAppBar(
+        title = {
+            if (isCreatingNewExpense)
+            { Text("Creating Expense") }
+            else
+            { Text("Editing Expense") }
+                },
+        modifier = modifier,
+        navigationIcon = {
+            IconButton( onClick = {onBackButtonPress()} )
+            {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                )
+            }
+        },
+        actions = {
+            IconButton( onClick = {onResetButtonPress()} )
+            {
+                Icon(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = "Clear Input Values",
+                )
+            }
+            IconButton( onClick = {onSaveButtonPress()} )
+            {
+                Icon(
+                    imageVector = Icons.Default.Done,
+                    contentDescription = "Save",
+                )
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CameraNavBar(
+    modifier: Modifier = Modifier,
+    onBackButtonPress: () -> Unit,
+){
+    TopAppBar(
+        title = { Text("Using Camera To Get Receipt") },
+        modifier = modifier,
+        navigationIcon = {
+            IconButton( onClick = {onBackButtonPress()} )
+            {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                )
+            }
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ReceiptCreatorNavBar(
+    titleText: String,
+    modifier: Modifier = Modifier,
+    onBackButtonPress: () -> Unit,
+    onResetButtonPress: () -> Unit
+){
+    TopAppBar(
+        title = { Text(titleText) },
+        modifier = modifier,
+        navigationIcon = {
+            IconButton( onClick = {onBackButtonPress()} )
+            {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                )
+            }
+        },
+        actions = {
+            IconButton( onClick = {onResetButtonPress()} )
+            {
+                Icon(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = "Clear Input Values",
+                )
+            }
+        }
+    )
 }
