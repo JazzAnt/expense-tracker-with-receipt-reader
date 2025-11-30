@@ -158,7 +158,14 @@ fun ExpenseApp(
             {
                 ReceiptCreatorNavBar(
                     titleText = getReceiptModelingScreenTitle(currentScreen),
-                    onBackButtonPress = { navController.popBackStack() },
+                    onBackButtonPress = {
+                        // This is done because the screen before ChooseStrategy is the loading screen which should be skipped if you click back
+                        if (currentScreen == AppScreen.CHOOSE_STRATEGY)
+                        { navController.popBackStack(route = AppScreen.CHOOSE_AMOUNT.name, inclusive = false) }
+                        else
+                        { navController.popBackStack() }
+
+                                        },
                     onResetButtonPress = { resetAllCameraStatesAndGoBackToCamera() }
                 )
             }
