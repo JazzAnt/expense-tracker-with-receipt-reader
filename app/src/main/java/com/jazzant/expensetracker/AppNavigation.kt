@@ -127,7 +127,23 @@ fun ExpenseApp(
             }
             else if (currentScreen == AppScreen.EDIT_EXPENSE)
             {
-                TopNavBar(currentRoute = currentScreen.name)
+                val expenseState = viewModel.expenseState.collectAsStateWithLifecycle()
+                EditorNavBar(
+                    isCreatingNewExpense = expenseState.value.id < 0,
+                    onBackButtonPress = { navController.popBackStack() },
+                    onResetButtonPress = { viewModel.resetUiState() },
+                    onSaveButtonPress = {
+                        val error = viewModel.checkForErrorsInUiState(context)
+                        if (error != null)
+                        { Toast.makeText(context,error,Toast.LENGTH_LONG).show() }
+                        else
+                        {
+                            viewModel.insertExpenseToDB()
+                            Toast.makeText(context,context.getString(R.string.saveExpenseToast),Toast.LENGTH_SHORT).show()
+                            navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                        }
+                    }
+                )
             }
             else if (CAMERA_ANALYZE_SCREENS.contains(currentScreen))
             {
@@ -213,26 +229,7 @@ fun ExpenseApp(
                     date = expenseState.date,
                     onDateChange = { viewModel.setDate(it ?: expenseState.date) },
                     onSaveButtonPress = {
-                        val error = viewModel.checkForErrorsInUiState(context)
-                        if (error != null)
-                        {
-                            Toast.makeText(
-                                context,
-                                error,
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                        else
-                        {
-                            viewModel.insertExpenseToDB()
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.saveExpenseToast),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
-                        }
-
+                        //TODO: Remove SaveButton since it's on the top bar now
                     }
                 )
             }
