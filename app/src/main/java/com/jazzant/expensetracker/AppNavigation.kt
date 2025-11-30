@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.DropdownMenu
@@ -168,6 +169,7 @@ fun ExpenseApp(
             }
             else if (RECEIPT_MODELING_SCREENS.contains(currentScreen))
             {
+                val openAlertDialog = remember { mutableStateOf(false) }
                 ReceiptCreatorNavBar(
                     titleText = getReceiptModelingScreenTitle(currentScreen),
                     onBackButtonPress = {
@@ -176,10 +178,18 @@ fun ExpenseApp(
                         { navController.popBackStack(route = AppScreen.CHOOSE_AMOUNT.name, inclusive = false) }
                         else
                         { navController.popBackStack() }
-
                                         },
-                    onResetButtonPress = { resetAllCameraStatesAndGoBackToCamera() }
+                    onResetButtonPress = { openAlertDialog.value = true }
                 )
+                when {
+                    openAlertDialog.value -> { AlertDialog(
+                        onDismissRequest = { openAlertDialog.value = false},
+                        onConfirmation = { resetAllCameraStatesAndGoBackToCamera() },
+                        dialogTitle = "Cancel Creating Model",
+                        dialogText = "Discard All Values and Go Back to the Camera?",
+                        icon = Icons.Default.Warning
+                    ) }
+                }
             }
             else if (currentScreen == AppScreen.REQUEST_CAMERA_PERMISSION)
             {
