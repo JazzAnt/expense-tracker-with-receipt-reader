@@ -31,6 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jazzant.expensetracker.analyzer.Strategy
+import com.jazzant.expensetracker.analyzer.containsPriceLabels
 import com.jazzant.expensetracker.analyzer.parseReceipt
 import com.jazzant.expensetracker.analyzer.toBlockList
 import com.jazzant.expensetracker.analyzer.toLineList
@@ -272,15 +273,22 @@ fun ExpenseApp(
                 TextRecognizerScreen(
                     recognizedText = receiptAnalyzerState.recognizedText,
                     bitmap = receiptAnalyzerState.capturedBitmap!!,
+                    receiptNotFoundOnImage = receiptAnalyzerState.noReceiptFound,
                     onTextRecognized = {
-                        viewModel.findKeyword(receiptModelList)
-                        val index = receiptAnalyzerState.receiptModelIndex
-                        if (index >= 0){
-                            val model = receiptModelList[index]
-                            val expense = viewModel.parseRecognizedTextFromModel(model)
-                            viewModel.setAnalyzedExpense(expense)
+                        //Validate if the text is a receipt by evaluating if it has price labels
+                        if (receiptAnalyzerState.recognizedText?.containsPriceLabels() ?: false)
+                        {
+                            viewModel.findKeyword(receiptModelList)
+                            val index = receiptAnalyzerState.receiptModelIndex
+                            if (index >= 0){
+                                val model = receiptModelList[index]
+                                val expense = viewModel.parseRecognizedTextFromModel(model)
+                                viewModel.setAnalyzedExpense(expense)
+                            }
+                            navController.navigate(AppScreen.TEXT_ANALYZER.name)
                         }
-                        navController.navigate(AppScreen.TEXT_ANALYZER.name)
+                        else
+                        { viewModel.setAnalyzerNoReceiptFoundState(true) }
                     },
                     onRetakeImageButtonPress = { resetAllCameraStatesAndGoBackToCamera() },
                     onCancelButtonPress = { resetAllCameraStatesAndGoBackToHome() }

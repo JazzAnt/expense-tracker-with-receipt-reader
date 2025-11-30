@@ -2,7 +2,6 @@ package com.jazzant.expensetracker.viewmodel
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.common.InputImage
@@ -20,7 +19,6 @@ import com.jazzant.expensetracker.database.receiptmodel.ReceiptModelRepository
 import com.jazzant.expensetracker.database.ExpenseDatabase
 import com.jazzant.expensetracker.database.expense.Expense
 import com.jazzant.expensetracker.database.expense.ExpenseRepository
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +27,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import kotlin.time.Duration.Companion.seconds
 
 
@@ -364,6 +361,11 @@ class ExpenseViewModel(): ViewModel() {
     fun setAnalyzerBitmap(bitmap: Bitmap){
         _receiptAnalyzerUiState.update { currentState ->
             currentState.copy(capturedBitmap = bitmap)
+        }
+    }
+    fun setAnalyzerNoReceiptFoundState(state: Boolean){
+        _receiptAnalyzerUiState.update { currentState ->
+            currentState.copy(noReceiptFound = state)
         }
     }
     fun setAnalyzerModelIndex(index: Int){
