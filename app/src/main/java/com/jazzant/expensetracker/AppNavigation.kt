@@ -62,6 +62,7 @@ import com.jazzant.expensetracker.viewmodel.ExpenseViewModel
 import com.jazzant.expensetracker.viewmodel.ViewModelException
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.collectAsState
+import java.lang.Exception
 
 @Composable
 fun ExpenseApp(
@@ -74,6 +75,7 @@ fun ExpenseApp(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppScreen.valueOf(value = backStackEntry?.destination?.route?: AppScreen.HOME_SCREEN.name)
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val currentItemId by viewModel.navDrawerId.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     var fabPosition: FabPosition = FabPosition.End
     if (currentScreen == AppScreen.EDIT_EXPENSE)
@@ -108,7 +110,7 @@ fun ExpenseApp(
         drawerState = drawerState,
         drawerContent = {
             NavigationDrawerSheet(
-                currentItemId = viewModel.navDrawerId,
+                currentItemId = currentItemId,
                 navDrawerItems = listOf(
                     DrawerItem(
                         id = 0,
@@ -188,7 +190,7 @@ fun ExpenseApp(
                          }
                      },
                      onGoHomeButtonPress = { resetAllStatesAndGoHome() },
-                     titleText = "Receipt Model List"
+                     titleText = "Receipt Models"
                  )
                 } else if (currentScreen == AppScreen.EDIT_EXPENSE) {
                     val expenseState = viewModel.expenseState.collectAsStateWithLifecycle()
@@ -256,7 +258,7 @@ fun ExpenseApp(
                             // This is done because the screen before ChooseStrategy is the loading screen which should be skipped if you click back
                             if (currentScreen == AppScreen.CHOOSE_STRATEGY) {
                                 navController.popBackStack(
-                                    route = AppScreen.CHOOSE_AMOUNT.name,
+                                    route = AppScreen.CHOOSE_CATEGORY.name,
                                     inclusive = false
                                 )
                             } else {
@@ -432,12 +434,6 @@ fun ExpenseApp(
                                     ?: false
                             ) {
                                 viewModel.findKeyword(receiptModelList)
-                                val index = receiptAnalyzerState.receiptModelIndex
-                                if (index >= 0) {
-                                    val model = receiptModelList[index]
-                                    val expense = viewModel.parseRecognizedTextFromModel(model)
-                                    viewModel.setAnalyzedExpense(expense)
-                                }
                                 navController.navigate(AppScreen.TEXT_ANALYZER.name)
                             } else {
                                 viewModel.setAnalyzerNoReceiptFoundState(true)
@@ -449,14 +445,28 @@ fun ExpenseApp(
                 }
                 composable(route = AppScreen.TEXT_ANALYZER.name) {
                     val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
+                    val receiptModelList by viewModel.receiptModelList.collectAsStateWithLifecycle()
+                    /**
+                     * For some reason parsing the receipt into an expense doesn't work unless
+                     * I do it over here. It just doesn't work otherwise.
+                     */
+                    try {
+                        val model = receiptModelList[receiptAnalyzerState.receiptModelIndex]
+                        val expense = viewModel.parseRecognizedTextFromModel(model)
+                        viewModel.setAnalyzedExpense(expense)
+                    }
+                    catch (e: Exception)
+                    { }
+
                     TextAnalyzerScreen(
                         receiptModelIndex = receiptAnalyzerState.receiptModelIndex,
                         bitmap = receiptAnalyzerState.capturedBitmap!!,
                         onCreateNewReceiptModelButtonPress = {
                             viewModel.resetReceiptModelUiState()
                             viewModel.setAnalyzerTextStringList(
-                                list = receiptAnalyzerState.recognizedText!!.toBlockList()
+                                list = receiptAnalyzerState.recognizedText!!.toLineList()
                             )
+                            viewModel.validateReceiptModelKeyword()
                             navController.navigate(AppScreen.CHOOSE_KEYWORD.name)
                         },
                         onInputExpenseManuallyButtonPress = {
@@ -479,12 +489,14 @@ fun ExpenseApp(
                         },
                         onUseAnalyzedExpenseButtonPress = {
                             viewModel.expenseEntityToUi(receiptAnalyzerState.analyzedExpense!!)
-                            navController.navigate(AppScreen.EDIT_EXPENSE.name)
+                            viewModel.insertExpenseToDB()
+                            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                            resetAllStatesAndGoHome()
                         },
                         onEditAnalyzedExpenseButtonPress = {
                             viewModel.expenseEntityToUi(receiptAnalyzerState.analyzedExpense!!)
-                            viewModel.insertExpenseToDB()
-                            resetAllStatesAndGoHome()
+                            navController.navigate(AppScreen.EDIT_EXPENSE.name)
+
                         },
                         analyzedExpense = receiptAnalyzerState.analyzedExpense,
                         onRetakeImageButtonPress = { resetAllCameraStatesAndGoBackToCamera() },
@@ -496,8 +508,15 @@ fun ExpenseApp(
                     val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                     ChooseKeywordScreen(
                         switchState = receiptModelState.switchState,
-                        onSwitchStateChanged = { viewModel.setReceiptSwitch(it) },
+                        onSwitchStateChanged = {
+                            viewModel.setReceiptSwitch(it)
+                            viewModel.validateReceiptModelKeyword()
+                                               },
                         textBlockList = receiptAnalyzerState.recognizedTextStringList,
+                        receiptDisplay = viewModel.getTextWithHighlightedKeyword(
+                            text = receiptAnalyzerState.recognizedText!!.text,
+                            query = receiptModelState.keyword
+                        ),
                         keyword = receiptModelState.keyword,
                         onKeywordChange = {
                             viewModel.setReceiptKeyword(it)
@@ -515,7 +534,12 @@ fun ExpenseApp(
                     val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                     ChooseNameScreen(
                         checkBoxState = receiptModelState.checkBoxState,
-                        onCheckBoxStateChange = { viewModel.setReceiptCheckBox(it) },
+                        onCheckBoxStateChange = {
+                            viewModel.setReceiptCheckBox(it)
+                            if (it)
+                            { viewModel.setReceiptName(receiptModelState.keyword) }
+                            viewModel.validateReceiptModelName()
+                                                },
                         name = receiptModelState.name,
                         onNameChange = {
                             viewModel.setReceiptName(it)
@@ -553,9 +577,15 @@ fun ExpenseApp(
                     val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                     ChooseCategoryScreen(
                         newCategorySwitch = receiptModelState.newCategorySwitch,
-                        onNewCategorySwitchChange = { viewModel.setReceiptNewCategorySwitch(it) },
+                        onNewCategorySwitchChange = {
+                            viewModel.setReceiptNewCategorySwitch(it)
+                            viewModel.validateReceiptModelCategory()
+                                                    },
                         category = receiptModelState.category,
-                        onCategoryChange = { viewModel.setReceiptCategory(it) },
+                        onCategoryChange = {
+                            viewModel.setReceiptCategory(it)
+                            viewModel.validateReceiptModelCategory()
+                                           },
                         categoryList = categoryList,
                         invalidInput = receiptModelState.invalidInput,
                         onNextButtonPress = {

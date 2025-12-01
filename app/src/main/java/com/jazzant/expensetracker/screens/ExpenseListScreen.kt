@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -39,11 +41,15 @@ import java.util.Locale
 
 @Composable
 fun ExpenseListScreen(list: List<Expense>, onCardClick: (Expense) -> Unit, sumOfExpenses: Float){
-    Box(Modifier.fillMaxSize()){
+    Box(Modifier
+        .fillMaxSize()
+        .padding(horizontal = 12.dp)
+    ){
         LazyColumn () {
             items(list){
                     item ->
                 ExpenseCard(item, onCardClick)
+                Spacer(Modifier.height(4.dp))
             }
         }
         ExpenseSumCard(sumOfExpenses, Modifier.align(Alignment.BottomEnd))
@@ -53,17 +59,17 @@ fun ExpenseListScreen(list: List<Expense>, onCardClick: (Expense) -> Unit, sumOf
 @Composable
 fun ExpenseSumCard(sum: Float, modifier: Modifier = Modifier){
     Card(modifier
-        .padding(2.dp)
-        .border(BorderStroke(1.dp, Color.Black))
-        .padding(3.dp)
+        .padding(10.dp)
         .fillMaxWidth()
         .height(50.dp)
+        .shadow(10.dp)
         .zIndex(1f)) {
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
             Text(
                 stringResource(R.string.sumOfExpensesLabel) +": $%.2f".format(sum),
                 fontSize = TextUnit(5f, TextUnitType.Em),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
             )
         }
     }

@@ -19,14 +19,18 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -54,6 +58,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -64,12 +71,15 @@ import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.Float
 
-private const val LABEL_FRACTION = 0.4f
+private const val DEFAULT_FRACTION = 0.4f
 @Composable
 fun NumberInput(label:String, value: Float,
                 onValueChange:(Float)->Unit,
-                modifier: Modifier = Modifier){
+                modifier: Modifier = Modifier,
+                labelFraction: Float = DEFAULT_FRACTION,
+){
     var temp: Float?;
     Row (verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -78,7 +88,7 @@ fun NumberInput(label:String, value: Float,
         Text(text = label,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp))
+            modifier = Modifier.fillMaxWidth(labelFraction).padding(end = 5.dp))
         TextField(
             value = value.toString(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -104,7 +114,9 @@ fun TextInput(
     value: String,
     onValueChange:(String)->Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true){
+    enabled: Boolean = true,
+    labelFraction: Float = DEFAULT_FRACTION,
+){
     Row (verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = modifier
@@ -112,7 +124,7 @@ fun TextInput(
         Text(text = label,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp))
+            modifier = Modifier.fillMaxWidth(labelFraction).padding(end = 5.dp))
         TextField(
             value = value,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -131,6 +143,8 @@ fun <T> RadioButtons(label:String,
                      onOptionChange:(T)->Unit,
                      modifier: Modifier = Modifier,
                      radioText: (T) -> String = {it.toString()},
+                     radioDescription: (T) -> String = {""},
+                     labelFraction: Float = DEFAULT_FRACTION,
 ) {
     Row(verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Center,
@@ -139,26 +153,50 @@ fun <T> RadioButtons(label:String,
         Text(text = label,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp))
+            modifier = Modifier.fillMaxWidth(labelFraction).padding(end = 5.dp))
         Column(modifier = Modifier.fillMaxWidth().selectableGroup()) {
             radioOptions.forEach { radioOption ->
-                Row (
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .selectable(
                             selected=(radioOption==selectedOption),
                             onClick={onOptionChange(radioOption)},
                             role=Role.RadioButton
                         )
-                        .padding(bottom = 5.dp)
-                ){
-                    RadioButton(
-                        selected=(radioOption == selectedOption),
-                        onClick=null //done by Row instead so that the text is also clickable
-                    )
-                    Text(
-                        text=radioText(radioOption),
-                    )
+                ) {
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                    ){
+                        RadioButton(
+                            selected=(radioOption == selectedOption),
+                            onClick=null //done by Row instead so that the text is also clickable
+                        )
+                        Text(
+                            text = radioText(radioOption),
+                            fontSize = TextUnit(18f, TextUnitType.Sp),
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Justify,
+                        )
+                    }
+                    if (radioDescription(radioOption).isNotBlank())
+                    {
+                        Box(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .background(Color.LightGray)
+                        ) {
+                            Text(
+                                text = radioDescription(radioOption),
+                                fontSize = TextUnit(16f, TextUnitType.Sp),
+                                textAlign = TextAlign.Justify,
+                                modifier = Modifier.fillMaxWidth().padding(5.dp).align(Alignment.Center)
+                            )
+                        }
+                        StandardVerticalSpacer(multiplier = 0.8f)
+                    }
                 }
             }
         }
@@ -169,10 +207,14 @@ fun <T> RadioButtons(label:String,
 fun CheckBoxField(text:String,
                   state: Boolean,
                   onStateChanged:(Boolean)->Unit,
-                  modifier:Modifier = Modifier){
+                  modifier: Modifier = Modifier,
+                  leftSpacerFraction: Float = DEFAULT_FRACTION,
+){
     Row (
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
     ){
+        Spacer(Modifier.fillMaxWidth(leftSpacerFraction))
         Checkbox(checked=state, onCheckedChange = onStateChanged)
         Text(text)
     }
@@ -182,10 +224,14 @@ fun CheckBoxField(text:String,
 fun SwitchField(text:String,
                 state: Boolean,
                 onStateChanged: (Boolean) -> Unit,
-                modifier: Modifier = Modifier){
+                modifier: Modifier = Modifier,
+                leftSpacerFraction: Float = DEFAULT_FRACTION,
+){
     Row (
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
     ){
+        Spacer(Modifier.fillMaxWidth(leftSpacerFraction))
         Switch(checked = state, onCheckedChange = onStateChanged)
         Text(text, modifier=Modifier.padding(start=5.dp))
     }
@@ -237,6 +283,7 @@ fun CategoryInputField(
     category: String,
     onCategoryChange: (String) -> Unit,
     categoryList: List<String>,
+    leftSpacerFraction: Float = DEFAULT_FRACTION,
 ){
     if (newCategoryState)
     {
@@ -244,8 +291,13 @@ fun CategoryInputField(
             label = "Category",
             value = category,
             onValueChange = onCategoryChange,
-            enabled = true
+            enabled = true,
+            labelFraction = leftSpacerFraction,
         )
+    }
+    else if (categoryList.isEmpty())
+    {
+        Text(stringResource(R.string.emptyCategoryListAlert))
     }
     else
     {
@@ -255,7 +307,7 @@ fun CategoryInputField(
             Text(text = "Category",
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp)
+                modifier = Modifier.fillMaxWidth(leftSpacerFraction).padding(end = 5.dp)
             )
             CategoryDropDownMenu(
                 categoryList = categoryList,
@@ -269,11 +321,11 @@ fun CategoryInputField(
         }
     }
     Row {
-        Spacer(Modifier.fillMaxWidth(LABEL_FRACTION))
         SwitchField(
             text = stringResource(R.string.newCategorySwitchLabel),
             state = newCategoryState,
             onStateChanged = onNewCategoryStateChange,
+            leftSpacerFraction = leftSpacerFraction,
         )
     }
 }
@@ -384,37 +436,54 @@ fun DateRangePickerModal(
         )
     }
 }
+
 @Composable
-fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
+fun ExpenseCard(
+    name: String,
+    category: String,
+    amount: Float,
+    date: Long,
+    onCardClick: ()->Unit,
+){
     Card (
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp)
-            .background(Color.White)
-            .border(width = 1.dp, color = Color.Black),
-        onClick = {onCardClick(expense)}
+            .height(64.dp)
+            .background(Color.White),
+        onClick = {onCardClick()}
     ){
         Row (
             modifier = Modifier.fillMaxWidth().padding(5.dp)
         ) {
-            DateBox(expense.date)
+            DateBox(date)
             Column (
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(0.5f)
+                modifier = Modifier.fillMaxWidth(0.64f)
                     .fillMaxHeight()
 
             ){
-                Text(stringResource(R.string.expenseNameLabel)+": " + expense.name, fontSize = TextUnit(4f, TextUnitType.Em))
-                Text(stringResource(R.string.expenseCategoryLabel)+": " + expense.category, fontSize = TextUnit(3f, TextUnitType.Em))
+                Text(stringResource(R.string.expenseNameLabel)+": " + name, fontSize = TextUnit(3.6f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(stringResource(R.string.expenseCategoryLabel)+": " + category, fontSize = TextUnit(3f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Row (
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.fillMaxWidth()
             ){
-                Text("$%.2f".format(expense.amount), fontSize = TextUnit(5f, TextUnitType.Em))
+                Text("$%.2f".format(amount), fontSize = TextUnit(4.4f, TextUnitType.Em))
             }
         }
     }
+}
+
+@Composable
+fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
+    ExpenseCard(
+        name = expense.name,
+        category = expense.category,
+        amount = expense.amount,
+        date = expense.date,
+        onCardClick = { onCardClick(expense) }
+    )
 }
 @Composable
 fun DateBox(millis: Long){
@@ -423,9 +492,9 @@ fun DateBox(millis: Long){
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .padding(end = 10.dp)
-            .width(40.dp)
-            .height(50.dp)
+            .padding(end = 12.dp)
+            .width(60.dp)
+            .height(64.dp)
             .drawBehind {
                 drawLine(
                     Color.Black,
@@ -435,9 +504,8 @@ fun DateBox(millis: Long){
                 )
             }
     ){
-        dateText.forEach {
-            Text(it)
-        }
+        Text(dateText[0], fontSize = TextUnit(4.8f, TextUnitType.Em))
+        Text(dateText[1], fontSize = TextUnit(3.0f, TextUnitType.Em))
     }
 }
 
@@ -471,4 +539,120 @@ fun AlertDialog(
             { Text("Dismiss") }
         }
     )
+}
+
+@Composable
+fun StandardButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    text: String = "",
+    width: Dp = 640.dp,
+){
+    Button(onClick = onClick, modifier = modifier.width(width))
+    {
+        Text(
+            text = text,
+            fontSize = TextUnit(24f, TextUnitType.Sp),
+        )
+    }
+}
+
+@Composable
+fun NextButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    icon: ImageVector = Icons.AutoMirrored.Filled.ArrowForward,
+    text: String = stringResource(R.string.nextButton),
+    width: Dp = 210.dp,
+
+){
+    ExtendedFloatingActionButton(
+        onClick = onClick,
+        modifier = modifier.width(width)
+    ) {
+        Text(
+            text = text,
+            fontSize = TextUnit(24f, TextUnitType.Sp),
+        )
+        Spacer(Modifier.width(8.dp))
+        Icon(
+            imageVector = icon,
+            contentDescription = text
+        )
+    }
+}
+
+@Composable
+fun HeaderText(text: String, modifier: Modifier = Modifier){
+    Text(
+        text = text,
+        fontSize = TextUnit(30f, TextUnitType.Sp),
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        modifier = modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+fun DescriptionText(text: String, modifier: Modifier = Modifier){
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color.LightGray)
+            .border(1.dp, Color.Black)
+    ) {
+        Text(
+            text = text,
+            fontSize = TextUnit(18f, TextUnitType.Sp),
+            textAlign = TextAlign.Justify,
+            modifier = Modifier.fillMaxWidth().padding(5.dp).align(Alignment.Center)
+        )
+    }
+
+}
+
+@Composable
+fun QuestionText(text: String, modifier: Modifier = Modifier){
+    Text(
+        text = text,
+        fontSize = TextUnit(20f, TextUnitType.Sp),
+        fontWeight = FontWeight.SemiBold,
+        textAlign = TextAlign.Center,
+        modifier = modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+fun StandardVerticalSpacer(
+    spacing: Float = 12f,
+    multiplier: Float = 1f,
+){
+    Spacer(Modifier.height((spacing * multiplier).dp))
+}
+
+@Composable
+fun ErrorText(text: String, modifier: Modifier = Modifier){
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color.Red)
+            .border(1.dp, Color.Black)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
+            Icon(
+                imageVector = Icons.Default.Warning,
+                contentDescription = "Warning Icon",
+                tint = Color.White
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(
+                text = text,
+                fontSize = TextUnit(18f, TextUnitType.Sp),
+                textAlign = TextAlign.Justify,
+                color = Color.White,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+
 }

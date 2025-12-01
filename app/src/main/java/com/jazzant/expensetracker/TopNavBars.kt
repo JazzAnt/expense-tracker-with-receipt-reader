@@ -238,7 +238,7 @@ fun CategoryDropDownMenu(
                     text = {
                         Text("No Category", color = Color.Red)
                     },
-                    onClick = {onSelectionChange("")}
+                    onClick = {onSelectionChange(""); expanded = false}
                 )
             }
 
@@ -247,7 +247,7 @@ fun CategoryDropDownMenu(
                     text = {
                         Text(it, color = selectedColor(selectedCategory == it))
                     },
-                    onClick = {onSelectionChange(it)}
+                    onClick = {onSelectionChange(it); expanded = false}
                 )
             }
         }

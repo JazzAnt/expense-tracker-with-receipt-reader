@@ -4,7 +4,10 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.database.expense.Expense
 import com.jazzant.expensetracker.ui.ExpenseCard
+import com.jazzant.expensetracker.ui.StandardButton
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
 fun TextAnalyzerScreen(
@@ -34,41 +39,84 @@ fun TextAnalyzerScreen(
     onCancelButtonPress: () -> Unit,
     modifier: Modifier = Modifier
 ){
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxSize()) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxSize()
+            .padding(vertical = 8.dp, horizontal = 12.dp)
+    ) {
         Text(
             text = stringResource(R.string.imageAnalyzedText),
-            fontSize = TextUnit(5f, TextUnitType.Em),
+            fontSize = TextUnit(40f, TextUnitType.Sp),
             fontWeight = FontWeight.Bold
         )
+        StandardVerticalSpacer()
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = stringResource(R.string.capturedImageBitmapContentDescription),
-            modifier = Modifier.border(2.dp, Color.Black)
+            modifier = Modifier.border(4.dp, Color.Black)
         )
-        if (receiptModelIndex < 0)
+        StandardVerticalSpacer()
+        if (receiptModelIndex < 0 || analyzedExpense == null)
         {
-            Button(onClick = onCreateNewReceiptModelButtonPress)
-            { Text(stringResource(R.string.createNewReceiptModelButton)) }
-            Button(onClick = onInputExpenseManuallyButtonPress)
-            { Text(stringResource(R.string.inputExpenseManuallyButton))}
+            if (receiptModelIndex < 0) {
+                Text(
+                    text = "The app has never seen a receipt like this",
+                    color = Color.Red,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = TextUnit(18f, TextUnitType.Sp),
+                )
+                StandardVerticalSpacer()
+                StandardButton(
+                    onClick = onCreateNewReceiptModelButtonPress,
+                    text = stringResource(R.string.createNewReceiptModelButton)
+                )
+            }
+            else
+            {
+                Text(
+                    text = "Something went wrong in Parsing Receipt",
+                    color = Color.Red,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = TextUnit(18f, TextUnitType.Sp),
+                )
+            }
+            StandardVerticalSpacer()
+            StandardButton(
+                onClick = onInputExpenseManuallyButtonPress,
+                text = stringResource(R.string.inputExpenseManuallyButton)
+            )
         }
         else
         {
-            if (analyzedExpense != null){
-                ExpenseCard(
-                    expense = analyzedExpense,
-                    onCardClick = {}
-                )
-            }
-
-            Button(onClick = onUseAnalyzedExpenseButtonPress)
-            { Text(stringResource(R.string.useAnalyzedExpenseButton)) }
-            Button(onClick = onEditAnalyzedExpenseButtonPress)
-            { Text(stringResource(R.string.editAnalyzedExpenseButton)) }
+            Text(text = "Expense Detected:",
+                color = Color.Red,
+                fontSize = TextUnit(18f, TextUnitType.Sp),
+            )
+            StandardVerticalSpacer()
+            ExpenseCard(
+                expense = analyzedExpense,
+                onCardClick = {}
+            )
+            StandardVerticalSpacer()
+            StandardButton(
+                onClick = onUseAnalyzedExpenseButtonPress,
+                text = stringResource(R.string.useAnalyzedExpenseButton)
+            )
+            StandardVerticalSpacer()
+            StandardButton(
+                onClick = onEditAnalyzedExpenseButtonPress,
+                text = stringResource(R.string.editAnalyzedExpenseButton)
+            )
         }
-        Button(onClick = onRetakeImageButtonPress)
-        { Text(stringResource(R.string.retakeImageButton)) }
-        Button(onClick = onCancelButtonPress)
-        { Text(stringResource(R.string.cancelButton)) }
+        StandardVerticalSpacer()
+        StandardButton(
+            onClick = onRetakeImageButtonPress,
+            text = stringResource(R.string.retakeImageButton)
+        )
+        StandardVerticalSpacer()
+        StandardButton(
+            onClick = onCancelButtonPress,
+            text = stringResource(R.string.cancelButton)
+        )
     }
 }

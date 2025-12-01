@@ -80,9 +80,8 @@ fun ReceiptModelCard(model: ReceiptModel, onCardClick: (ReceiptModel)->Unit){
     Card (
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp)
-            .background(Color.White)
-            .border(width = 1.dp, color = Color.Black),
+            .height(64.dp)
+            .background(Color.White),
         onClick = {onCardClick(model)}
     ){
         Row (
@@ -90,18 +89,18 @@ fun ReceiptModelCard(model: ReceiptModel, onCardClick: (ReceiptModel)->Unit){
         ) {
             Column (
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(0.5f)
+                modifier = Modifier.fillMaxWidth(0.64f)
                     .fillMaxHeight()
 
             ){
-                Text(text = "Name: " + model.name, fontSize = TextUnit(4f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(text = "Name: " + model.name, fontSize = TextUnit(3.6f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(text = "Keyword: " + model.keyword, fontSize = TextUnit(3f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Row (
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.fillMaxWidth()
             ){
-                Text("Category: " + model.category, fontSize = TextUnit(4f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text("Category: " + model.category, fontSize = TextUnit(4.0f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
     }

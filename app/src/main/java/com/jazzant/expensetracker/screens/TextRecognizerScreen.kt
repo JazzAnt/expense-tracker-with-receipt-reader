@@ -4,7 +4,10 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
@@ -22,6 +25,8 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.google.mlkit.vision.text.Text
 import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.ui.StandardButton
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
 fun TextRecognizerScreen(
@@ -33,19 +38,32 @@ fun TextRecognizerScreen(
     modifier: Modifier = Modifier,
     receiptNotFoundOnImage: Boolean = false,
 ){
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxSize()) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxSize()
+            .padding(vertical = 8.dp, horizontal = 12.dp)
+    ) {
         if (recognizedText == null){
             Text(
                 text = stringResource(R.string.analyzingImageText),
-                fontSize = TextUnit(5f, TextUnitType.Em),
+                fontSize = TextUnit(40f, TextUnitType.Sp),
+                fontWeight = FontWeight.Bold
+            )
+        } else {
+            Text(
+                text = stringResource(R.string.imageAnalyzedText),
+                fontSize = TextUnit(40f, TextUnitType.Sp),
                 fontWeight = FontWeight.Bold
             )
         }
+        StandardVerticalSpacer()
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = stringResource(R.string.capturedImageBitmapContentDescription),
-            modifier = Modifier.border(2.dp, Color.Black)
+            modifier = Modifier.border(4.dp, Color.Black)
         )
+        StandardVerticalSpacer()
         if (recognizedText == null)
         { Text(stringResource(R.string.noTextRecognizedText)) }
         else if (receiptNotFoundOnImage)
@@ -57,15 +75,21 @@ fun TextRecognizerScreen(
             )
             Text(text = "No Receipt Recognized on Image!",
                 color = Color.Red,
-                fontSize = TextUnit(5f, TextUnitType.Em),
+                fontSize = TextUnit(24f, TextUnitType.Sp),
                 fontWeight = FontWeight.Bold
             )
         }
         else
         { onTextRecognized() }
-        Button(onClick = onRetakeImageButtonPress)
-        { Text(stringResource(R.string.retakeImageButton)) }
-        Button(onClick = onCancelButtonPress)
-        { Text(stringResource(R.string.cancelButton)) }
+        StandardVerticalSpacer()
+        StandardButton(
+            onClick = onRetakeImageButtonPress,
+            text = stringResource(R.string.retakeImageButton)
+        )
+        StandardVerticalSpacer()
+        StandardButton(
+            onClick = onCancelButtonPress,
+            text = stringResource(R.string.cancelButton)
+        )
     }
 }

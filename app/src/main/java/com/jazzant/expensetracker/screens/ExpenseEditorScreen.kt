@@ -2,7 +2,10 @@ package com.jazzant.expensetracker.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -10,11 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.ui.CheckBoxField
 import com.jazzant.expensetracker.ui.DatePickerField
 import com.jazzant.expensetracker.ui.NumberInput
 import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.ui.CategoryInputField
+import com.jazzant.expensetracker.ui.ExpenseCard
 import com.jazzant.expensetracker.ui.RadioButtons
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 import com.jazzant.expensetracker.ui.SwitchField
 import com.jazzant.expensetracker.ui.TextInput
 import com.jazzant.expensetracker.ui.convertMillisToDate
@@ -39,92 +46,58 @@ fun ExpenseEditorScreen(
     modifier: Modifier = Modifier
 ){
     Column(
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
-        modifier = modifier
+        modifier = modifier.padding(horizontal = 16.dp)
     ) {
+        ExpenseCard(
+            name = name,
+            category = category,
+            amount = if (tipping) { amount + tip } else { amount },
+            date = date,
+            onCardClick = {},
+        )
+        StandardVerticalSpacer(multiplier = 3f)
         NumberInput(
             label = stringResource(R.string.amountInputLabel),
             value = amount,
             onValueChange = onAmountChange,
             modifier = Modifier.fillMaxWidth()
         )
-
+        StandardVerticalSpacer()
         TextInput(
             label = stringResource(R.string.nameInputLabel),
             value = name,
             onValueChange = onNameChange,
             modifier = Modifier.fillMaxWidth()
         )
-
-        SwitchField(
-            text = stringResource(R.string.newCategorySwitchLabel),
-            state = newCategorySwitch,
-            onStateChanged = onNewCategorySwitchChange
+        StandardVerticalSpacer()
+        CategoryInputField(
+            newCategoryState = newCategorySwitch,
+            onNewCategoryStateChange = onNewCategorySwitchChange,
+            category = category,
+            onCategoryChange = onCategoryChange,
+            categoryList = categoryList,
         )
-
-        if (newCategorySwitch)
-        {
-            TextInput(
-                label = stringResource(R.string.newCategoryInputLabel),
-                value = category,
-                onValueChange = onCategoryChange,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        else if (categoryList.isEmpty())
-        {
-            Text(stringResource(R.string.emptyCategoryListAlert))
-        }
-        else
-        {
-            RadioButtons(
-                label = stringResource(R.string.categorySelectorLabel),
-                radioOptions = categoryList,
-                selectedOption = category,
-                onOptionChange = onCategoryChange,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
+        StandardVerticalSpacer()
         CheckBoxField(
             text = stringResource(R.string.addTipCheckboxLabel),
             state = tipping,
             onStateChanged = onTippingChange,
-            modifier = Modifier.fillMaxWidth(0.5f)
         )
         if(tipping){
             NumberInput(
                 label = stringResource(R.string.tipInputLabel),
                 value = tip,
                 onValueChange = onTipChange,
-                modifier = Modifier.fillMaxWidth()
             )
         }
-
+        StandardVerticalSpacer()
         DatePickerField(
             label = stringResource(R.string.datePickerLabel),
             date = date,
             onDateChange = onDateChange
         )
-
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column {
-                Text("Amount\t: ${
-                    if(tipping){
-                        amount + tip
-                    } else {
-                        amount
-                    }
-                }")
-                Text("Category\t: $category")
-                Text("Name\t: $name")
-                Text("Date\t: ${convertMillisToDate(date)}")
-
-            }
-        }
     }
 }
 

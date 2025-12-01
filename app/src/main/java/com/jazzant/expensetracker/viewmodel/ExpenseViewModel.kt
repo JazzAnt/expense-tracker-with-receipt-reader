@@ -2,6 +2,13 @@ package com.jazzant.expensetracker.viewmodel
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.common.InputImage
@@ -47,7 +54,7 @@ class ExpenseViewModel(): ViewModel() {
     private val _homeNavUiState = MutableStateFlow(HomeNavUiState())
     val homeNavUiState: StateFlow<HomeNavUiState> = _homeNavUiState
     private val _navDrawerId = MutableStateFlow(0)
-    val navDrawerId = _navDrawerId.value
+    val navDrawerId: StateFlow<Int> = _navDrawerId
     private val _modelBeingEdited: MutableStateFlow<ReceiptModel?> = MutableStateFlow(null)
     val modelBeingEdited: StateFlow<ReceiptModel?> = _modelBeingEdited
     private val _expenseListUpdateRequested = MutableStateFlow(false)
@@ -501,6 +508,7 @@ class ExpenseViewModel(): ViewModel() {
             name = model.name,
             date = System.currentTimeMillis()
         )
+        expense.expenseId = -1
         return expense
     }
 
@@ -566,6 +574,30 @@ class ExpenseViewModel(): ViewModel() {
             currentState.copy(strategyValue1 = value1)
         }
     }
+
+    @Composable
+    fun getTextWithHighlightedKeyword(text:String, query:String): AnnotatedString{
+        val span = SpanStyle(
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            fontWeight = FontWeight.SemiBold,
+            background = MaterialTheme.colorScheme.primary
+        )
+        val annotatedString = buildAnnotatedString {
+            var start = 0
+            while (text.indexOf(query, start, ignoreCase = true) != -1 && query.isNotBlank())
+            {
+                val firstIndex = text.indexOf(query, start, ignoreCase = true)
+                val end = firstIndex + query.length
+                append(text = text.substring(start, firstIndex))
+                withStyle(style = span)
+                { append(text = text.substring(firstIndex, end)) }
+                start = end
+            }
+            append(text = text.substring(start, text.length))
+            toAnnotatedString()
+        }
+        return annotatedString
+    }
     //Receipt Model Value Validators
     /**
      * Validates the receiptModelUiState Keyword value.
@@ -627,20 +659,20 @@ class ExpenseViewModel(): ViewModel() {
     fun validateReceiptModelCategory(){
         val category = _receiptModelUiState.value.category
         val newCategorySwitch = _receiptModelUiState.value.newCategorySwitch
+        val categoryList = categoryList.value
         if (newCategorySwitch)
         {
-            if (category.isNotBlank())
+            if (category.isBlank())
             { setReceiptInvalidInput(true) }
             else
             { setReceiptInvalidInput(false) }
         }
         else
         {
-            val categoryList = _receiptModelUiState.value.category
-            if (categoryList.contains(category))
-            { setReceiptInvalidInput(false) }
-            else
+            if (category.isBlank() || category !in categoryList)
             { setReceiptInvalidInput(true) }
+            else
+            { setReceiptInvalidInput(false) }
         }
     }
 
