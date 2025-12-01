@@ -38,6 +38,7 @@ import com.jazzant.expensetracker.ui.DescriptionText
 import com.jazzant.expensetracker.ui.ErrorText
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
+import com.jazzant.expensetracker.ui.QuestionText
 import com.jazzant.expensetracker.ui.RadioButtons
 import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 import com.jazzant.expensetracker.ui.SwitchField
@@ -70,7 +71,7 @@ fun ChooseKeywordScreen(
             DescriptionText(stringResource(R.string.chooseKeyword_description))
             StandardVerticalSpacer()
 
-            Text(stringResource(R.string.chooseKeyword_radioButtonLabel))
+            QuestionText(stringResource(R.string.chooseKeyword_radioButtonLabel))
             StandardVerticalSpacer()
             SwitchField(
                 stringResource(R.string.chooseKeyword_switchLabel),

@@ -607,6 +607,17 @@ fun DescriptionText(text: String, modifier: Modifier = Modifier){
 }
 
 @Composable
+fun QuestionText(text: String, modifier: Modifier = Modifier){
+    Text(
+        text = text,
+        fontSize = TextUnit(20f, TextUnitType.Sp),
+        fontWeight = FontWeight.SemiBold,
+        textAlign = TextAlign.Center,
+        modifier = modifier.fillMaxWidth()
+    )
+}
+
+@Composable
 fun StandardVerticalSpacer(
     spacing: Float = 12f,
     multiplier: Float = 1f,

@@ -20,6 +20,7 @@ import com.jazzant.expensetracker.ui.DescriptionText
 import com.jazzant.expensetracker.ui.ErrorText
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
+import com.jazzant.expensetracker.ui.QuestionText
 import com.jazzant.expensetracker.ui.RadioButtons
 import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
@@ -46,6 +47,8 @@ fun ChooseStrategyScreen(
             HeaderText(stringResource(R.string.chooseStrategy_header))
             StandardVerticalSpacer()
             DescriptionText(stringResource(R.string.chooseStrategy_description))
+            StandardVerticalSpacer()
+            QuestionText(stringResource(R.string.chooseStrategy_question))
             StandardVerticalSpacer()
             RadioButtons(
                 label = stringResource(R.string.chooseStrategy_radioButtonLabel),

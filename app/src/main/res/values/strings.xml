@@ -32,7 +32,7 @@
     <string name="chooseKeyword_description"> Keyword is a unique identifier of the shop listed in your receipt. It\'s usually either the shop name or address.</string>
     <string name="chooseKeyword_switchLabel">Enter Keyword Manually?</string>
     <string name="chooseKeyword_textInputLabel">Keyword</string>
-    <string name="chooseKeyword_radioButtonLabel">Which of these values are unique to this shop?</string>
+    <string name="chooseKeyword_radioButtonLabel">What word is unique to this shop?</string>
     <string name="chooseKeyword_invalidKeywordText">The app couldn\'t find the keyword amongst the recognized text!</string>
     <!--CHOOSE NAME SCREEN-->
     <string name="chooseName_header">Choose the Name of the Shop</string>
@@ -42,7 +42,8 @@
     <string name="chooseName_invalidNameText">The name input is empty!</string>
     <!--CHOOSE AMOUNT SCREEN-->
     <string name="chooseAmount_header">Choose The Amount You Spent</string>
-    <string name="chooseAmount_description">Which one of these values correspond to the amount you spent? This helps the app determine the amount for any following receipts from this shop.</string>
+    <string name="chooseAmount_description">This helps the app determine the amount for any subsequent receipts from this shop.</string>
+    <string name="chooseAmount_question">How much did you spend?</string>
     <string name="chooseAmount_radioButtonLabel">Amount Spent</string>
     <string name="chooseAmount_invalidAmountLabel">ERROR: App Cannot Parse Amount</string>
     <!--CHOOSE CATEGORY SCREEN-->
@@ -53,6 +54,7 @@
     <string name="chooseStrategy_header">Choose the Amount Finder Strategy</string>
     <string name="chooseStrategy_description">Here is the strategies to find the expense amount we find to be compatible with this type of receipt. Which one would you like to choose for receipts from this shop?</string>
     <string name="chooseStrategy_radioButtonLabel">Strategy</string>
+    <string name="chooseStrategy_question">Choose the preferred Strategy</string>
     <string name="chooseStrategy_invalidStrategyLabel">Please Choose a Strategy before Proceeding</string>
     <!--STRATEGY NAMES (SORTED BY THEIR ENUM ORDINAL VALUE)-->
     <string-array name="strategyNames">
