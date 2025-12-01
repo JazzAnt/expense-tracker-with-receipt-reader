@@ -48,6 +48,8 @@ class ExpenseViewModel(): ViewModel() {
     val homeNavUiState: StateFlow<HomeNavUiState> = _homeNavUiState
     private val _navDrawerId = MutableStateFlow(0)
     val navDrawerId = _navDrawerId.value
+    private val _modelBeingEdited: MutableStateFlow<ReceiptModel?> = MutableStateFlow(null)
+    val modelBeingEdited: StateFlow<ReceiptModel?> = _modelBeingEdited
 
     fun initializeViewModel(context: Context){
         //Set the Repository
@@ -85,6 +87,33 @@ class ExpenseViewModel(): ViewModel() {
     fun setNavDrawerId(id: Int)
     { _navDrawerId.value = id }
 
+    //RECEIPT MODEL EDITOR STUFF
+    fun resetReceiptModelEdit(){
+        _modelBeingEdited.value = null
+    }
+    fun setModelEdit(receiptModel: ReceiptModel){
+        _modelBeingEdited.value = receiptModel
+    }
+    fun setModelEditName(value: String){
+        _modelBeingEdited.update { currentState ->
+            currentState!!.copy(name = value)
+        }
+    }
+    fun setModelEditCategory(value: String){
+        _modelBeingEdited.update { currentState ->
+            currentState!!.copy(category = value)
+        }
+    }
+    fun deleteModelEdit(){
+        viewModelScope.launch {
+            receiptModelRepository.delete(_modelBeingEdited.value!!)
+        }
+    }
+    fun updateModelEdit(){
+        viewModelScope.launch {
+            receiptModelRepository.update(_modelBeingEdited.value!!)
+        }
+    }
     /**
      * Checks the value of HomeNavUiState and re-Query the expenseList based on the
      * availability of the Query values (e.g. if DateRange is not null then Query based

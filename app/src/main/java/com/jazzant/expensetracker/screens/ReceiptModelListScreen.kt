@@ -41,7 +41,7 @@ import com.jazzant.expensetracker.ui.CategoryInputField
 import com.jazzant.expensetracker.ui.TextInput
 
 @Composable
-fun ExpenseListScreen(
+fun ReceiptModelListScreen(
     list: List<ReceiptModel>,
     onCardClick: (ReceiptModel) -> Unit,
     currentReceiptModel: ReceiptModel?,
