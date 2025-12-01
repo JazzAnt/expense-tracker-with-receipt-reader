@@ -61,7 +61,7 @@ fun TopNavBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavBar(
-    onResetButtonPress: () -> Unit,
+    onMenuButtonPress: () -> Unit,
     titleText: String,
     isSearching: Boolean,
     setIsSearching: (Boolean) -> Unit,
@@ -99,7 +99,12 @@ fun HomeNavBar(
             }
         },
         navigationIcon = {
-            SettingDropDownMenu(onResetButtonPress)
+            IconButton(onClick = onMenuButtonPress) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = "Open Menu",
+                )
+            }
         },
         actions = {
             if (isSearching) {
@@ -154,32 +159,6 @@ fun HomeNavBar(
             onDateRangeSelected = onDateRangeChanged,
             onDismiss = { showDatePicker = false }
         )
-    }
-}
-
-@Composable
-fun SettingDropDownMenu(
-    onResetButtonPress: () -> Unit,
-){
-    var expanded by remember { mutableStateOf(false) }
-    Box {
-        IconButton( onClick = { expanded = !expanded }) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = "Settings"
-            )
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            DropdownMenuItem(
-                text = {
-                    Text("Reset Query")
-                },
-                onClick = {onResetButtonPress()}
-            )
-        }
     }
 }
 
