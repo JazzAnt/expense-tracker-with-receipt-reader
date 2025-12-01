@@ -1,6 +1,7 @@
 package com.jazzant.expensetracker.screens
 
 import android.util.Log
+import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -12,8 +13,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -68,7 +71,7 @@ fun CameraPreviewScreen(modifier:Modifier = Modifier, onImageCapture: (ImageProx
                 }
             }, ContextCompat.getMainExecutor(context))
         }
-        FloatingActionButton(
+        ExtendedFloatingActionButton(
             onClick = {
                 imageCapture?.takePicture(
                     ContextCompat.getMainExecutor(context),
@@ -80,6 +83,7 @@ fun CameraPreviewScreen(modifier:Modifier = Modifier, onImageCapture: (ImageProx
 
                         override fun onError(exception: ImageCaptureException) {
                             Log.e("CameraScreen", "Image Capture Failed: ${exception.message}")
+                            Toast.makeText(context, "Image Capture Failed", Toast.LENGTH_LONG).show()
                         }
                     }
                 )
@@ -87,6 +91,7 @@ fun CameraPreviewScreen(modifier:Modifier = Modifier, onImageCapture: (ImageProx
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             Icon(Icons.Default.Search, contentDescription = stringResource(R.string.takePictureContentDescription))
+            Text("Capture and Analyze")
         }
     }
 }
