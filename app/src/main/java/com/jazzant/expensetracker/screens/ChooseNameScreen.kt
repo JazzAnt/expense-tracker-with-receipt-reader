@@ -15,6 +15,7 @@ import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.ui.CheckBoxField
 import com.jazzant.expensetracker.ui.DescriptionText
 import com.jazzant.expensetracker.ui.ErrorText
+import com.jazzant.expensetracker.ui.ExpenseCard
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.StandardVerticalSpacer
