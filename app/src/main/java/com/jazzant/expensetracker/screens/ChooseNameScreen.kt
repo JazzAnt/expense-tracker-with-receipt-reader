@@ -46,14 +46,16 @@ fun ChooseNameScreen(
             CheckBoxField(
                 text = stringResource(R.string.chooseName_checkBoxLabel),
                 state = checkBoxState,
-                onStateChanged = onCheckBoxStateChange
+                onStateChanged = onCheckBoxStateChange,
+                leftSpacerFraction = 0.25f
             )
             StandardVerticalSpacer()
             TextInput(
                 label = stringResource(R.string.chooseName_textInputLabel),
                 value = name,
                 onValueChange = onNameChange,
-                enabled = !checkBoxState
+                enabled = !checkBoxState,
+                labelFraction = 0.3f
             )
         }
         if (invalidInput) {
