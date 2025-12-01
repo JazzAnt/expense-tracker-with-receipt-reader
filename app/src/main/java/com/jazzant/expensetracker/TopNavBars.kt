@@ -124,7 +124,8 @@ fun HomeNavBar(
                 CategoryDropDownMenu(
                     categoryList = categoryList,
                     selectedCategory = selectedCategory,
-                    onSelectionChange = onSelectionChange
+                    onSelectionChange = onSelectionChange,
+                    hasNoCategoryOption = true,
                 )
                 if (dateRange.first == null || dateRange.second == null){
                     IconButton(onClick = { showDatePicker = true }) {
@@ -198,6 +199,7 @@ fun CategoryDropDownMenu(
     categoryList: List<String>,
     selectedCategory: String,
     onSelectionChange: (String) -> Unit,
+    hasNoCategoryOption: Boolean = false
 ){
     var expanded by remember { mutableStateOf(false) }
     Box {
@@ -213,12 +215,16 @@ fun CategoryDropDownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            DropdownMenuItem(
-                text = {
-                    Text("No Category", color = Color.Red)
-                },
-                onClick = {onSelectionChange("")}
-            )
+            if (hasNoCategoryOption)
+            {
+                DropdownMenuItem(
+                    text = {
+                        Text("No Category", color = Color.Red)
+                    },
+                    onClick = {onSelectionChange("")}
+                )
+            }
+
             categoryList.forEach {
                 DropdownMenuItem(
                     text = {
