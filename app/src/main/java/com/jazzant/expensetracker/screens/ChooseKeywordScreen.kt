@@ -58,14 +58,16 @@ fun ChooseKeywordScreen(
             SwitchField(
                 stringResource(R.string.chooseKeyword_switchLabel),
                 state = switchState,
-                onStateChanged = onSwitchStateChanged
+                onStateChanged = onSwitchStateChanged,
+                leftSpacerFraction = 0.05f
             )
             StandardVerticalSpacer()
             if (switchState) {
                 TextInput(
                     stringResource(R.string.chooseKeyword_textInputLabel),
                     value = keyword,
-                    onValueChange = onKeywordChange
+                    onValueChange = onKeywordChange,
+                    labelFraction = 0.25f
                 )
             } else {
                 RadioButtons(

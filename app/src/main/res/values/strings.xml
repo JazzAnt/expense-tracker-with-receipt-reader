@@ -31,7 +31,7 @@
     <string name="chooseKeyword_header">Choose the Keyword</string>
     <string name="chooseKeyword_description"> Keyword is a unique identifier of the shop listed in your receipt. It\'s usually either the shop name or address.</string>
     <string name="chooseKeyword_switchLabel">Enter Keyword Manually?</string>
-    <string name="chooseKeyword_textInputLabel">Enter the keyword</string>
+    <string name="chooseKeyword_textInputLabel">Keyword</string>
     <string name="chooseKeyword_radioButtonLabel">Which of these values are unique to this shop?</string>
     <string name="chooseKeyword_invalidKeywordText">The app couldn\'t find the keyword amongst the recognized text!</string>
     <!--CHOOSE NAME SCREEN-->
