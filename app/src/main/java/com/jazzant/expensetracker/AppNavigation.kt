@@ -18,7 +18,6 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -167,11 +166,13 @@ fun ExpenseApp(
                  )
                 } else if (currentScreen == AppScreen.EDIT_EXPENSE) {
                     val expenseState = viewModel.expenseState.collectAsStateWithLifecycle()
-                    val openAlertDialog = remember { mutableStateOf(false) }
+                    val openResetAlertDialog = remember { mutableStateOf(false) }
+                    val openDeleteAlertDialog = remember { mutableStateOf(false) }
                     EditorNavBar(
                         isCreatingNewExpense = expenseState.value.id < 0,
                         onBackButtonPress = { navController.popBackStack() },
-                        onResetButtonPress = { openAlertDialog.value = true },
+                        onResetButtonPress = { openResetAlertDialog.value = true },
+                        onDeleteButtonPress = { openDeleteAlertDialog.value = true },
                         onSaveButtonPress = {
                             val error = viewModel.checkForErrorsInUiState(context)
                             if (error != null) {
@@ -191,12 +192,25 @@ fun ExpenseApp(
                         }
                     )
                     when {
-                        openAlertDialog.value -> {
+                        openResetAlertDialog.value -> {
                             AlertDialog(
-                                onDismissRequest = { openAlertDialog.value = false },
+                                onDismissRequest = { openResetAlertDialog.value = false },
                                 onConfirmation = { viewModel.resetUiState() },
                                 dialogTitle = "Reset Input Values",
                                 dialogText = "Remove all Input Values?",
+                                icon = Icons.Default.Info
+                            )
+                        }
+                        openDeleteAlertDialog.value -> {
+                            AlertDialog(
+                                onDismissRequest = { openDeleteAlertDialog.value = false },
+                                onConfirmation = {
+                                    viewModel.deleteExpenseOnDB()
+                                    Toast.makeText(context, "Deleted Expense", Toast.LENGTH_SHORT).show()
+                                    navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                                                 },
+                                dialogTitle = "Delete Expense",
+                                dialogText = "Delete This Expense from the Database? This action cannot be undone.",
                                 icon = Icons.Default.Info
                             )
                         }
