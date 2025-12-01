@@ -54,6 +54,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -410,9 +411,8 @@ fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
     Card (
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp)
-            .background(Color.White)
-            .border(width = 1.dp, color = Color.Black),
+            .height(64.dp)
+            .background(Color.White),
         onClick = {onCardClick(expense)}
     ){
         Row (
@@ -421,18 +421,18 @@ fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
             DateBox(expense.date)
             Column (
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(0.5f)
+                modifier = Modifier.fillMaxWidth(0.64f)
                     .fillMaxHeight()
 
             ){
-                Text(stringResource(R.string.expenseNameLabel)+": " + expense.name, fontSize = TextUnit(4f, TextUnitType.Em))
-                Text(stringResource(R.string.expenseCategoryLabel)+": " + expense.category, fontSize = TextUnit(3f, TextUnitType.Em))
+                Text(stringResource(R.string.expenseNameLabel)+": " + expense.name, fontSize = TextUnit(3.6f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(stringResource(R.string.expenseCategoryLabel)+": " + expense.category, fontSize = TextUnit(3f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Row (
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.fillMaxWidth()
             ){
-                Text("$%.2f".format(expense.amount), fontSize = TextUnit(5f, TextUnitType.Em))
+                Text("$%.2f".format(expense.amount), fontSize = TextUnit(4.4f, TextUnitType.Em))
             }
         }
     }
@@ -449,9 +449,8 @@ fun ExpenseCard(
     Card (
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp)
-            .background(Color.White)
-            .border(width = 1.dp, color = Color.Black),
+            .height(64.dp)
+            .background(Color.White),
         onClick = {onCardClick()}
     ){
         Row (
@@ -460,18 +459,18 @@ fun ExpenseCard(
             DateBox(date)
             Column (
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(0.5f)
+                modifier = Modifier.fillMaxWidth(0.64f)
                     .fillMaxHeight()
 
             ){
-                Text(stringResource(R.string.expenseNameLabel)+": " + name, fontSize = TextUnit(4f, TextUnitType.Em))
-                Text(stringResource(R.string.expenseCategoryLabel)+": " + category, fontSize = TextUnit(3f, TextUnitType.Em))
+                Text(stringResource(R.string.expenseNameLabel)+": " + name, fontSize = TextUnit(3.6f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(stringResource(R.string.expenseCategoryLabel)+": " + category, fontSize = TextUnit(3f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Row (
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.fillMaxWidth()
             ){
-                Text("$%.2f".format(amount), fontSize = TextUnit(5f, TextUnitType.Em))
+                Text("$%.2f".format(amount), fontSize = TextUnit(4.4f, TextUnitType.Em))
             }
         }
     }
@@ -483,9 +482,9 @@ fun DateBox(millis: Long){
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .padding(end = 10.dp)
-            .width(40.dp)
-            .height(50.dp)
+            .padding(end = 12.dp)
+            .width(60.dp)
+            .height(64.dp)
             .drawBehind {
                 drawLine(
                     Color.Black,
@@ -495,9 +494,8 @@ fun DateBox(millis: Long){
                 )
             }
     ){
-        dateText.forEach {
-            Text(it)
-        }
+        Text(dateText[0], fontSize = TextUnit(4.8f, TextUnitType.Em))
+        Text(dateText[1], fontSize = TextUnit(3.0f, TextUnitType.Em))
     }
 }
 

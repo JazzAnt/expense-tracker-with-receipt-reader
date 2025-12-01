@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,11 +40,15 @@ import java.util.Locale
 
 @Composable
 fun ExpenseListScreen(list: List<Expense>, onCardClick: (Expense) -> Unit, sumOfExpenses: Float){
-    Box(Modifier.fillMaxSize()){
+    Box(Modifier
+        .fillMaxSize()
+        .padding(horizontal = 12.dp)
+    ){
         LazyColumn () {
             items(list){
                     item ->
                 ExpenseCard(item, onCardClick)
+                Spacer(Modifier.height(4.dp))
             }
         }
         ExpenseSumCard(sumOfExpenses, Modifier.align(Alignment.BottomEnd))
