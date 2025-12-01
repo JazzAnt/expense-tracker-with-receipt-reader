@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -58,17 +59,17 @@ fun ExpenseListScreen(list: List<Expense>, onCardClick: (Expense) -> Unit, sumOf
 @Composable
 fun ExpenseSumCard(sum: Float, modifier: Modifier = Modifier){
     Card(modifier
-        .padding(2.dp)
-        .border(BorderStroke(1.dp, Color.Black))
-        .padding(3.dp)
+        .padding(10.dp)
         .fillMaxWidth()
         .height(50.dp)
+        .shadow(10.dp)
         .zIndex(1f)) {
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
             Text(
                 stringResource(R.string.sumOfExpensesLabel) +": $%.2f".format(sum),
                 fontSize = TextUnit(5f, TextUnitType.Em),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
             )
         }
     }
