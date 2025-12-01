@@ -53,6 +53,7 @@ import com.jazzant.expensetracker.screens.ChooseStrategyScreen
 import com.jazzant.expensetracker.screens.ExpenseEditorScreen
 import com.jazzant.expensetracker.screens.ExpenseListScreen
 import com.jazzant.expensetracker.screens.LoadingScreen
+import com.jazzant.expensetracker.screens.ReceiptModelListScreen
 import com.jazzant.expensetracker.screens.TextAnalyzerScreen
 import com.jazzant.expensetracker.screens.TextRecognizerScreen
 import com.jazzant.expensetracker.ui.AlertDialog
@@ -275,6 +276,38 @@ fun ExpenseApp(
                         },
                         sumOfExpenses = sumOfExpenses
                     )
+                }
+                composable(route = AppScreen.RECEIPT_MODEL_LIST.name) {
+                    val receiptModelList by viewModel.receiptModelList.collectAsStateWithLifecycle()
+                    val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
+                    val currentModel by viewModel.modelBeingEdited.collectAsStateWithLifecycle()
+                    val openAlertDialog = remember { mutableStateOf(false) }
+                    ReceiptModelListScreen(
+                        list = receiptModelList,
+                        onCardClick = { viewModel.setModelEdit(it) },
+                        currentReceiptModel = currentModel,
+                        onEditorNameChange = { viewModel.setModelEditName(it) },
+                        onEditorCategoryChange = { viewModel.setModelEditCategory(it) },
+                        onEditorSaveChanges = {
+                            viewModel.updateModelEdit()
+                            Toast.makeText(context, "Saved Changes", Toast.LENGTH_SHORT).show()
+                                              },
+                        onEditorDelete = { openAlertDialog.value = true },
+                        categoryList = categoryList
+                    )
+                    when {
+                        openAlertDialog.value ->
+                            AlertDialog(
+                                onDismissRequest = { openAlertDialog.value = false },
+                                onConfirmation = {
+                                    viewModel.deleteModelEdit()
+                                    viewModel.resetReceiptModelEdit()
+                                                 },
+                                dialogTitle = "Delete Confirmation",
+                                dialogText = "Delete this receipt model? This action cannot be undone.",
+                                icon = Icons.Default.Warning
+                            )
+                    }
                 }
                 composable(route = AppScreen.EDIT_EXPENSE.name) {
                     val expenseState by viewModel.expenseState.collectAsStateWithLifecycle()

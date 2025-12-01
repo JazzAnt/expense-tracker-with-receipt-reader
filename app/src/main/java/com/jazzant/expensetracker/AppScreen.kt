@@ -2,6 +2,7 @@ package com.jazzant.expensetracker
 
 enum class AppScreen(){
     HOME_SCREEN,
+    RECEIPT_MODEL_LIST,
     EDIT_EXPENSE,
     REQUEST_CAMERA_PERMISSION,
     CAMERA_PREVIEW,
