@@ -257,7 +257,7 @@ fun ExpenseApp(
                             // This is done because the screen before ChooseStrategy is the loading screen which should be skipped if you click back
                             if (currentScreen == AppScreen.CHOOSE_STRATEGY) {
                                 navController.popBackStack(
-                                    route = AppScreen.CHOOSE_AMOUNT.name,
+                                    route = AppScreen.CHOOSE_CATEGORY.name,
                                     inclusive = false
                                 )
                             } else {
