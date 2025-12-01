@@ -116,7 +116,7 @@ fun ExpenseApp(
                         contentDescription = "Receipt Menu",
                         onClick = {
                             navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
-                            TODO("Navigate to Receipt Menu Screen")
+                            navController.navigate(route = AppScreen.RECEIPT_MODEL_LIST.name)
                             viewModel.setNavDrawerId(1)
                         }
                     )
@@ -149,6 +149,19 @@ fun ExpenseApp(
                         selectedCategory = homeNavState.selectedCategory,
                         onSelectionChange = { viewModel.setHomeNavCategory(it) }
                     )
+                } else if (currentScreen == AppScreen.RECEIPT_MODEL_LIST) {
+                 SettingNavBar(
+                     onMenuButtonPress = {
+                         scope.launch {
+                             if (drawerState.isClosed)
+                             { drawerState.open() }
+                             else
+                             { drawerState.close() }
+                         }
+                     },
+                     onGoHomeButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)},
+                     titleText = "Receipt Model List"
+                 )
                 } else if (currentScreen == AppScreen.EDIT_EXPENSE) {
                     val expenseState = viewModel.expenseState.collectAsStateWithLifecycle()
                     val openAlertDialog = remember { mutableStateOf(false) }

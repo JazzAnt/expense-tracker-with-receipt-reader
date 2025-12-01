@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
@@ -169,6 +170,7 @@ fun HomeNavBar(
 @Composable
 fun SettingNavBar(
     onMenuButtonPress: () -> Unit,
+    onGoHomeButtonPress: () -> Unit,
     titleText: String,
 ){
     TopAppBar(
@@ -181,6 +183,14 @@ fun SettingNavBar(
                 )
             }
         },
+        actions = {
+            IconButton(onClick = onGoHomeButtonPress) {
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = "Go To Home Menu",
+                )
+            }
+        }
     )
 }
 @Composable
