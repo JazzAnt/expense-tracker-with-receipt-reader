@@ -14,6 +14,7 @@ import com.jazzant.expensetracker.ui.CheckBoxField
 import com.jazzant.expensetracker.ui.DatePickerField
 import com.jazzant.expensetracker.ui.NumberInput
 import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.ui.CategoryInputField
 import com.jazzant.expensetracker.ui.RadioButtons
 import com.jazzant.expensetracker.ui.SwitchField
 import com.jazzant.expensetracker.ui.TextInput
@@ -57,35 +58,13 @@ fun ExpenseEditorScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        SwitchField(
-            text = stringResource(R.string.newCategorySwitchLabel),
-            state = newCategorySwitch,
-            onStateChanged = onNewCategorySwitchChange
+        CategoryInputField(
+            newCategoryState = newCategorySwitch,
+            onNewCategoryStateChange = onNewCategorySwitchChange,
+            category = category,
+            onCategoryChange = onCategoryChange,
+            categoryList = categoryList,
         )
-
-        if (newCategorySwitch)
-        {
-            TextInput(
-                label = stringResource(R.string.newCategoryInputLabel),
-                value = category,
-                onValueChange = onCategoryChange,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-        else if (categoryList.isEmpty())
-        {
-            Text(stringResource(R.string.emptyCategoryListAlert))
-        }
-        else
-        {
-            RadioButtons(
-                label = stringResource(R.string.categorySelectorLabel),
-                radioOptions = categoryList,
-                selectedOption = category,
-                onOptionChange = onCategoryChange,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
 
         CheckBoxField(
             text = stringResource(R.string.addTipCheckboxLabel),
