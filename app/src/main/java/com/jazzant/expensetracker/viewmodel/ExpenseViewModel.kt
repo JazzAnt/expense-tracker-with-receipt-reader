@@ -508,6 +508,7 @@ class ExpenseViewModel(): ViewModel() {
             name = model.name,
             date = System.currentTimeMillis()
         )
+        expense.expenseId = -1
         return expense
     }
 
