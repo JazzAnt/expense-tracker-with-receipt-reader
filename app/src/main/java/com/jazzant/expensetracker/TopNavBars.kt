@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -267,6 +268,7 @@ fun EditorNavBar(
     isCreatingNewExpense: Boolean = true,
     onBackButtonPress: () -> Unit,
     onResetButtonPress: () -> Unit,
+    onDeleteButtonPress: () -> Unit,
     onSaveButtonPress: () -> Unit
 ){
     TopAppBar(
@@ -287,6 +289,16 @@ fun EditorNavBar(
             }
         },
         actions = {
+            if (!isCreatingNewExpense)
+            {
+                IconButton( onClick = {onDeleteButtonPress()} )
+                {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete Expense",
+                    )
+                }
+            }
             IconButton( onClick = {onResetButtonPress()} )
             {
                 Icon(
