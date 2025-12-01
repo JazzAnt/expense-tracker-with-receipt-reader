@@ -13,7 +13,7 @@ interface ReceiptModelDao {
     @Insert
     suspend fun insert(receiptModel: ReceiptModel)
 
-    @Query("SELECT * FROM receipt_model_table")
+    @Query("SELECT * FROM receipt_model_table ORDER BY category ASC")
     fun getAllReceiptModels(): Flow<List<ReceiptModel>>
 
     @Delete

@@ -189,7 +189,7 @@ fun ExpenseApp(
                          }
                      },
                      onGoHomeButtonPress = { resetAllStatesAndGoHome() },
-                     titleText = "Receipt Model List"
+                     titleText = "Receipt Models"
                  )
                 } else if (currentScreen == AppScreen.EDIT_EXPENSE) {
                     val expenseState = viewModel.expenseState.collectAsStateWithLifecycle()
