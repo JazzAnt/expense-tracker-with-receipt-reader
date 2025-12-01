@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,7 +13,6 @@ import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.ui.CheckBoxField
 import com.jazzant.expensetracker.ui.DescriptionText
 import com.jazzant.expensetracker.ui.ErrorText
-import com.jazzant.expensetracker.ui.ExpenseCard
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.StandardVerticalSpacer

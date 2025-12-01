@@ -1,4 +1,4 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
@@ -43,7 +42,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.jazzant.expensetracker.ui.DateRangePickerModal
+import com.jazzant.expensetracker.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)

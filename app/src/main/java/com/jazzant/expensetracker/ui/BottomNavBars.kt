@@ -1,4 +1,4 @@
-package com.jazzant.expensetracker
+package com.jazzant.expensetracker.ui
 
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults

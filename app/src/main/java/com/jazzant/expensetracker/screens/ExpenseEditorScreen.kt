@@ -2,29 +2,21 @@ package com.jazzant.expensetracker.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.jazzant.expensetracker.ui.CheckBoxField
-import com.jazzant.expensetracker.ui.DatePickerField
-import com.jazzant.expensetracker.ui.NumberInput
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.ui.CategoryInputField
+import com.jazzant.expensetracker.ui.CheckBoxField
+import com.jazzant.expensetracker.ui.DatePickerField
 import com.jazzant.expensetracker.ui.ExpenseCard
-import com.jazzant.expensetracker.ui.RadioButtons
+import com.jazzant.expensetracker.ui.NumberInput
 import com.jazzant.expensetracker.ui.StandardVerticalSpacer
-import com.jazzant.expensetracker.ui.SwitchField
 import com.jazzant.expensetracker.ui.TextInput
-import com.jazzant.expensetracker.ui.convertMillisToDate
 
 @Composable
 fun ExpenseEditorScreen(
