@@ -107,6 +107,7 @@ fun ExpenseApp(
                             navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
                             viewModel.resetHomeNavUiSTate()
                             viewModel.setNavDrawerId(0)
+                            scope.launch { drawerState.close() }
                         }
                     ),
                     DrawerItem(
@@ -118,6 +119,7 @@ fun ExpenseApp(
                             navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
                             navController.navigate(route = AppScreen.RECEIPT_MODEL_LIST.name)
                             viewModel.setNavDrawerId(1)
+                            scope.launch { drawerState.close() }
                         }
                     )
                 )
