@@ -51,12 +51,13 @@ fun ChooseStrategyScreen(
             QuestionText(stringResource(R.string.chooseStrategy_question))
             StandardVerticalSpacer()
             RadioButtons(
-                label = stringResource(R.string.chooseStrategy_radioButtonLabel),
+                label = "",
+                labelFraction = 0.05f,
                 radioOptions = strategyList,
                 selectedOption = strategy,
                 onOptionChange = onStrategyChange,
-                radioText = { strategyNames[it.ordinal] }
-                //TODO: Modify RadioButtons to allow adding description text to put strategyDescriptions
+                radioText = { strategyNames[it.ordinal] },
+                radioDescription = { strategyDescriptions[it.ordinal] }
             )
         }
 

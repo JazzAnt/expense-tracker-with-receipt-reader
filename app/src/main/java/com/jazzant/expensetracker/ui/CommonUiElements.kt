@@ -143,6 +143,7 @@ fun <T> RadioButtons(label:String,
                      onOptionChange:(T)->Unit,
                      modifier: Modifier = Modifier,
                      radioText: (T) -> String = {it.toString()},
+                     radioDescription: (T) -> String = {""},
                      labelFraction: Float = DEFAULT_FRACTION,
 ) {
     Row(verticalAlignment = Alignment.Top,
@@ -155,23 +156,47 @@ fun <T> RadioButtons(label:String,
             modifier = Modifier.fillMaxWidth(labelFraction).padding(end = 5.dp))
         Column(modifier = Modifier.fillMaxWidth().selectableGroup()) {
             radioOptions.forEach { radioOption ->
-                Row (
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .selectable(
                             selected=(radioOption==selectedOption),
                             onClick={onOptionChange(radioOption)},
                             role=Role.RadioButton
                         )
-                        .padding(bottom = 5.dp)
-                ){
-                    RadioButton(
-                        selected=(radioOption == selectedOption),
-                        onClick=null //done by Row instead so that the text is also clickable
-                    )
-                    Text(
-                        text=radioText(radioOption),
-                    )
+                ) {
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .padding(bottom = 5.dp)
+                    ){
+                        RadioButton(
+                            selected=(radioOption == selectedOption),
+                            onClick=null //done by Row instead so that the text is also clickable
+                        )
+                        Text(
+                            text = radioText(radioOption),
+                            fontSize = TextUnit(18f, TextUnitType.Sp),
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Justify,
+                        )
+                    }
+                    if (radioDescription(radioOption).isNotBlank())
+                    {
+                        Box(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .background(Color.LightGray)
+                        ) {
+                            Text(
+                                text = radioDescription(radioOption),
+                                fontSize = TextUnit(16f, TextUnitType.Sp),
+                                textAlign = TextAlign.Justify,
+                                modifier = Modifier.fillMaxWidth().padding(5.dp).align(Alignment.Center)
+                            )
+                        }
+                        StandardVerticalSpacer(multiplier = 0.8f)
+                    }
                 }
             }
         }
