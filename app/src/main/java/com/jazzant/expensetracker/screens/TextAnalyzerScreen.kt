@@ -56,17 +56,30 @@ fun TextAnalyzerScreen(
             modifier = Modifier.border(4.dp, Color.Black)
         )
         StandardVerticalSpacer()
-        if (receiptModelIndex < 0)
+        if (receiptModelIndex < 0 || analyzedExpense == null)
         {
-            Text(text = "The app has never seen a receipt like this!",
-                color = Color.Red,
-                fontSize = TextUnit(18f, TextUnitType.Sp),
-            )
-            StandardVerticalSpacer()
-            StandardButton(
-                onClick = onCreateNewReceiptModelButtonPress,
-                text = stringResource(R.string.createNewReceiptModelButton)
-            )
+            if (receiptModelIndex < 0) {
+                Text(
+                    text = "The app has never seen a receipt like this",
+                    color = Color.Red,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = TextUnit(18f, TextUnitType.Sp),
+                )
+                StandardVerticalSpacer()
+                StandardButton(
+                    onClick = onCreateNewReceiptModelButtonPress,
+                    text = stringResource(R.string.createNewReceiptModelButton)
+                )
+            }
+            else
+            {
+                Text(
+                    text = "Something went wrong in Parsing Receipt",
+                    color = Color.Red,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = TextUnit(18f, TextUnitType.Sp),
+                )
+            }
             StandardVerticalSpacer()
             StandardButton(
                 onClick = onInputExpenseManuallyButtonPress,
@@ -80,12 +93,10 @@ fun TextAnalyzerScreen(
                 fontSize = TextUnit(18f, TextUnitType.Sp),
             )
             StandardVerticalSpacer()
-            if (analyzedExpense != null){
-                ExpenseCard(
-                    expense = analyzedExpense,
-                    onCardClick = {}
-                )
-            }
+            ExpenseCard(
+                expense = analyzedExpense,
+                onCardClick = {}
+            )
             StandardVerticalSpacer()
             StandardButton(
                 onClick = onUseAnalyzedExpenseButtonPress,

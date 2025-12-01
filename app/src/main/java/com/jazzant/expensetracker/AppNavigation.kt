@@ -62,6 +62,7 @@ import com.jazzant.expensetracker.viewmodel.ExpenseViewModel
 import com.jazzant.expensetracker.viewmodel.ViewModelException
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.collectAsState
+import java.lang.Exception
 
 @Composable
 fun ExpenseApp(
@@ -433,12 +434,6 @@ fun ExpenseApp(
                                     ?: false
                             ) {
                                 viewModel.findKeyword(receiptModelList)
-                                val index = receiptAnalyzerState.receiptModelIndex
-                                if (index >= 0) {
-                                    val model = receiptModelList[index]
-                                    val expense = viewModel.parseRecognizedTextFromModel(model)
-                                    viewModel.setAnalyzedExpense(expense)
-                                }
                                 navController.navigate(AppScreen.TEXT_ANALYZER.name)
                             } else {
                                 viewModel.setAnalyzerNoReceiptFoundState(true)
@@ -450,6 +445,19 @@ fun ExpenseApp(
                 }
                 composable(route = AppScreen.TEXT_ANALYZER.name) {
                     val receiptAnalyzerState by viewModel.receiptAnalyzerUiState.collectAsStateWithLifecycle()
+                    val receiptModelList by viewModel.receiptModelList.collectAsStateWithLifecycle()
+                    /**
+                     * For some reason parsing the receipt into an expense doesn't work unless
+                     * I do it over here. It just doesn't work otherwise.
+                     */
+                    try {
+                        val model = receiptModelList[receiptAnalyzerState.receiptModelIndex]
+                        val expense = viewModel.parseRecognizedTextFromModel(model)
+                        viewModel.setAnalyzedExpense(expense)
+                    }
+                    catch (e: Exception)
+                    { }
+
                     TextAnalyzerScreen(
                         receiptModelIndex = receiptAnalyzerState.receiptModelIndex,
                         bitmap = receiptAnalyzerState.capturedBitmap!!,
