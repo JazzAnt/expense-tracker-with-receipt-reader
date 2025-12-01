@@ -658,20 +658,20 @@ class ExpenseViewModel(): ViewModel() {
     fun validateReceiptModelCategory(){
         val category = _receiptModelUiState.value.category
         val newCategorySwitch = _receiptModelUiState.value.newCategorySwitch
+        val categoryList = categoryList.value
         if (newCategorySwitch)
         {
-            if (category.isNotBlank())
+            if (category.isBlank())
             { setReceiptInvalidInput(true) }
             else
             { setReceiptInvalidInput(false) }
         }
         else
         {
-            val categoryList = _receiptModelUiState.value.category
-            if (categoryList.contains(category))
-            { setReceiptInvalidInput(false) }
-            else
+            if (category.isBlank() || category !in categoryList)
             { setReceiptInvalidInput(true) }
+            else
+            { setReceiptInvalidInput(false) }
         }
     }
 
