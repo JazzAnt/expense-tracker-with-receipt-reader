@@ -60,16 +60,20 @@ import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.CategoryDropDownMenu
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.database.expense.Expense
+import com.jazzant.expensetracker.ui.DEFAULT_FRACTION
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.Float
 
-private const val LABEL_FRACTION = 0.4f
+private const val DEFAULT_FRACTION = 0.4f
 @Composable
 fun NumberInput(label:String, value: Float,
                 onValueChange:(Float)->Unit,
-                modifier: Modifier = Modifier){
+                modifier: Modifier = Modifier,
+                labelFraction: Float = DEFAULT_FRACTION,
+){
     var temp: Float?;
     Row (verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -78,7 +82,7 @@ fun NumberInput(label:String, value: Float,
         Text(text = label,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp))
+            modifier = Modifier.fillMaxWidth(labelFraction).padding(end = 5.dp))
         TextField(
             value = value.toString(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -104,7 +108,9 @@ fun TextInput(
     value: String,
     onValueChange:(String)->Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true){
+    enabled: Boolean = true,
+    labelFraction: Float = DEFAULT_FRACTION,
+){
     Row (verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = modifier
@@ -112,7 +118,7 @@ fun TextInput(
         Text(text = label,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp))
+            modifier = Modifier.fillMaxWidth(labelFraction).padding(end = 5.dp))
         TextField(
             value = value,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -131,6 +137,7 @@ fun <T> RadioButtons(label:String,
                      onOptionChange:(T)->Unit,
                      modifier: Modifier = Modifier,
                      radioText: (T) -> String = {it.toString()},
+                     labelFraction: Float = DEFAULT_FRACTION,
 ) {
     Row(verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Center,
@@ -139,7 +146,7 @@ fun <T> RadioButtons(label:String,
         Text(text = label,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp))
+            modifier = Modifier.fillMaxWidth(labelFraction).padding(end = 5.dp))
         Column(modifier = Modifier.fillMaxWidth().selectableGroup()) {
             radioOptions.forEach { radioOption ->
                 Row (
@@ -169,10 +176,14 @@ fun <T> RadioButtons(label:String,
 fun CheckBoxField(text:String,
                   state: Boolean,
                   onStateChanged:(Boolean)->Unit,
-                  modifier:Modifier = Modifier){
+                  modifier: Modifier = Modifier,
+                  leftSpacerFraction: Float = DEFAULT_FRACTION,
+){
     Row (
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
     ){
+        Spacer(Modifier.fillMaxWidth(leftSpacerFraction))
         Checkbox(checked=state, onCheckedChange = onStateChanged)
         Text(text)
     }
@@ -182,10 +193,14 @@ fun CheckBoxField(text:String,
 fun SwitchField(text:String,
                 state: Boolean,
                 onStateChanged: (Boolean) -> Unit,
-                modifier: Modifier = Modifier){
+                modifier: Modifier = Modifier,
+                leftSpacerFraction: Float = DEFAULT_FRACTION,
+){
     Row (
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
     ){
+        Spacer(Modifier.fillMaxWidth(leftSpacerFraction))
         Switch(checked = state, onCheckedChange = onStateChanged)
         Text(text, modifier=Modifier.padding(start=5.dp))
     }
@@ -237,6 +252,7 @@ fun CategoryInputField(
     category: String,
     onCategoryChange: (String) -> Unit,
     categoryList: List<String>,
+    leftSpacerFraction: Float = DEFAULT_FRACTION,
 ){
     if (newCategoryState)
     {
@@ -244,7 +260,8 @@ fun CategoryInputField(
             label = "Category",
             value = category,
             onValueChange = onCategoryChange,
-            enabled = true
+            enabled = true,
+            labelFraction = leftSpacerFraction,
         )
     }
     else
@@ -255,7 +272,7 @@ fun CategoryInputField(
             Text(text = "Category",
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp)
+                modifier = Modifier.fillMaxWidth(leftSpacerFraction).padding(end = 5.dp)
             )
             CategoryDropDownMenu(
                 categoryList = categoryList,
@@ -269,11 +286,11 @@ fun CategoryInputField(
         }
     }
     Row {
-        Spacer(Modifier.fillMaxWidth(LABEL_FRACTION))
         SwitchField(
             text = stringResource(R.string.newCategorySwitchLabel),
             state = newCategoryState,
             onStateChanged = onNewCategoryStateChange,
+            leftSpacerFraction = leftSpacerFraction,
         )
     }
 }
