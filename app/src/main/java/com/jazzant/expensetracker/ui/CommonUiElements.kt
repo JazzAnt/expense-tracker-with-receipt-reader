@@ -21,6 +21,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -529,4 +531,20 @@ fun AlertDialog(
             { Text("Dismiss") }
         }
     )
+}
+
+@Composable
+fun StandardButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    text: String = "",
+    width: Dp = 640.dp,
+){
+    Button(onClick = onClick, modifier = modifier.width(width))
+    {
+        Text(
+            text = text,
+            fontSize = TextUnit(24f, TextUnitType.Sp),
+        )
+    }
 }
