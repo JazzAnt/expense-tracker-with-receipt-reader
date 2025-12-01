@@ -411,37 +411,6 @@ fun DateRangePickerModal(
         )
     }
 }
-@Composable
-fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
-    Card (
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .background(Color.White),
-        onClick = {onCardClick(expense)}
-    ){
-        Row (
-            modifier = Modifier.fillMaxWidth().padding(5.dp)
-        ) {
-            DateBox(expense.date)
-            Column (
-                verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(0.64f)
-                    .fillMaxHeight()
-
-            ){
-                Text(stringResource(R.string.expenseNameLabel)+": " + expense.name, fontSize = TextUnit(3.6f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(stringResource(R.string.expenseCategoryLabel)+": " + expense.category, fontSize = TextUnit(3f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
-            Row (
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Text("$%.2f".format(expense.amount), fontSize = TextUnit(4.4f, TextUnitType.Em))
-            }
-        }
-    }
-}
 
 @Composable
 fun ExpenseCard(
@@ -479,6 +448,17 @@ fun ExpenseCard(
             }
         }
     }
+}
+
+@Composable
+fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
+    ExpenseCard(
+        name = expense.name,
+        category = expense.category,
+        amount = expense.amount,
+        date = expense.date,
+        onCardClick = { onCardClick(expense) }
+    )
 }
 @Composable
 fun DateBox(millis: Long){
