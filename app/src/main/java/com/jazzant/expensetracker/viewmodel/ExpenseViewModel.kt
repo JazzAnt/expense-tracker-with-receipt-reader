@@ -2,6 +2,13 @@ package com.jazzant.expensetracker.viewmodel
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.common.InputImage
@@ -565,6 +572,30 @@ class ExpenseViewModel(): ViewModel() {
         _receiptModelUiState.update { currentState ->
             currentState.copy(strategyValue1 = value1)
         }
+    }
+
+    @Composable
+    fun getTextWithHighlightedKeyword(text:String, query:String): AnnotatedString{
+        val span = SpanStyle(
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            fontWeight = FontWeight.SemiBold,
+            background = MaterialTheme.colorScheme.primary
+        )
+        val annotatedString = buildAnnotatedString {
+            var start = 0
+            while (text.indexOf(query, start, ignoreCase = true) != -1 && query.isNotBlank())
+            {
+                val firstIndex = text.indexOf(query, start, ignoreCase = true)
+                val end = firstIndex + query.length
+                append(text = text.substring(start, firstIndex))
+                withStyle(style = span)
+                { append(text = text.substring(firstIndex, end)) }
+                start = end
+            }
+            append(text = text.substring(start, text.length))
+            toAnnotatedString()
+        }
+        return annotatedString
     }
     //Receipt Model Value Validators
     /**

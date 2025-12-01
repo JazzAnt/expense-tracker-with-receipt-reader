@@ -456,7 +456,7 @@ fun ExpenseApp(
                         onCreateNewReceiptModelButtonPress = {
                             viewModel.resetReceiptModelUiState()
                             viewModel.setAnalyzerTextStringList(
-                                list = receiptAnalyzerState.recognizedText!!.toBlockList()
+                                list = receiptAnalyzerState.recognizedText!!.toLineList()
                             )
                             viewModel.validateReceiptModelKeyword()
                             navController.navigate(AppScreen.CHOOSE_KEYWORD.name)
@@ -503,6 +503,10 @@ fun ExpenseApp(
                             viewModel.validateReceiptModelKeyword()
                                                },
                         textBlockList = receiptAnalyzerState.recognizedTextStringList,
+                        receiptDisplay = viewModel.getTextWithHighlightedKeyword(
+                            text = receiptAnalyzerState.recognizedText!!.text,
+                            query = receiptModelState.keyword
+                        ),
                         keyword = receiptModelState.keyword,
                         onKeywordChange = {
                             viewModel.setReceiptKeyword(it)
