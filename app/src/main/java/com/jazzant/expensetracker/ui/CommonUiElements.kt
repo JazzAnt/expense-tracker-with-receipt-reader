@@ -65,7 +65,6 @@ import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.CategoryDropDownMenu
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.database.expense.Expense
-import com.jazzant.expensetracker.ui.DEFAULT_FRACTION
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -603,4 +602,12 @@ fun DescriptionText(text: String, modifier: Modifier = Modifier){
         )
     }
 
+}
+
+@Composable
+fun StandardVerticalSpacer(
+    spacing: Float = 12f,
+    multiplier: Float = 1f,
+){
+    Spacer(Modifier.height((spacing * multiplier).dp))
 }

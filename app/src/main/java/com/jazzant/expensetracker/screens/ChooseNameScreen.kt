@@ -16,6 +16,7 @@ import com.jazzant.expensetracker.ui.CheckBoxField
 import com.jazzant.expensetracker.ui.DescriptionText
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 import com.jazzant.expensetracker.ui.TextInput
 
 @Composable
@@ -38,18 +39,22 @@ fun ChooseNameScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             HeaderText(stringResource(R.string.chooseName_header))
+            StandardVerticalSpacer()
             DescriptionText(stringResource(R.string.chooseName_description))
+            StandardVerticalSpacer()
             CheckBoxField(
                 text = stringResource(R.string.chooseName_checkBoxLabel),
                 state = checkBoxState,
                 onStateChanged = onCheckBoxStateChange
             )
+            StandardVerticalSpacer()
             TextInput(
                 label = stringResource(R.string.chooseName_textInputLabel),
                 value = name,
                 onValueChange = onNameChange,
                 enabled = !checkBoxState
             )
+            StandardVerticalSpacer()
             if (invalidInput) {
                 Text(stringResource(R.string.chooseName_invalidNameText))
             }

@@ -24,6 +24,7 @@ import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.database.expense.Expense
 import com.jazzant.expensetracker.ui.ExpenseCard
 import com.jazzant.expensetracker.ui.StandardButton
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
 fun TextAnalyzerScreen(
@@ -48,25 +49,25 @@ fun TextAnalyzerScreen(
             fontSize = TextUnit(40f, TextUnitType.Sp),
             fontWeight = FontWeight.Bold
         )
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = stringResource(R.string.capturedImageBitmapContentDescription),
             modifier = Modifier.border(4.dp, Color.Black)
         )
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         if (receiptModelIndex < 0)
         {
             Text(text = "The app has never seen a receipt like this!",
                 color = Color.Red,
                 fontSize = TextUnit(18f, TextUnitType.Sp),
             )
-            Spacer(Modifier.height(SPACING.dp))
+            StandardVerticalSpacer()
             StandardButton(
                 onClick = onCreateNewReceiptModelButtonPress,
                 text = stringResource(R.string.createNewReceiptModelButton)
             )
-            Spacer(Modifier.height(SPACING.dp))
+            StandardVerticalSpacer()
             StandardButton(
                 onClick = onInputExpenseManuallyButtonPress,
                 text = stringResource(R.string.inputExpenseManuallyButton)
@@ -78,31 +79,30 @@ fun TextAnalyzerScreen(
                 color = Color.Red,
                 fontSize = TextUnit(18f, TextUnitType.Sp),
             )
-            Spacer(Modifier.height(SPACING.dp))
+            StandardVerticalSpacer()
             if (analyzedExpense != null){
                 ExpenseCard(
                     expense = analyzedExpense,
                     onCardClick = {}
                 )
             }
-            Spacer(Modifier.height(SPACING.dp))
+            StandardVerticalSpacer()
             StandardButton(
                 onClick = onUseAnalyzedExpenseButtonPress,
                 text = stringResource(R.string.useAnalyzedExpenseButton)
             )
-            Spacer(Modifier.height(SPACING.dp))
+            StandardVerticalSpacer()
             StandardButton(
                 onClick = onEditAnalyzedExpenseButtonPress,
                 text = stringResource(R.string.editAnalyzedExpenseButton)
             )
         }
-
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         StandardButton(
             onClick = onRetakeImageButtonPress,
             text = stringResource(R.string.retakeImageButton)
         )
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         StandardButton(
             onClick = onCancelButtonPress,
             text = stringResource(R.string.cancelButton)

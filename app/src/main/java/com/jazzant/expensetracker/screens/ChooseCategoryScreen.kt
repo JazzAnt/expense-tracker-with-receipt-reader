@@ -17,6 +17,7 @@ import com.jazzant.expensetracker.ui.DescriptionText
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.RadioButtons
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 import com.jazzant.expensetracker.ui.SwitchField
 import com.jazzant.expensetracker.ui.TextInput
 
@@ -41,13 +42,16 @@ fun ChooseCategoryScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             HeaderText(stringResource(R.string.chooseCategory_header))
+            StandardVerticalSpacer()
             DescriptionText(stringResource(R.string.chooseCategory_description))
+            StandardVerticalSpacer()
 
             SwitchField(
                 text = stringResource(R.string.newCategorySwitchLabel),
                 state = newCategorySwitch,
                 onStateChanged = onNewCategorySwitchChange
             )
+            StandardVerticalSpacer()
             if (newCategorySwitch) {
                 TextInput(
                     label = stringResource(R.string.newCategoryInputLabel),
@@ -66,6 +70,7 @@ fun ChooseCategoryScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
+            StandardVerticalSpacer()
             if (invalidInput) {
                 Text(stringResource(R.string.chooseCategory_invalidAmountLabel))
             }

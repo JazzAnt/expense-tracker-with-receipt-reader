@@ -20,6 +20,7 @@ import com.jazzant.expensetracker.ui.DescriptionText
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.RadioButtons
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
 fun ChooseStrategyScreen(
@@ -42,7 +43,9 @@ fun ChooseStrategyScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             HeaderText(stringResource(R.string.chooseStrategy_header))
+            StandardVerticalSpacer()
             DescriptionText(stringResource(R.string.chooseStrategy_description))
+            StandardVerticalSpacer()
             RadioButtons(
                 label = stringResource(R.string.chooseStrategy_radioButtonLabel),
                 radioOptions = strategyList,
@@ -51,6 +54,7 @@ fun ChooseStrategyScreen(
                 radioText = { strategyNames[it.ordinal] }
                 //TODO: Modify RadioButtons to allow adding description text to put strategyDescriptions
             )
+            StandardVerticalSpacer()
             if (invalidInput) {
                 Text(stringResource(R.string.chooseStrategy_invalidStrategyLabel))
             }

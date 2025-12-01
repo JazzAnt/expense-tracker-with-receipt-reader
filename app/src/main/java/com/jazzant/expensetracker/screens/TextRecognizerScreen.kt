@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.google.mlkit.vision.text.Text
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.ui.StandardButton
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
 fun TextRecognizerScreen(
@@ -56,13 +57,13 @@ fun TextRecognizerScreen(
                 fontWeight = FontWeight.Bold
             )
         }
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         Image(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = stringResource(R.string.capturedImageBitmapContentDescription),
             modifier = Modifier.border(4.dp, Color.Black)
         )
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         if (recognizedText == null)
         { Text(stringResource(R.string.noTextRecognizedText)) }
         else if (receiptNotFoundOnImage)
@@ -80,12 +81,12 @@ fun TextRecognizerScreen(
         }
         else
         { onTextRecognized() }
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         StandardButton(
             onClick = onRetakeImageButtonPress,
             text = stringResource(R.string.retakeImageButton)
         )
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         StandardButton(
             onClick = onCancelButtonPress,
             text = stringResource(R.string.cancelButton)

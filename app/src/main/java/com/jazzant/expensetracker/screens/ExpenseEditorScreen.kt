@@ -21,11 +21,10 @@ import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.ui.CategoryInputField
 import com.jazzant.expensetracker.ui.ExpenseCard
 import com.jazzant.expensetracker.ui.RadioButtons
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 import com.jazzant.expensetracker.ui.SwitchField
 import com.jazzant.expensetracker.ui.TextInput
 import com.jazzant.expensetracker.ui.convertMillisToDate
-
-const val SPACING = 12
 
 @Composable
 fun ExpenseEditorScreen(
@@ -58,21 +57,21 @@ fun ExpenseEditorScreen(
             date = date,
             onCardClick = {},
         )
-        Spacer(Modifier.height((3 * SPACING).dp))
+        StandardVerticalSpacer(multiplier = 3f)
         NumberInput(
             label = stringResource(R.string.amountInputLabel),
             value = amount,
             onValueChange = onAmountChange,
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         TextInput(
             label = stringResource(R.string.nameInputLabel),
             value = name,
             onValueChange = onNameChange,
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         CategoryInputField(
             newCategoryState = newCategorySwitch,
             onNewCategoryStateChange = onNewCategorySwitchChange,
@@ -80,7 +79,7 @@ fun ExpenseEditorScreen(
             onCategoryChange = onCategoryChange,
             categoryList = categoryList,
         )
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         CheckBoxField(
             text = stringResource(R.string.addTipCheckboxLabel),
             state = tipping,
@@ -93,7 +92,7 @@ fun ExpenseEditorScreen(
                 onValueChange = onTipChange,
             )
         }
-        Spacer(Modifier.height(SPACING.dp))
+        StandardVerticalSpacer()
         DatePickerField(
             label = stringResource(R.string.datePickerLabel),
             date = date,

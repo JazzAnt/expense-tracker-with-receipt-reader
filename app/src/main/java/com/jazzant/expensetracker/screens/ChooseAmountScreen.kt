@@ -16,6 +16,7 @@ import com.jazzant.expensetracker.ui.DescriptionText
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.RadioButtons
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
 fun ChooseAmountScreen(
@@ -36,7 +37,9 @@ fun ChooseAmountScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             HeaderText(stringResource(R.string.chooseAmount_header))
+            StandardVerticalSpacer()
             DescriptionText(stringResource(R.string.chooseAmount_description))
+            StandardVerticalSpacer()
             RadioButtons(
                 label = stringResource(R.string.chooseAmount_radioButtonLabel),
                 radioOptions = amountList,
@@ -45,6 +48,7 @@ fun ChooseAmountScreen(
                 radioText = { "$%.2f".format(it) }
                 //TODO: Make '$' non-static and allow user to change currency
             )
+            StandardVerticalSpacer()
             if (invalidInput) {
                 Text(stringResource(R.string.chooseAmount_invalidAmountLabel))
             }
