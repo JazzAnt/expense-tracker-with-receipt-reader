@@ -111,9 +111,7 @@ fun ExpenseApp(
                         icon = Icons.Default.Home,
                         contentDescription = "Home Menu",
                         onClick = {
-                            navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
-                            viewModel.resetHomeNavUiSTate()
-                            viewModel.setNavDrawerId(0)
+                            resetAllStatesAndGoHome()
                             scope.launch { drawerState.close() }
                         }
                     ),
@@ -123,10 +121,9 @@ fun ExpenseApp(
                         icon = Icons.Default.ShoppingCart,
                         contentDescription = "Receipt Menu",
                         onClick = {
-                            navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                            resetAllStatesAndGoHome()
                             navController.navigate(route = AppScreen.RECEIPT_MODEL_LIST.name)
                             viewModel.setNavDrawerId(1)
-                            viewModel.resetReceiptModelEdit()
                             scope.launch { drawerState.close() }
                         }
                     )
@@ -169,7 +166,7 @@ fun ExpenseApp(
                              { drawerState.close() }
                          }
                      },
-                     onGoHomeButtonPress = { navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)},
+                     onGoHomeButtonPress = { resetAllStatesAndGoHome() },
                      titleText = "Receipt Model List"
                  )
                 } else if (currentScreen == AppScreen.EDIT_EXPENSE) {
@@ -192,10 +189,7 @@ fun ExpenseApp(
                                     context.getString(R.string.saveExpenseToast),
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                navController.popBackStack(
-                                    route = AppScreen.HOME_SCREEN.name,
-                                    inclusive = false
-                                )
+                                resetAllStatesAndGoHome()
                             }
                         }
                     )
@@ -215,7 +209,7 @@ fun ExpenseApp(
                                 onConfirmation = {
                                     viewModel.deleteExpenseOnDB()
                                     Toast.makeText(context, "Deleted Expense", Toast.LENGTH_SHORT).show()
-                                    navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                                    resetAllStatesAndGoHome()
                                                  },
                                 dialogTitle = "Delete Expense",
                                 dialogText = "Delete This Expense from the Database? This action cannot be undone.",
