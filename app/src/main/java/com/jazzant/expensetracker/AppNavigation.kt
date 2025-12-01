@@ -458,6 +458,7 @@ fun ExpenseApp(
                             viewModel.setAnalyzerTextStringList(
                                 list = receiptAnalyzerState.recognizedText!!.toBlockList()
                             )
+                            viewModel.validateReceiptModelKeyword()
                             navController.navigate(AppScreen.CHOOSE_KEYWORD.name)
                         },
                         onInputExpenseManuallyButtonPress = {
@@ -497,7 +498,10 @@ fun ExpenseApp(
                     val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                     ChooseKeywordScreen(
                         switchState = receiptModelState.switchState,
-                        onSwitchStateChanged = { viewModel.setReceiptSwitch(it) },
+                        onSwitchStateChanged = {
+                            viewModel.setReceiptSwitch(it)
+                            viewModel.validateReceiptModelKeyword()
+                                               },
                         textBlockList = receiptAnalyzerState.recognizedTextStringList,
                         keyword = receiptModelState.keyword,
                         onKeywordChange = {
@@ -520,6 +524,7 @@ fun ExpenseApp(
                             viewModel.setReceiptCheckBox(it)
                             if (it)
                             { viewModel.setReceiptName(receiptModelState.keyword) }
+                            viewModel.validateReceiptModelName()
                                                 },
                         name = receiptModelState.name,
                         onNameChange = {
@@ -558,9 +563,15 @@ fun ExpenseApp(
                     val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                     ChooseCategoryScreen(
                         newCategorySwitch = receiptModelState.newCategorySwitch,
-                        onNewCategorySwitchChange = { viewModel.setReceiptNewCategorySwitch(it) },
+                        onNewCategorySwitchChange = {
+                            viewModel.setReceiptNewCategorySwitch(it)
+                            viewModel.validateReceiptModelCategory()
+                                                    },
                         category = receiptModelState.category,
-                        onCategoryChange = { viewModel.setReceiptCategory(it) },
+                        onCategoryChange = {
+                            viewModel.setReceiptCategory(it)
+                            viewModel.validateReceiptModelCategory()
+                                           },
                         categoryList = categoryList,
                         invalidInput = receiptModelState.invalidInput,
                         onNextButtonPress = {
