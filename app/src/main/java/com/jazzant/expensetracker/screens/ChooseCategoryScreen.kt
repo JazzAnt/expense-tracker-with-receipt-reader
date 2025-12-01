@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.ui.CategoryInputField
 import com.jazzant.expensetracker.ui.DescriptionText
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
@@ -46,30 +47,14 @@ fun ChooseCategoryScreen(
             DescriptionText(stringResource(R.string.chooseCategory_description))
             StandardVerticalSpacer()
 
-            SwitchField(
-                text = stringResource(R.string.newCategorySwitchLabel),
-                state = newCategorySwitch,
-                onStateChanged = onNewCategorySwitchChange
+            CategoryInputField(
+                newCategoryState = newCategorySwitch,
+                onNewCategoryStateChange = onNewCategorySwitchChange,
+                category = category,
+                onCategoryChange = onCategoryChange,
+                categoryList = categoryList
             )
-            StandardVerticalSpacer()
-            if (newCategorySwitch) {
-                TextInput(
-                    label = stringResource(R.string.newCategoryInputLabel),
-                    value = category,
-                    onValueChange = onCategoryChange,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            } else if (categoryList.isEmpty()) {
-                Text(stringResource(R.string.emptyCategoryListAlert))
-            } else {
-                RadioButtons(
-                    label = stringResource(R.string.categorySelectorLabel),
-                    radioOptions = categoryList,
-                    selectedOption = category,
-                    onOptionChange = onCategoryChange,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+
             StandardVerticalSpacer()
             if (invalidInput) {
                 Text(stringResource(R.string.chooseCategory_invalidAmountLabel))
