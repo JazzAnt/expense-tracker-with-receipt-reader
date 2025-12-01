@@ -162,6 +162,24 @@ fun HomeNavBar(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingNavBar(
+    onMenuButtonPress: () -> Unit,
+    titleText: String,
+){
+    TopAppBar(
+        title = { Text(titleText) },
+        navigationIcon = {
+            IconButton(onClick = onMenuButtonPress) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = "Open Menu",
+                )
+            }
+        },
+    )
+}
 @Composable
 fun CategoryDropDownMenu(
     categoryList: List<String>,
