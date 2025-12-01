@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +41,6 @@ import androidx.navigation.compose.rememberNavController
 import com.jazzant.expensetracker.analyzer.Strategy
 import com.jazzant.expensetracker.analyzer.containsPriceLabels
 import com.jazzant.expensetracker.analyzer.parseReceipt
-import com.jazzant.expensetracker.analyzer.toBlockList
 import com.jazzant.expensetracker.analyzer.toLineList
 import com.jazzant.expensetracker.analyzer.toPriceLabelsList
 import com.jazzant.expensetracker.database.expense.Expense
@@ -58,11 +58,17 @@ import com.jazzant.expensetracker.screens.ReceiptModelListScreen
 import com.jazzant.expensetracker.screens.TextAnalyzerScreen
 import com.jazzant.expensetracker.screens.TextRecognizerScreen
 import com.jazzant.expensetracker.ui.AlertDialog
+import com.jazzant.expensetracker.ui.CameraNavBar
+import com.jazzant.expensetracker.ui.DrawerItem
+import com.jazzant.expensetracker.ui.EditorNavBar
+import com.jazzant.expensetracker.ui.HomeNavBar
+import com.jazzant.expensetracker.ui.NavigationDrawerSheet
+import com.jazzant.expensetracker.ui.ReceiptCreatorNavBar
+import com.jazzant.expensetracker.ui.SettingNavBar
+import com.jazzant.expensetracker.ui.TopNavBar
 import com.jazzant.expensetracker.viewmodel.ExpenseViewModel
 import com.jazzant.expensetracker.viewmodel.ViewModelException
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.collectAsState
-import java.lang.Exception
 
 @Composable
 fun ExpenseApp(
@@ -146,10 +152,11 @@ fun ExpenseApp(
                     HomeNavBar(
                         onMenuButtonPress = {
                             scope.launch {
-                                if (drawerState.isClosed)
-                                { drawerState.open() }
-                                else
-                                { drawerState.close() }
+                                if (drawerState.isClosed) {
+                                    drawerState.open()
+                                } else {
+                                    drawerState.close()
+                                }
                             }
                         },
                         titleText = homeNavState.titleText,
@@ -158,19 +165,19 @@ fun ExpenseApp(
                             viewModel.setHomeNavSearching(it)
                             viewModel.updateExpenseList()
                             viewModel.requestExpenseListUpdate()
-                                         },
+                        },
                         searchValue = homeNavState.searchValue,
                         onSearchValueChange = {
                             viewModel.setHomeNavSearchValue(it)
                             viewModel.updateExpenseList()
                             viewModel.requestExpenseListUpdate()
-                                              },
+                        },
                         dateRange = homeNavState.dateRange,
                         onDateRangeChanged = {
                             viewModel.setHomeNavDateRange(it)
                             viewModel.updateExpenseList()
                             viewModel.requestExpenseListUpdate()
-                                             },
+                        },
                         categoryList = categoryList,
                         selectedCategory = homeNavState.selectedCategory,
                         onSelectionChange = {
@@ -180,18 +187,19 @@ fun ExpenseApp(
                         }
                     )
                 } else if (currentScreen == AppScreen.RECEIPT_MODEL_LIST) {
-                 SettingNavBar(
-                     onMenuButtonPress = {
-                         scope.launch {
-                             if (drawerState.isClosed)
-                             { drawerState.open() }
-                             else
-                             { drawerState.close() }
-                         }
-                     },
-                     onGoHomeButtonPress = { resetAllStatesAndGoHome() },
-                     titleText = "Receipt Models"
-                 )
+                    SettingNavBar(
+                        onMenuButtonPress = {
+                            scope.launch {
+                                if (drawerState.isClosed) {
+                                    drawerState.open()
+                                } else {
+                                    drawerState.close()
+                                }
+                            }
+                        },
+                        onGoHomeButtonPress = { resetAllStatesAndGoHome() },
+                        titleText = "Receipt Models"
+                    )
                 } else if (currentScreen == AppScreen.EDIT_EXPENSE) {
                     val expenseState = viewModel.expenseState.collectAsStateWithLifecycle()
                     val openResetAlertDialog = remember { mutableStateOf(false) }
@@ -455,7 +463,7 @@ fun ExpenseApp(
                         val expense = viewModel.parseRecognizedTextFromModel(model)
                         viewModel.setAnalyzedExpense(expense)
                     }
-                    catch (e: Exception)
+                    catch (_: Exception)
                     { }
 
                     TextAnalyzerScreen(
@@ -618,7 +626,6 @@ fun ExpenseApp(
                             )
                             viewModel.validateReceiptModelStrategy()
                         },
-                        //TODO: Add high order function to manipulate RadioText
                         invalidInput = receiptModelState.invalidInput,
                         onSaveButtonPress = {
                             viewModel.insertReceiptModelToDB()

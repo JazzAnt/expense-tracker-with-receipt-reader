@@ -21,11 +21,11 @@ import com.jazzant.expensetracker.analyzer.containsKeyword
 import com.jazzant.expensetracker.analyzer.evaluateAllPossibleStrategies
 import com.jazzant.expensetracker.analyzer.parseReceipt
 import com.jazzant.expensetracker.analyzer.toPriceLabelsList
-import com.jazzant.expensetracker.database.receiptmodel.ReceiptModel
-import com.jazzant.expensetracker.database.receiptmodel.ReceiptModelRepository
 import com.jazzant.expensetracker.database.ExpenseDatabase
 import com.jazzant.expensetracker.database.expense.Expense
 import com.jazzant.expensetracker.database.expense.ExpenseRepository
+import com.jazzant.expensetracker.database.receiptmodel.ReceiptModel
+import com.jazzant.expensetracker.database.receiptmodel.ReceiptModelRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
