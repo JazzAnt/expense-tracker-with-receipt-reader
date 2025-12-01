@@ -2,7 +2,10 @@ package com.jazzant.expensetracker.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -10,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.ui.CheckBoxField
 import com.jazzant.expensetracker.ui.DatePickerField
 import com.jazzant.expensetracker.ui.NumberInput
@@ -20,6 +24,8 @@ import com.jazzant.expensetracker.ui.RadioButtons
 import com.jazzant.expensetracker.ui.SwitchField
 import com.jazzant.expensetracker.ui.TextInput
 import com.jazzant.expensetracker.ui.convertMillisToDate
+
+const val SPACING = 12
 
 @Composable
 fun ExpenseEditorScreen(
@@ -41,24 +47,32 @@ fun ExpenseEditorScreen(
     modifier: Modifier = Modifier
 ){
     Column(
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
-        modifier = modifier
+        modifier = modifier.padding(horizontal = 16.dp)
     ) {
+        ExpenseCard(
+            name = name,
+            category = category,
+            amount = if (tipping) { amount + tip } else { amount },
+            date = date,
+            onCardClick = {},
+        )
+        Spacer(Modifier.height((3 * SPACING).dp))
         NumberInput(
             label = stringResource(R.string.amountInputLabel),
             value = amount,
             onValueChange = onAmountChange,
             modifier = Modifier.fillMaxWidth()
         )
-
+        Spacer(Modifier.height(SPACING.dp))
         TextInput(
             label = stringResource(R.string.nameInputLabel),
             value = name,
             onValueChange = onNameChange,
             modifier = Modifier.fillMaxWidth()
         )
-
+        Spacer(Modifier.height(SPACING.dp))
         CategoryInputField(
             newCategoryState = newCategorySwitch,
             onNewCategoryStateChange = onNewCategorySwitchChange,
@@ -66,33 +80,24 @@ fun ExpenseEditorScreen(
             onCategoryChange = onCategoryChange,
             categoryList = categoryList,
         )
-
+        Spacer(Modifier.height(SPACING.dp))
         CheckBoxField(
             text = stringResource(R.string.addTipCheckboxLabel),
             state = tipping,
             onStateChanged = onTippingChange,
-            modifier = Modifier.fillMaxWidth(0.5f)
         )
         if(tipping){
             NumberInput(
                 label = stringResource(R.string.tipInputLabel),
                 value = tip,
                 onValueChange = onTipChange,
-                modifier = Modifier.fillMaxWidth()
             )
         }
-
+        Spacer(Modifier.height(SPACING.dp))
         DatePickerField(
             label = stringResource(R.string.datePickerLabel),
             date = date,
             onDateChange = onDateChange
-        )
-        ExpenseCard(
-            name = name,
-            category = category,
-            amount = if (tipping) { amount + tip } else { amount },
-            date = date,
-            onCardClick = {},
         )
     }
 }
