@@ -56,6 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.jazzant.expensetracker.CategoryDropDownMenu
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.database.expense.Expense
 import java.math.RoundingMode
@@ -226,6 +227,40 @@ fun DatePickerField(label: String, date: Long, onDateChange: (Long?)->Unit){
             )
         }
     }
+}
+
+@Composable
+fun CategoryInputField(
+    newCategoryState: Boolean,
+    onNewCategoryStateChange: (Boolean) -> Unit,
+    category: String,
+    onCategoryChange: (String) -> Unit,
+    categoryList: List<String>,
+){
+    SwitchField(
+        text = stringResource(R.string.newCategorySwitchLabel),
+        state = newCategoryState,
+        onStateChanged = onNewCategoryStateChange,
+    )
+    if (newCategoryState)
+    {
+        TextField(
+            value = category,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            singleLine = true,
+            onValueChange = onCategoryChange,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+    else
+    {
+        CategoryDropDownMenu(
+            categoryList = categoryList,
+            selectedCategory = category,
+            onSelectionChange = onCategoryChange
+        )
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

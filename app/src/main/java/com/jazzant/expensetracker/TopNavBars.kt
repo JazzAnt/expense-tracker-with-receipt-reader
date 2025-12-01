@@ -1,7 +1,9 @@
 package com.jazzant.expensetracker
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -31,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.ui.DateRangePickerModal
 
 
@@ -189,6 +192,8 @@ fun CategoryDropDownMenu(
     var expanded by remember { mutableStateOf(false) }
     Box {
         IconButton( onClick = { expanded = !expanded }) {
+            Text(selectedCategory)
+            Spacer(Modifier.width(2.dp))
             Icon(
                 imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = "Filter by Category"
