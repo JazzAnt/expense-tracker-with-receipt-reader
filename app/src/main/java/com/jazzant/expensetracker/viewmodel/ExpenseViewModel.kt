@@ -46,6 +46,8 @@ class ExpenseViewModel(): ViewModel() {
     val receiptModelUiState: StateFlow<ReceiptModelUiState> = _receiptModelUiState.asStateFlow()
     private val _homeNavUiState = MutableStateFlow(HomeNavUiState())
     val homeNavUiState: StateFlow<HomeNavUiState> = _homeNavUiState
+    private val _navDrawerId = MutableStateFlow(0)
+    val navDrawerId = _navDrawerId.value
 
     fun initializeViewModel(context: Context){
         //Set the Repository
@@ -79,6 +81,9 @@ class ExpenseViewModel(): ViewModel() {
                 initialValue = 0f
             )
     }
+
+    fun setNavDrawerId(id: Int)
+    { _navDrawerId.value = id }
 
     /**
      * Checks the value of HomeNavUiState and re-Query the expenseList based on the
