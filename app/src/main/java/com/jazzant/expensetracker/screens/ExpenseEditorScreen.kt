@@ -15,6 +15,7 @@ import com.jazzant.expensetracker.ui.DatePickerField
 import com.jazzant.expensetracker.ui.NumberInput
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.ui.CategoryInputField
+import com.jazzant.expensetracker.ui.ExpenseCard
 import com.jazzant.expensetracker.ui.RadioButtons
 import com.jazzant.expensetracker.ui.SwitchField
 import com.jazzant.expensetracker.ui.TextInput
@@ -86,24 +87,13 @@ fun ExpenseEditorScreen(
             date = date,
             onDateChange = onDateChange
         )
-
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column {
-                Text("Amount\t: ${
-                    if(tipping){
-                        amount + tip
-                    } else {
-                        amount
-                    }
-                }")
-                Text("Category\t: $category")
-                Text("Name\t: $name")
-                Text("Date\t: ${convertMillisToDate(date)}")
-
-            }
-        }
+        ExpenseCard(
+            name = name,
+            category = category,
+            amount = if (tipping) { amount + tip } else { amount },
+            date = date,
+            onCardClick = {},
+        )
     }
 }
 
