@@ -48,7 +48,7 @@
     <!--CHOOSE CATEGORY SCREEN-->
     <string name="chooseCategory_header">Choose The Category of this Expense</string>
     <string name="chooseCategory_description">This category will be tied to this particular shop. Thus it should be a general category of the shop instead of a specific spending. e.g. if it\'s a grocery receipt, the category should be something like \"grocery\" instead of something you specifically bought.</string>
-    <string name="chooseCategory_invalidAmountLabel">ERROR: No Category is Chosen</string>
+    <string name="chooseCategory_invalidCategoryLabel">ERROR: No Category is Chosen</string>
     <!--CHOOSE STRATEGY SCREEN-->
     <string name="chooseStrategy_header">Choose the Amount Finder Strategy</string>
     <string name="chooseStrategy_description">Here is the strategies to find the expense amount we find to be compatible with this type of receipt. Which one would you like to choose for receipts from this shop?</string>

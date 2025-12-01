@@ -3,10 +3,7 @@ package com.jazzant.expensetracker.screens
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,12 +12,10 @@ import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.ui.CategoryInputField
 import com.jazzant.expensetracker.ui.DescriptionText
+import com.jazzant.expensetracker.ui.ErrorText
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
-import com.jazzant.expensetracker.ui.RadioButtons
 import com.jazzant.expensetracker.ui.StandardVerticalSpacer
-import com.jazzant.expensetracker.ui.SwitchField
-import com.jazzant.expensetracker.ui.TextInput
 
 @Composable
 fun ChooseCategoryScreen(
@@ -55,12 +50,13 @@ fun ChooseCategoryScreen(
                 categoryList = categoryList
             )
 
-            StandardVerticalSpacer()
-            if (invalidInput) {
-                Text(stringResource(R.string.chooseCategory_invalidAmountLabel))
-            }
         }
-        if (!invalidInput) {
+        if (invalidInput) {
+            ErrorText(stringResource(R.string.chooseCategory_invalidCategoryLabel),
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+        else {
             NextButton(onNextButtonPress, modifier = Modifier.align(Alignment.BottomEnd))
         }
     }

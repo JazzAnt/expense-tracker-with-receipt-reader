@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.ui.DescriptionText
+import com.jazzant.expensetracker.ui.ErrorText
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.RadioButtons
@@ -75,12 +76,13 @@ fun ChooseKeywordScreen(
                     labelFraction = 0.05f
                 )
             }
-            StandardVerticalSpacer()
-            if (invalidInput) {
-                Text(stringResource(R.string.chooseKeyword_invalidKeywordText))
-            }
         }
-        if (!invalidInput) {
+        if (invalidInput) {
+            ErrorText(stringResource(R.string.chooseKeyword_invalidKeywordText),
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+        else {
             NextButton(onNextButtonPress, modifier = Modifier.align(Alignment.BottomEnd))
         }
     }

@@ -21,6 +21,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -57,6 +58,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -610,4 +612,31 @@ fun StandardVerticalSpacer(
     multiplier: Float = 1f,
 ){
     Spacer(Modifier.height((spacing * multiplier).dp))
+}
+
+@Composable
+fun ErrorText(text: String, modifier: Modifier = Modifier){
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color.Red)
+            .border(1.dp, Color.Black)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
+            Icon(
+                imageVector = Icons.Default.Warning,
+                contentDescription = "Warning Icon",
+                tint = Color.White
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(
+                text = text,
+                fontSize = TextUnit(18f, TextUnitType.Sp),
+                textAlign = TextAlign.Justify,
+                color = Color.White,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+
 }

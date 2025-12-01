@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.analyzer.Strategy
 import com.jazzant.expensetracker.ui.DescriptionText
+import com.jazzant.expensetracker.ui.ErrorText
 import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.RadioButtons
@@ -54,12 +55,14 @@ fun ChooseStrategyScreen(
                 radioText = { strategyNames[it.ordinal] }
                 //TODO: Modify RadioButtons to allow adding description text to put strategyDescriptions
             )
-            StandardVerticalSpacer()
-            if (invalidInput) {
-                Text(stringResource(R.string.chooseStrategy_invalidStrategyLabel))
-            }
         }
-        if (!invalidInput) {
+
+        if (invalidInput) {
+            ErrorText(stringResource(R.string.chooseStrategy_invalidStrategyLabel),
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+        else {
             NextButton(onSaveButtonPress,
                 modifier = Modifier.align(Alignment.BottomEnd),
                 text = "Save",
