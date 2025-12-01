@@ -24,7 +24,7 @@
     <!--TEXT ANALYZER SCREEN-->
     <string name="imageAnalyzedText">Image Analyzed</string>
     <string name="createNewReceiptModelButton">Create New Receipt Model</string>
-    <string name="useAnalyzedExpenseButton">Use Analyzed Expense</string>
+    <string name="useAnalyzedExpenseButton">Save Expense To Database</string>
     <string name="editAnalyzedExpenseButton">Edit Analyzed Expense</string>
     <string name="inputExpenseManuallyButton">Input Expense Manually</string>
     <!--CHOOSE KEYWORD SCREEN-->
