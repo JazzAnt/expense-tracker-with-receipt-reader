@@ -231,6 +231,14 @@ class ExpenseViewModel(): ViewModel() {
             )
         }
     }
+
+    fun deleteExpenseOnDB(){
+        viewModelScope.launch {
+            expenseRepository.delete(
+                getExpenseEntityFromExpenseUIState()
+            )
+        }
+    }
     fun insertReceiptModelToDB(){
         viewModelScope.launch {
             receiptModelRepository.insert(
