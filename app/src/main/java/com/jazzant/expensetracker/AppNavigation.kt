@@ -80,7 +80,15 @@ fun ExpenseApp(
     val homeNavState by viewModel.homeNavUiState.collectAsStateWithLifecycle()
 
     //NAVIGATION FUNCTIONS
-    fun resetAllCameraStatesAndGoBackToHome(){
+    /**
+     * Go to the home screen and reset every viewmodel state. It resets ALL viewmodel states so this
+     * can be used as the 'go to home screen' button by any other screen.
+     */
+    fun resetAllStatesAndGoHome(){
+        viewModel.setNavDrawerId(0)
+        viewModel.resetHomeNavUiSTate()
+        viewModel.resetUiState()
+        viewModel.resetReceiptModelEdit()
         viewModel.resetReceiptAnalyzerUiState()
         viewModel.resetReceiptModelUiState()
         navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
@@ -408,7 +416,7 @@ fun ExpenseApp(
                             }
                         },
                         onRetakeImageButtonPress = { resetAllCameraStatesAndGoBackToCamera() },
-                        onCancelButtonPress = { resetAllCameraStatesAndGoBackToHome() }
+                        onCancelButtonPress = { resetAllStatesAndGoHome() }
                     )
                 }
                 composable(route = AppScreen.TEXT_ANALYZER.name) {
@@ -448,11 +456,11 @@ fun ExpenseApp(
                         onEditAnalyzedExpenseButtonPress = {
                             viewModel.expenseEntityToUi(receiptAnalyzerState.analyzedExpense!!)
                             viewModel.insertExpenseToDB()
-                            resetAllCameraStatesAndGoBackToHome()
+                            resetAllStatesAndGoHome()
                         },
                         analyzedExpense = receiptAnalyzerState.analyzedExpense,
                         onRetakeImageButtonPress = { resetAllCameraStatesAndGoBackToCamera() },
-                        onCancelButtonPress = { resetAllCameraStatesAndGoBackToHome() }
+                        onCancelButtonPress = { resetAllStatesAndGoHome() }
                     )
                 }
                 composable(route = AppScreen.CHOOSE_KEYWORD.name) {
