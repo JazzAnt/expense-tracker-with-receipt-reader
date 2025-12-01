@@ -50,6 +50,8 @@ class ExpenseViewModel(): ViewModel() {
     val navDrawerId: StateFlow<Int> = _navDrawerId
     private val _modelBeingEdited: MutableStateFlow<ReceiptModel?> = MutableStateFlow(null)
     val modelBeingEdited: StateFlow<ReceiptModel?> = _modelBeingEdited
+    private val _expenseListUpdateRequested = MutableStateFlow(false)
+    val expenseListUpdateRequested: StateFlow<Boolean> = _expenseListUpdateRequested
 
     fun initializeViewModel(context: Context){
         //Set the Repository
@@ -83,6 +85,11 @@ class ExpenseViewModel(): ViewModel() {
                 initialValue = 0f
             )
     }
+
+    fun requestExpenseListUpdate()
+    {_expenseListUpdateRequested.value = true}
+    fun confirmExpenseListUpdate()
+    {_expenseListUpdateRequested.value = false}
 
     fun setNavDrawerId(id: Int)
     { _navDrawerId.value = id }
