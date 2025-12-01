@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -237,30 +238,44 @@ fun CategoryInputField(
     onCategoryChange: (String) -> Unit,
     categoryList: List<String>,
 ){
-    SwitchField(
-        text = stringResource(R.string.newCategorySwitchLabel),
-        state = newCategoryState,
-        onStateChanged = onNewCategoryStateChange,
-    )
     if (newCategoryState)
     {
-        TextField(
+        TextInput(
+            label = "Category",
             value = category,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            singleLine = true,
             onValueChange = onCategoryChange,
-            modifier = Modifier.fillMaxWidth()
+            enabled = true
         )
     }
     else
     {
-        CategoryDropDownMenu(
-            categoryList = categoryList,
-            selectedCategory = category,
-            onSelectionChange = onCategoryChange
+        Row (verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ){
+            Text(text = "Category",
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp)
+            )
+            CategoryDropDownMenu(
+                categoryList = categoryList,
+                selectedCategory = category,
+                onSelectionChange = onCategoryChange,
+                innerHorizontalPadding = 12.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, Color.Gray)
+            )
+        }
+    }
+    Row {
+        Spacer(Modifier.fillMaxWidth(LABEL_FRACTION))
+        SwitchField(
+            text = stringResource(R.string.newCategorySwitchLabel),
+            state = newCategoryState,
+            onStateChanged = onNewCategoryStateChange,
         )
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -32,10 +33,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.jazzant.expensetracker.database.receiptmodel.ReceiptModel
 import com.jazzant.expensetracker.ui.CategoryInputField
 import com.jazzant.expensetracker.ui.TextInput
@@ -93,14 +94,14 @@ fun ReceiptModelCard(model: ReceiptModel, onCardClick: (ReceiptModel)->Unit){
                     .fillMaxHeight()
 
             ){
-                Text(text = "Name: " + model.name, fontSize = TextUnit(4f, TextUnitType.Em))
-                Text(text = "Keyword: " + model.keyword, fontSize = TextUnit(3f, TextUnitType.Em))
+                Text(text = "Name: " + model.name, fontSize = TextUnit(4f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(text = "Keyword: " + model.keyword, fontSize = TextUnit(3f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Row (
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.fillMaxWidth()
             ){
-                Text("Category: " + model.category, fontSize = TextUnit(4f, TextUnitType.Em))
+                Text("Category: " + model.category, fontSize = TextUnit(4f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
     }
@@ -118,12 +119,10 @@ fun ReceiptModelEditor(
 ){
     var newCategoryState by remember { mutableStateOf(false) }
     Card(modifier
-        .padding(2.dp)
+        .padding(16.dp)
         .border(BorderStroke(1.dp, Color.Black))
-        .padding(3.dp)
         .fillMaxWidth()
-        .height(100.dp)
-        .zIndex(1f)
+        .height(220.dp)
         .shadow( elevation = 3.dp)
     ) {
         Column(Modifier.fillMaxSize()) {
@@ -132,6 +131,7 @@ fun ReceiptModelEditor(
                 value = model.name,
                 onValueChange = onNameChange,
             )
+            Spacer(Modifier.height(3.dp))
             CategoryInputField(
                 newCategoryState = newCategoryState,
                 onNewCategoryStateChange = {newCategoryState = it},
@@ -139,7 +139,7 @@ fun ReceiptModelEditor(
                 onCategoryChange = onCategoryChange,
                 categoryList = categoryList,
             )
-            Row(Modifier.fillMaxWidth()) {
+            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
                 Button(onClick = onDelete) {
                     Icon(
                         imageVector = Icons.Default.Delete,
@@ -147,7 +147,7 @@ fun ReceiptModelEditor(
                     )
                     Text("Delete Model")
                 }
-                Spacer(Modifier.width(16.dp))
+                Spacer(Modifier.width(20.dp))
                 Button(onClick = onSaveChanges) {
                     Icon(
                         imageVector = Icons.Default.Done,
