@@ -460,7 +460,10 @@ fun AlertDialog(
         text = { Text(text = dialogText) },
         onDismissRequest = { onDismissRequest() },
         confirmButton = {
-            TextButton( onClick = { onConfirmation() } )
+            TextButton( onClick = {
+                onConfirmation()
+                onDismissRequest()
+            } )
             { Text("Confirm") }
         },
         dismissButton = {
