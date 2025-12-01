@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -56,6 +57,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.jazzant.expensetracker.CategoryDropDownMenu
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.database.expense.Expense
 import java.math.RoundingMode
@@ -225,6 +227,54 @@ fun DatePickerField(label: String, date: Long, onDateChange: (Long?)->Unit){
                 onDismiss = {showDatePicker = false}
             )
         }
+    }
+}
+
+@Composable
+fun CategoryInputField(
+    newCategoryState: Boolean,
+    onNewCategoryStateChange: (Boolean) -> Unit,
+    category: String,
+    onCategoryChange: (String) -> Unit,
+    categoryList: List<String>,
+){
+    if (newCategoryState)
+    {
+        TextInput(
+            label = "Category",
+            value = category,
+            onValueChange = onCategoryChange,
+            enabled = true
+        )
+    }
+    else
+    {
+        Row (verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ){
+            Text(text = "Category",
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth(LABEL_FRACTION).padding(end = 5.dp)
+            )
+            CategoryDropDownMenu(
+                categoryList = categoryList,
+                selectedCategory = category,
+                onSelectionChange = onCategoryChange,
+                innerHorizontalPadding = 12.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, Color.Gray)
+            )
+        }
+    }
+    Row {
+        Spacer(Modifier.fillMaxWidth(LABEL_FRACTION))
+        SwitchField(
+            text = stringResource(R.string.newCategorySwitchLabel),
+            state = newCategoryState,
+            onStateChanged = onNewCategoryStateChange,
+        )
     }
 }
 
