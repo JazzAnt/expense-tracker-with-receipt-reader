@@ -489,12 +489,14 @@ fun ExpenseApp(
                         },
                         onUseAnalyzedExpenseButtonPress = {
                             viewModel.expenseEntityToUi(receiptAnalyzerState.analyzedExpense!!)
-                            navController.navigate(AppScreen.EDIT_EXPENSE.name)
+                            viewModel.insertExpenseToDB()
+                            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                            resetAllStatesAndGoHome()
                         },
                         onEditAnalyzedExpenseButtonPress = {
                             viewModel.expenseEntityToUi(receiptAnalyzerState.analyzedExpense!!)
-                            viewModel.insertExpenseToDB()
-                            resetAllStatesAndGoHome()
+                            navController.navigate(AppScreen.EDIT_EXPENSE.name)
+
                         },
                         analyzedExpense = receiptAnalyzerState.analyzedExpense,
                         onRetakeImageButtonPress = { resetAllCameraStatesAndGoBackToCamera() },
