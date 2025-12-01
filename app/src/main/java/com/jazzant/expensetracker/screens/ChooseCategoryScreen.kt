@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.ui.DescriptionText
+import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.RadioButtons
 import com.jazzant.expensetracker.ui.SwitchField
@@ -38,8 +40,8 @@ fun ChooseCategoryScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            Text(stringResource(R.string.chooseCategory_header))
-            Text(stringResource(R.string.chooseCategory_description))
+            HeaderText(stringResource(R.string.chooseCategory_header))
+            DescriptionText(stringResource(R.string.chooseCategory_description))
 
             SwitchField(
                 text = stringResource(R.string.newCategorySwitchLabel),

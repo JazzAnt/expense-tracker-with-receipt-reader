@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.ui.DescriptionText
+import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.RadioButtons
 
@@ -33,8 +35,8 @@ fun ChooseAmountScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            Text(stringResource(R.string.chooseAmount_header))
-            Text(stringResource(R.string.chooseAmount_description))
+            HeaderText(stringResource(R.string.chooseAmount_header))
+            DescriptionText(stringResource(R.string.chooseAmount_description))
             RadioButtons(
                 label = stringResource(R.string.chooseAmount_radioButtonLabel),
                 radioOptions = amountList,

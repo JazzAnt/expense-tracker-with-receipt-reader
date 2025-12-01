@@ -16,6 +16,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.analyzer.Strategy
+import com.jazzant.expensetracker.ui.DescriptionText
+import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.RadioButtons
 
@@ -39,8 +41,8 @@ fun ChooseStrategyScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            Text(stringResource(R.string.chooseStrategy_header))
-            Text(stringResource(R.string.chooseStrategy_description))
+            HeaderText(stringResource(R.string.chooseStrategy_header))
+            DescriptionText(stringResource(R.string.chooseStrategy_description))
             RadioButtons(
                 label = stringResource(R.string.chooseStrategy_radioButtonLabel),
                 radioOptions = strategyList,

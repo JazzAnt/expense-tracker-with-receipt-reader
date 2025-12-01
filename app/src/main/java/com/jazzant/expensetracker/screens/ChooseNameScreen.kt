@@ -13,6 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.ui.CheckBoxField
+import com.jazzant.expensetracker.ui.DescriptionText
+import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.TextInput
 
@@ -35,8 +37,8 @@ fun ChooseNameScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            Text(stringResource(R.string.chooseName_header))
-            Text(stringResource(R.string.chooseName_description))
+            HeaderText(stringResource(R.string.chooseName_header))
+            DescriptionText(stringResource(R.string.chooseName_description))
             CheckBoxField(
                 text = stringResource(R.string.chooseName_checkBoxLabel),
                 state = checkBoxState,

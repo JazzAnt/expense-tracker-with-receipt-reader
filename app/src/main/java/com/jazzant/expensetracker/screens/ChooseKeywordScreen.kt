@@ -2,7 +2,9 @@ package com.jazzant.expensetracker.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -17,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.ui.DescriptionText
+import com.jazzant.expensetracker.ui.HeaderText
 import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.RadioButtons
 import com.jazzant.expensetracker.ui.SwitchField
@@ -42,8 +46,8 @@ fun ChooseKeywordScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            Text(stringResource(R.string.chooseKeyword_header))
-            Text(stringResource(R.string.chooseKeyword_description))
+            HeaderText(stringResource(R.string.chooseKeyword_header))
+            DescriptionText(stringResource(R.string.chooseKeyword_description))
 
             Text(stringResource(R.string.chooseKeyword_radioButtonLabel))
             SwitchField(

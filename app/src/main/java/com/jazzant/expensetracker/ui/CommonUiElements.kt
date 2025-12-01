@@ -575,3 +575,32 @@ fun NextButton(
         )
     }
 }
+
+@Composable
+fun HeaderText(text: String, modifier: Modifier = Modifier){
+    Text(
+        text = text,
+        fontSize = TextUnit(30f, TextUnitType.Sp),
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        modifier = modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+fun DescriptionText(text: String, modifier: Modifier = Modifier){
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color.LightGray)
+            .border(1.dp, Color.Black)
+    ) {
+        Text(
+            text = text,
+            fontSize = TextUnit(18f, TextUnitType.Sp),
+            textAlign = TextAlign.Justify,
+            modifier = Modifier.fillMaxWidth().padding(5.dp).align(Alignment.Center)
+        )
+    }
+
+}
