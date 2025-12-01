@@ -264,6 +264,10 @@ fun CategoryInputField(
             labelFraction = leftSpacerFraction,
         )
     }
+    else if (categoryList.isEmpty())
+    {
+        Text(stringResource(R.string.emptyCategoryListAlert))
+    }
     else
     {
         Row (verticalAlignment = Alignment.CenterVertically,
