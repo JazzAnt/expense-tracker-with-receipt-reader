@@ -71,6 +71,7 @@ fun ExpenseApp(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppScreen.valueOf(value = backStackEntry?.destination?.route?: AppScreen.HOME_SCREEN.name)
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val currentItemId by viewModel.navDrawerId.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     var fabPosition: FabPosition = FabPosition.End
     if (currentScreen == AppScreen.EDIT_EXPENSE)
@@ -95,7 +96,7 @@ fun ExpenseApp(
         drawerState = drawerState,
         drawerContent = {
             NavigationDrawerSheet(
-                currentItemId = viewModel.navDrawerId,
+                currentItemId = currentItemId,
                 navDrawerItems = listOf(
                     DrawerItem(
                         id = 0,

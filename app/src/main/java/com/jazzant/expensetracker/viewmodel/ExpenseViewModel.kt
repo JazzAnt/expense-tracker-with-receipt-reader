@@ -47,7 +47,7 @@ class ExpenseViewModel(): ViewModel() {
     private val _homeNavUiState = MutableStateFlow(HomeNavUiState())
     val homeNavUiState: StateFlow<HomeNavUiState> = _homeNavUiState
     private val _navDrawerId = MutableStateFlow(0)
-    val navDrawerId = _navDrawerId.value
+    val navDrawerId: StateFlow<Int> = _navDrawerId
     private val _modelBeingEdited: MutableStateFlow<ReceiptModel?> = MutableStateFlow(null)
     val modelBeingEdited: StateFlow<ReceiptModel?> = _modelBeingEdited
 
