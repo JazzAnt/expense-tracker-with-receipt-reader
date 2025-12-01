@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,6 +43,7 @@ import com.jazzant.expensetracker.analyzer.parseReceipt
 import com.jazzant.expensetracker.analyzer.toBlockList
 import com.jazzant.expensetracker.analyzer.toLineList
 import com.jazzant.expensetracker.analyzer.toPriceLabelsList
+import com.jazzant.expensetracker.database.expense.Expense
 import com.jazzant.expensetracker.screens.CameraPermissionScreen
 import com.jazzant.expensetracker.screens.CameraPreviewScreen
 import com.jazzant.expensetracker.screens.ChooseAmountScreen
@@ -59,6 +61,7 @@ import com.jazzant.expensetracker.ui.AlertDialog
 import com.jazzant.expensetracker.viewmodel.ExpenseViewModel
 import com.jazzant.expensetracker.viewmodel.ViewModelException
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.collectAsState
 
 @Composable
 fun ExpenseApp(
@@ -87,6 +90,8 @@ fun ExpenseApp(
     fun resetAllStatesAndGoHome(){
         viewModel.setNavDrawerId(0)
         viewModel.resetHomeNavUiSTate()
+        viewModel.updateExpenseList()
+        viewModel.requestExpenseListUpdate()
         viewModel.resetUiState()
         viewModel.resetReceiptModelEdit()
         viewModel.resetReceiptAnalyzerUiState()
@@ -147,14 +152,30 @@ fun ExpenseApp(
                         },
                         titleText = homeNavState.titleText,
                         isSearching = homeNavState.isSearching,
-                        setIsSearching = { viewModel.setHomeNavSearching(it) },
+                        setIsSearching = {
+                            viewModel.setHomeNavSearching(it)
+                            viewModel.updateExpenseList()
+                            viewModel.requestExpenseListUpdate()
+                                         },
                         searchValue = homeNavState.searchValue,
-                        onSearchValueChange = { viewModel.setHomeNavSearchValue(it) },
+                        onSearchValueChange = {
+                            viewModel.setHomeNavSearchValue(it)
+                            viewModel.updateExpenseList()
+                            viewModel.requestExpenseListUpdate()
+                                              },
                         dateRange = homeNavState.dateRange,
-                        onDateRangeChanged = { viewModel.setHomeNavDateRange(it) },
+                        onDateRangeChanged = {
+                            viewModel.setHomeNavDateRange(it)
+                            viewModel.updateExpenseList()
+                            viewModel.requestExpenseListUpdate()
+                                             },
                         categoryList = categoryList,
                         selectedCategory = homeNavState.selectedCategory,
-                        onSelectionChange = { viewModel.setHomeNavCategory(it) }
+                        onSelectionChange = {
+                            viewModel.setHomeNavCategory(it)
+                            viewModel.updateExpenseList()
+                            viewModel.requestExpenseListUpdate()
+                        }
                     )
                 } else if (currentScreen == AppScreen.RECEIPT_MODEL_LIST) {
                  SettingNavBar(
@@ -299,8 +320,21 @@ fun ExpenseApp(
                     .padding(innerPadding)
             ) {
                 composable(route = AppScreen.HOME_SCREEN.name) {
-                    val expenseList by viewModel.expenseList.collectAsStateWithLifecycle()
+                    val expenseList = remember { mutableStateListOf<Expense>() }
                     val sumOfExpenses by viewModel.sumOfExpenses.collectAsStateWithLifecycle()
+                    val listUpdateRequest by viewModel.expenseListUpdateRequested.collectAsStateWithLifecycle()
+
+                    expenseList.clear()
+                    expenseList.addAll( viewModel.expenseList.collectAsState().value )
+
+                    when {
+                        listUpdateRequest -> {
+                            expenseList.clear()
+                            expenseList.addAll( viewModel.expenseList.collectAsState().value )
+                            viewModel.confirmExpenseListUpdate()
+                        }
+                    }
+
                     ExpenseListScreen(
                         list = expenseList, onCardClick = { expense ->
                             viewModel.expenseEntityToUi(expense)
