@@ -3,7 +3,7 @@ package com.jazzant.expensetracker.viewmodel
 import com.jazzant.expensetracker.analyzer.Strategy
 
 data class ReceiptModelUiState(
-    val switchState: Boolean = false,
+    val switchState: Boolean = true,
     val checkBoxState: Boolean = false,
     val invalidInput: Boolean = false,
     val keyword: String = "",
