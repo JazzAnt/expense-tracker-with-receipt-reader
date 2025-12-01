@@ -516,7 +516,11 @@ fun ExpenseApp(
                     val receiptModelState by viewModel.receiptModelUiState.collectAsStateWithLifecycle()
                     ChooseNameScreen(
                         checkBoxState = receiptModelState.checkBoxState,
-                        onCheckBoxStateChange = { viewModel.setReceiptCheckBox(it) },
+                        onCheckBoxStateChange = {
+                            viewModel.setReceiptCheckBox(it)
+                            if (it)
+                            { viewModel.setReceiptName(receiptModelState.keyword) }
+                                                },
                         name = receiptModelState.name,
                         onNameChange = {
                             viewModel.setReceiptName(it)
