@@ -119,6 +119,7 @@ fun ExpenseApp(
                             navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
                             navController.navigate(route = AppScreen.RECEIPT_MODEL_LIST.name)
                             viewModel.setNavDrawerId(1)
+                            viewModel.resetReceiptModelEdit()
                             scope.launch { drawerState.close() }
                         }
                     )
