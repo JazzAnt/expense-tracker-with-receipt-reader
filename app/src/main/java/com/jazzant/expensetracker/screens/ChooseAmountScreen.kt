@@ -1,5 +1,6 @@
 package com.jazzant.expensetracker.screens
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
+import com.jazzant.expensetracker.ui.NextButton
 import com.jazzant.expensetracker.ui.RadioButtons
 
 @Composable
@@ -22,30 +24,31 @@ fun ChooseAmountScreen(
     invalidInput: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
         modifier = modifier
             .fillMaxSize()
             .padding(vertical = 8.dp, horizontal = 12.dp)
     ) {
-        Text(stringResource(R.string.chooseAmount_header))
-        Text(stringResource(R.string.chooseAmount_description))
-        RadioButtons(
-            label = stringResource(R.string.chooseAmount_radioButtonLabel),
-            radioOptions = amountList,
-            selectedOption = amount,
-            onOptionChange = onAmountChange,
-            radioText = {"$%.2f".format(it)}
-            //TODO: Make '$' non-static and allow user to change currency
-        )
-        if (invalidInput)
-        {
-            Text(stringResource(R.string.chooseAmount_invalidAmountLabel))
-        }
-        else
-        {
-            Button(onClick = onNextButtonPress) {
-                Text(stringResource(R.string.nextButton))
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Text(stringResource(R.string.chooseAmount_header))
+            Text(stringResource(R.string.chooseAmount_description))
+            RadioButtons(
+                label = stringResource(R.string.chooseAmount_radioButtonLabel),
+                radioOptions = amountList,
+                selectedOption = amount,
+                onOptionChange = onAmountChange,
+                radioText = { "$%.2f".format(it) }
+                //TODO: Make '$' non-static and allow user to change currency
+            )
+            if (invalidInput) {
+                Text(stringResource(R.string.chooseAmount_invalidAmountLabel))
             }
+        }
+        if (!invalidInput) {
+            NextButton(onNextButtonPress, modifier = Modifier.align(Alignment.BottomEnd))
         }
     }
 }
