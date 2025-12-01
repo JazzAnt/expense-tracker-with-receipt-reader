@@ -437,6 +437,45 @@ fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
         }
     }
 }
+
+@Composable
+fun ExpenseCard(
+    name: String,
+    category: String,
+    amount: Float,
+    date: Long,
+    onCardClick: ()->Unit,
+){
+    Card (
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .background(Color.White)
+            .border(width = 1.dp, color = Color.Black),
+        onClick = {onCardClick()}
+    ){
+        Row (
+            modifier = Modifier.fillMaxWidth().padding(5.dp)
+        ) {
+            DateBox(date)
+            Column (
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth(0.5f)
+                    .fillMaxHeight()
+
+            ){
+                Text(stringResource(R.string.expenseNameLabel)+": " + name, fontSize = TextUnit(4f, TextUnitType.Em))
+                Text(stringResource(R.string.expenseCategoryLabel)+": " + category, fontSize = TextUnit(3f, TextUnitType.Em))
+            }
+            Row (
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Text("$%.2f".format(amount), fontSize = TextUnit(5f, TextUnitType.Em))
+            }
+        }
+    }
+}
 @Composable
 fun DateBox(millis: Long){
     val formatter = SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault())
