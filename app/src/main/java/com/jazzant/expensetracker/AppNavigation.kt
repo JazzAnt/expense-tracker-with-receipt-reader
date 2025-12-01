@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.DrawerValue
@@ -92,7 +94,33 @@ fun ExpenseApp(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            TODO("Implement ModalDrawerSheet")
+            NavigationDrawerSheet(
+                currentItemId = viewModel.navDrawerId,
+                navDrawerItems = listOf(
+                    DrawerItem(
+                        id = 0,
+                        label = "Expenses",
+                        icon = Icons.Default.Home,
+                        contentDescription = "Home Menu",
+                        onClick = {
+                            navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                            viewModel.resetHomeNavUiSTate()
+                            viewModel.setNavDrawerId(0)
+                        }
+                    ),
+                    DrawerItem(
+                        id = 1,
+                        label = "Receipt Models",
+                        icon = Icons.Default.ShoppingCart,
+                        contentDescription = "Receipt Menu",
+                        onClick = {
+                            navController.popBackStack(route = AppScreen.HOME_SCREEN.name, inclusive = false)
+                            TODO("Navigate to Receipt Menu Screen")
+                            viewModel.setNavDrawerId(1)
+                        }
+                    )
+                )
+            )
         },
         gesturesEnabled = true,
     ) {
