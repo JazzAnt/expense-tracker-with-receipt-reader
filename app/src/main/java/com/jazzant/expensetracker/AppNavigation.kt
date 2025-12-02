@@ -32,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -302,8 +303,9 @@ fun ExpenseApp(
                 if (currentScreen == AppScreen.EDIT_EXPENSE) {
                     ExtendedFloatingActionButton(
                         onClick = { navController.navigate(AppScreen.REQUEST_CAMERA_PERMISSION.name) },
-                        containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+                        contentColor = MaterialTheme.colorScheme.tertiary
                     ) {
                         Icon(
                             imageVector = Icons.Default.Search,
@@ -314,12 +316,14 @@ fun ExpenseApp(
                 } else if (currentScreen == AppScreen.HOME_SCREEN) {
                     FloatingActionButton(
                         onClick = { navController.navigate(AppScreen.EDIT_EXPENSE.name) },
-                        containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+                        contentColor = MaterialTheme.colorScheme.tertiary
                     ) {
                         Icon(
                             imageVector = Icons.Default.Create,
                             contentDescription = "Create New Expense",
+                            tint = Color.Black
                         )
                     }
                 }
