@@ -2,6 +2,7 @@ package com.jazzant.expensetracker
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -18,6 +19,7 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -144,6 +147,8 @@ fun ExpenseApp(
             )
         },
         gesturesEnabled = false,
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
     ) {
         //ACTUAL COMPOSE SCREEN
         Scaffold(
@@ -298,8 +303,9 @@ fun ExpenseApp(
                 if (currentScreen == AppScreen.EDIT_EXPENSE) {
                     ExtendedFloatingActionButton(
                         onClick = { navController.navigate(AppScreen.REQUEST_CAMERA_PERMISSION.name) },
-                        containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+                        contentColor = MaterialTheme.colorScheme.tertiary
                     ) {
                         Icon(
                             imageVector = Icons.Default.Search,
@@ -310,16 +316,20 @@ fun ExpenseApp(
                 } else if (currentScreen == AppScreen.HOME_SCREEN) {
                     FloatingActionButton(
                         onClick = { navController.navigate(AppScreen.EDIT_EXPENSE.name) },
-                        containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+                        contentColor = MaterialTheme.colorScheme.tertiary
                     ) {
                         Icon(
                             imageVector = Icons.Default.Create,
                             contentDescription = "Create New Expense",
+                            tint = Color.Black
                         )
                     }
                 }
-            }
+            },
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
 
         ) { innerPadding ->
             NavHost(
@@ -328,6 +338,7 @@ fun ExpenseApp(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .background(MaterialTheme.colorScheme.background)
             ) {
                 composable(route = AppScreen.HOME_SCREEN.name) {
                     val expenseList = remember { mutableStateListOf<Expense>() }

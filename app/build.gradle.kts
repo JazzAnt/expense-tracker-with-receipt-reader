@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.compose.ui.text.google.fonts)
     val room_version = "2.8.3"
 
     implementation(libs.androidx.core.ktx)

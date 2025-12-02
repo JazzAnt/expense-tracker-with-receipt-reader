@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.database.receiptmodel.ReceiptModel
 import com.jazzant.expensetracker.ui.CategoryInputField
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 import com.jazzant.expensetracker.ui.TextInput
 
 @Composable
@@ -51,11 +52,14 @@ fun ReceiptModelListScreen(
     onEditorDelete: () -> Unit,
     categoryList: List<String>,
 ){
-    Box(Modifier.fillMaxSize()){
+    Box(Modifier.fillMaxSize()
+        .padding(horizontal = 12.dp)
+    ){
         LazyColumn {
             items(list){
                     item ->
                 ReceiptModelCard(item, onCardClick)
+                StandardVerticalSpacer(multiplier = 0.5f)
             }
         }
         if (currentReceiptModel != null){
@@ -84,7 +88,8 @@ fun ReceiptModelCard(model: ReceiptModel, onCardClick: (ReceiptModel)->Unit){
         onClick = {onCardClick(model)}
     ){
         Row (
-            modifier = Modifier.fillMaxWidth().padding(5.dp)
+            modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 5.dp)
         ) {
             Column (
                 verticalArrangement = Arrangement.SpaceBetween,
@@ -118,12 +123,13 @@ fun ReceiptModelEditor(
     var newCategoryState by remember { mutableStateOf(false) }
     Card(modifier
         .padding(16.dp)
-        .border(BorderStroke(1.dp, Color.Black))
         .fillMaxWidth()
         .height(220.dp)
         .shadow( elevation = 3.dp)
     ) {
-        Column(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize()
+            .padding(horizontal = 6.dp)
+        ) {
             TextInput(
                 label = "Name",
                 value = model.name,
