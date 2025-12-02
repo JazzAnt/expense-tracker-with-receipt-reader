@@ -143,7 +143,7 @@ fun ExpenseApp(
                 )
             )
         },
-        gesturesEnabled = true,
+        gesturesEnabled = false,
     ) {
         //ACTUAL COMPOSE SCREEN
         Scaffold(
