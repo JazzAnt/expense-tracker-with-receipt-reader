@@ -1,5 +1,6 @@
 package com.jazzant.expensetracker.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -26,6 +27,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
@@ -53,9 +55,9 @@ fun TopNavBar(
 ){
     TopAppBar(
         title = { Text(currentRoute) },
-        modifier = modifier,
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.background),
         navigationIcon = {
-
             IconButton(
                 onClick = {
                 },
@@ -63,7 +65,7 @@ fun TopNavBar(
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = stringResource(R.string.menuNavIcon),
-                    tint = Color.Gray
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
@@ -93,20 +95,21 @@ fun HomeNavBar(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     singleLine = true,
                     onValueChange = onSearchValueChange,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface),
                     trailingIcon = {
                         IconButton(onClick = { onSearchValueChange("") }) {
                             Icon(
                                 imageVector = Icons.Default.Clear,
                                 contentDescription = "Clear Search",
-                                tint = Color.Gray
+                                tint = MaterialTheme.colorScheme.onBackground
                             )
                         }
                     }
                 )
             }
             else {
-                Text(titleText)
+                Text(titleText, color = MaterialTheme.colorScheme.onBackground)
             }
         },
         navigationIcon = {
@@ -114,6 +117,7 @@ fun HomeNavBar(
                 Icon(
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = "Open Menu",
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         },
@@ -123,7 +127,7 @@ fun HomeNavBar(
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close Search",
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
@@ -139,7 +143,7 @@ fun HomeNavBar(
                         Icon(
                             imageVector = Icons.Default.DateRange,
                             contentDescription = "Filter by Date",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
@@ -148,7 +152,7 @@ fun HomeNavBar(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Reset Date",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
@@ -157,7 +161,7 @@ fun HomeNavBar(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search",
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
