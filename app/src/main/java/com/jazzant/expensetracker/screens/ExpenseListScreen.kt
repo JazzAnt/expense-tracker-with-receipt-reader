@@ -25,6 +25,7 @@ import androidx.compose.ui.zIndex
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.database.expense.Expense
 import com.jazzant.expensetracker.ui.ExpenseCard
+import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
 fun ExpenseListScreen(list: List<Expense>, onCardClick: (Expense) -> Unit, sumOfExpenses: Float){
