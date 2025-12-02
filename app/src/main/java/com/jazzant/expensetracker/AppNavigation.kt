@@ -2,6 +2,7 @@ package com.jazzant.expensetracker
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -18,6 +19,7 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -144,6 +146,8 @@ fun ExpenseApp(
             )
         },
         gesturesEnabled = false,
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
     ) {
         //ACTUAL COMPOSE SCREEN
         Scaffold(
@@ -319,7 +323,9 @@ fun ExpenseApp(
                         )
                     }
                 }
-            }
+            },
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
 
         ) { innerPadding ->
             NavHost(
@@ -328,6 +334,7 @@ fun ExpenseApp(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .background(MaterialTheme.colorScheme.background)
             ) {
                 composable(route = AppScreen.HOME_SCREEN.name) {
                     val expenseList = remember { mutableStateListOf<Expense>() }
