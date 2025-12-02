@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -51,6 +52,7 @@ fun TextAnalyzerScreen(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = stringResource(R.string.capturedImageBitmapContentDescription),
             modifier = Modifier.border(4.dp, Color.Black)
+                .fillMaxHeight(0.40f)
         )
         StandardVerticalSpacer()
         if (receiptModelIndex < 0 || analyzedExpense == null)
