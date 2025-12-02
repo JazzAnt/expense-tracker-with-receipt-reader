@@ -4,8 +4,11 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
@@ -39,6 +42,7 @@ fun TextRecognizerScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(vertical = 8.dp, horizontal = 12.dp)
     ) {
         if (recognizedText == null){
@@ -59,6 +63,7 @@ fun TextRecognizerScreen(
             bitmap = bitmap.asImageBitmap(),
             contentDescription = stringResource(R.string.capturedImageBitmapContentDescription),
             modifier = Modifier.border(4.dp, Color.Black)
+                .fillMaxHeight(0.40f)
         )
         StandardVerticalSpacer()
         if (recognizedText == null)
