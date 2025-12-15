@@ -48,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -457,6 +458,7 @@ fun ExpenseCard(
                 .padding(5.dp)
         ) {
             DateBox(date)
+            Spacer(Modifier.width(4.dp))
             Column (
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
@@ -511,33 +513,25 @@ fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
 fun DateBox(millis: Long){
     val formatter = SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault())
     val dateText = formatter.format(Date(millis)).split('/')
-    val lineColor = MaterialTheme.colorScheme.onPrimaryContainer
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(end = 12.dp)
-            .width(60.dp)
-            .height(64.dp)
-            .drawBehind {
-                drawLine(
-                    lineColor,
-                    Offset(size.width, 0f),
-                    Offset(size.width, size.height),
-                    12f
-                )
-            }
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .clip(MaterialTheme.shapes.small)
+            .width(64.dp)
+            .height(60.dp)
+            .background(MaterialTheme.colorScheme.primary)
+            .padding(1.dp)
     ){
         Text(
             text = dateText[0],
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onPrimary,
         )
         Text(
             text = dateText[1] + " " + dateText[2],
             style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = MaterialTheme.colorScheme.onPrimary,
         )
     }
 }
