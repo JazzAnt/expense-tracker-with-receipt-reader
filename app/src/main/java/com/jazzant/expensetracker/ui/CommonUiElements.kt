@@ -462,7 +462,7 @@ fun ExpenseCard(
             Column (
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
-                    .fillMaxWidth(0.64f)
+                    .fillMaxWidth(0.60f)
                     .fillMaxHeight()
                     .background(MaterialTheme.colorScheme.primaryContainer)
 
@@ -489,10 +489,9 @@ fun ExpenseCard(
             ){
                 Text(
                     text = "$%.2f".format(amount),
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
