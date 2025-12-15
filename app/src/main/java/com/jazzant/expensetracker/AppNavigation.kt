@@ -34,6 +34,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -147,8 +148,6 @@ fun ExpenseApp(
             )
         },
         gesturesEnabled = false,
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
     ) {
         //ACTUAL COMPOSE SCREEN
         Scaffold(
@@ -304,33 +303,44 @@ fun ExpenseApp(
                     ExtendedFloatingActionButton(
                         onClick = { navController.navigate(AppScreen.REQUEST_CAMERA_PERMISSION.name) },
                         containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
-                        contentColor = MaterialTheme.colorScheme.tertiary
+                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(
+                            defaultElevation = 3.dp,
+                            pressedElevation = 1.dp,
+                            focusedElevation = 2.dp,
+                            hoveredElevation = 2.dp,
+                        ),
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
                     ) {
                         Icon(
                             imageVector = Icons.Default.Search,
+                            tint = MaterialTheme.colorScheme.onTertiaryContainer,
                             contentDescription = "Analyze Receipt with Camera",
                         )
-                        Text("Analyze with Camera")
+                        Text(
+                            text="Analyze with Camera",
+                            color = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
                     }
                 } else if (currentScreen == AppScreen.HOME_SCREEN) {
                     FloatingActionButton(
                         onClick = { navController.navigate(AppScreen.EDIT_EXPENSE.name) },
                         containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
-                        contentColor = MaterialTheme.colorScheme.tertiary
+                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(
+                            defaultElevation = 3.dp,
+                            pressedElevation = 1.dp,
+                            focusedElevation = 2.dp,
+                            hoveredElevation = 2.dp,
+                        ),
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
                     ) {
                         Icon(
                             imageVector = Icons.Default.Create,
                             contentDescription = "Create New Expense",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onTertiaryContainer
                         )
                     }
                 }
             },
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-
         ) { innerPadding ->
             NavHost(
                 navController = navController,
@@ -338,7 +348,7 @@ fun ExpenseApp(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .background(MaterialTheme.colorScheme.background)
+                    .background(MaterialTheme.colorScheme.surface)
             ) {
                 composable(route = AppScreen.HOME_SCREEN.name) {
                     val expenseList = remember { mutableStateListOf<Expense>() }
