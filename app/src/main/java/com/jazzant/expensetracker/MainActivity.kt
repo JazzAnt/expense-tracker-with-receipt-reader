@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AppTheme {
+            AppTheme(dynamicColor = false) {
                 Surface(tonalElevation = 3.dp) {
                     ExpenseApp()
                 }
