@@ -32,6 +32,7 @@ import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
@@ -446,27 +447,51 @@ fun ExpenseCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(64.dp)
-            .background(Color.White),
+            .background(MaterialTheme.colorScheme.surface),
         onClick = {onCardClick()}
     ){
         Row (
-            modifier = Modifier.fillMaxWidth().padding(5.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .padding(5.dp)
         ) {
             DateBox(date)
             Column (
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(0.64f)
+                modifier = Modifier
+                    .fillMaxWidth(0.64f)
                     .fillMaxHeight()
+                    .background(MaterialTheme.colorScheme.primaryContainer)
 
             ){
-                Text(stringResource(R.string.expenseNameLabel)+": " + name, fontSize = TextUnit(3.6f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(stringResource(R.string.expenseCategoryLabel)+": " + category, fontSize = TextUnit(3f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(text = category,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
             Row (
                 horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.primaryContainer)
             ){
-                Text("$%.2f".format(amount), fontSize = TextUnit(4.4f, TextUnitType.Em))
+                Text(
+                    text = "$%.2f".format(amount),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -486,23 +511,34 @@ fun ExpenseCard(expense: Expense, onCardClick: (Expense)->Unit){
 fun DateBox(millis: Long){
     val formatter = SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault())
     val dateText = formatter.format(Date(millis)).split('/')
+    val lineColor = MaterialTheme.colorScheme.onPrimaryContainer
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .padding(end = 12.dp)
             .width(60.dp)
             .height(64.dp)
             .drawBehind {
                 drawLine(
-                    Color.Black,
+                    lineColor,
                     Offset(size.width, 0f),
                     Offset(size.width, size.height),
-                    5f
+                    12f
                 )
             }
+            .background(MaterialTheme.colorScheme.primaryContainer)
     ){
-        Text(dateText[0], fontSize = TextUnit(4.8f, TextUnitType.Em))
-        Text(dateText[1], fontSize = TextUnit(3.0f, TextUnitType.Em))
+        Text(
+            text = dateText[0],
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+        Text(
+            text = dateText[1] + " " + dateText[2],
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
     }
 }
 
