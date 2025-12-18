@@ -19,7 +19,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
@@ -41,15 +40,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.jazzant.expensetracker.R
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun myTopAppColor(): TopAppBarColors{
+    return TopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        scrolledContainerColor = MaterialTheme.colorScheme.primary,
+        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+        titleContentColor = MaterialTheme.colorScheme.onPrimary,
+        actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,20 +65,8 @@ fun TopNavBar(
 ){
     TopAppBar(
         title = { Text(currentRoute) },
+        colors = myTopAppColor(),
         modifier = modifier
-            .background(MaterialTheme.colorScheme.background),
-        navigationIcon = {
-            IconButton(
-                onClick = {
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = stringResource(R.string.menuNavIcon),
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
-            }
-        }
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
@@ -169,13 +163,7 @@ fun HomeNavBar(
                 }
             }
         },
-        colors = TopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            scrolledContainerColor = MaterialTheme.colorScheme.primary,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
-        )
+        colors = myTopAppColor()
     )
     if (showDatePicker) {
         DateRangePickerModal(
@@ -210,7 +198,8 @@ fun SettingNavBar(
                     contentDescription = "Go To Home Menu",
                 )
             }
-        }
+        },
+        colors = myTopAppColor()
     )
 }
 @Composable
@@ -324,7 +313,8 @@ fun EditorNavBar(
                     contentDescription = "Save",
                 )
             }
-        }
+        },
+        colors = myTopAppColor()
     )
 }
 
@@ -346,6 +336,7 @@ fun CameraNavBar(
                 )
             }
         },
+        colors = myTopAppColor()
     )
 }
 
@@ -377,6 +368,7 @@ fun ReceiptCreatorNavBar(
                     contentDescription = "Clear Input Values",
                 )
             }
-        }
+        },
+        colors = myTopAppColor()
     )
 }
