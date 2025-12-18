@@ -137,6 +137,8 @@ fun HomeNavBar(
                     selectedCategory = selectedCategory,
                     onSelectionChange = onSelectionChange,
                     hasNoCategoryOption = true,
+                    labelWidth = 100.dp,
+                    labelColor = MaterialTheme.colorScheme.primaryContainer
                 )
                 if (dateRange.first == null || dateRange.second == null){
                     IconButton(onClick = { showDatePicker = true }) {
@@ -210,6 +212,8 @@ fun CategoryDropDownMenu(
     modifier: Modifier = Modifier,
     hasNoCategoryOption: Boolean = false,
     innerHorizontalPadding: Dp = 0.dp,
+    labelWidth: Dp? = null,
+    labelColor: Color = Color.Unspecified,
 ){
     var expanded by remember { mutableStateOf(false) }
     Box(modifier) {
@@ -218,7 +222,29 @@ fun CategoryDropDownMenu(
             horizontalArrangement = Arrangement.End,
             modifier = Modifier.wrapContentWidth().padding(horizontal = innerHorizontalPadding).align(Alignment.CenterEnd)
         ) {
-            Text(selectedCategory, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if ( labelWidth == null )
+            {
+                Text(
+                    text = selectedCategory,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = labelColor,
+                    )
+            }
+            else
+            {
+                Box(
+                    contentAlignment = Alignment.CenterEnd,
+                    modifier = Modifier.width(labelWidth)
+                ){
+                    Text(
+                       text = selectedCategory,
+                       maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = labelColor,
+                    )
+                }
+            }
             Spacer(Modifier.width(2.dp))
             IconButton( onClick = { expanded = !expanded }) {
                 Icon(
