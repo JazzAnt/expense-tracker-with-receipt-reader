@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
@@ -554,15 +555,22 @@ fun AlertDialog(
         text = { Text(text = dialogText) },
         onDismissRequest = { onDismissRequest() },
         confirmButton = {
-            TextButton( onClick = {
+            TextButton(onClick = {
                 onConfirmation()
                 onDismissRequest()
-            } )
+            },
+                shape = MaterialTheme.shapes.medium,
+                colors = ButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContainerColor = MaterialTheme.colorScheme.secondary,
+                    disabledContentColor = MaterialTheme.colorScheme.onSecondary,
+                ))
             { Text("Confirm") }
         },
         dismissButton = {
             TextButton( onClick = { onDismissRequest() })
-            { Text("Dismiss") }
+            { Text("Cancel") }
         }
     )
 }
