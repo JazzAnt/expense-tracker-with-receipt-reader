@@ -31,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,11 +39,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.R
 
@@ -95,8 +99,12 @@ fun HomeNavBar(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     singleLine = true,
                     onValueChange = onSearchValueChange,
-                    modifier = Modifier.fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surface),
+                    textStyle = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp)
+                        .clip(MaterialTheme.shapes.large)
+                        .background(MaterialTheme.colorScheme.background),
                     trailingIcon = {
                         IconButton(onClick = { onSearchValueChange("") }) {
                             Icon(
@@ -109,7 +117,7 @@ fun HomeNavBar(
                 )
             }
             else {
-                Text(titleText, color = MaterialTheme.colorScheme.onBackground)
+                Text(titleText)
             }
         },
         navigationIcon = {
@@ -117,7 +125,6 @@ fun HomeNavBar(
                 Icon(
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = "Open Menu",
-                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         },
@@ -127,7 +134,6 @@ fun HomeNavBar(
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close Search",
-                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
@@ -143,7 +149,6 @@ fun HomeNavBar(
                         Icon(
                             imageVector = Icons.Default.DateRange,
                             contentDescription = "Filter by Date",
-                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
@@ -152,7 +157,6 @@ fun HomeNavBar(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Reset Date",
-                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
@@ -161,13 +165,17 @@ fun HomeNavBar(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search",
-                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
-
-        }
-
+        },
+        colors = TopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            scrolledContainerColor = MaterialTheme.colorScheme.primary,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+        )
     )
     if (showDatePicker) {
         DateRangePickerModal(
