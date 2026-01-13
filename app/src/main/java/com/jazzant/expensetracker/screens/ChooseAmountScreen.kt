@@ -22,45 +22,46 @@ import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
 fun ChooseAmountScreen(
-    amountList: List<Float>,
-    amount: Float,
-    onAmountChange: (Float) -> Unit,
-    onNextButtonPress: () -> Unit,
-    invalidInput: Boolean,
-    modifier: Modifier = Modifier
+  amountList: List<Float>,
+  amount: Float,
+  onAmountChange: (Float) -> Unit,
+  onNextButtonPress: () -> Unit,
+  invalidInput: Boolean,
+  modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(vertical = 8.dp, horizontal = 12.dp)
+  Box(
+    modifier = modifier
+        .fillMaxSize()
+        .padding(vertical = 8.dp, horizontal = 12.dp)
+  ) {
+    Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier
+          .fillMaxSize()
+          .verticalScroll(rememberScrollState())
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            HeaderText(stringResource(R.string.chooseAmount_header))
-            StandardVerticalSpacer()
-            DescriptionText(stringResource(R.string.chooseAmount_description))
-            StandardVerticalSpacer()
-            QuestionText(stringResource(R.string.chooseAmount_question))
-            StandardVerticalSpacer()
-            RadioButtons(
-                label = stringResource(R.string.chooseAmount_radioButtonLabel),
-                radioOptions = amountList,
-                selectedOption = amount,
-                onOptionChange = onAmountChange,
-                radioText = { "$%.2f".format(it) }
-                //TODO: Make '$' non-static and allow user to change currency
-            )
-        }
-        if (invalidInput) {
-            ErrorText(stringResource(R.string.chooseAmount_invalidAmountLabel),
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
-        else {
-            NextButton(onNextButtonPress, modifier = Modifier.align(Alignment.BottomEnd))
-        }
+      HeaderText(stringResource(R.string.chooseAmount_header))
+      StandardVerticalSpacer()
+      DescriptionText(stringResource(R.string.chooseAmount_description))
+      StandardVerticalSpacer()
+      QuestionText(stringResource(R.string.chooseAmount_question))
+      StandardVerticalSpacer()
+      RadioButtons(
+        label = stringResource(R.string.chooseAmount_radioButtonLabel),
+        radioOptions = amountList,
+        selectedOption = amount,
+        onOptionChange = onAmountChange,
+        radioText = { "$%.2f".format(it) }
+        //TODO: Make '$' non-static and allow user to change currency
+      )
     }
+    if (invalidInput) {
+      ErrorText(
+        stringResource(R.string.chooseAmount_invalidAmountLabel),
+        modifier = Modifier.align(Alignment.BottomCenter)
+      )
+    } else {
+      NextButton(onNextButtonPress, modifier = Modifier.align(Alignment.BottomEnd))
+    }
+  }
 }

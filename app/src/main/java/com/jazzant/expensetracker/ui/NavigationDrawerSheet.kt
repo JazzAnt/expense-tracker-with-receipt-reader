@@ -18,52 +18,51 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 data class DrawerItem(
-    val id: Int,
-    val label: String,
-    val icon: ImageVector,
-    val contentDescription: String = label,
-    val onClick: () -> Unit,
+  val id: Int,
+  val label: String,
+  val icon: ImageVector,
+  val contentDescription: String = label,
+  val onClick: () -> Unit,
 )
 
 @Composable
-fun NavigationDrawerSheet(navDrawerItems: List<DrawerItem>, currentItemId: Int)
-{
-    ModalDrawerSheet{
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            DrawerHeader()
-            navDrawerItems.forEach {
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            text = it.label,
-                            style = TextStyle(fontSize = 18.sp),
-                        )
-                    },
-                    selected = currentItemId == it.id,
-                    icon = {
-                        Icon(
-                            imageVector = it.icon,
-                            contentDescription = it.contentDescription,
-                        )
-                    },
-                    onClick = it.onClick
-                )
-            }
-        }
+fun NavigationDrawerSheet(navDrawerItems: List<DrawerItem>, currentItemId: Int) {
+  ModalDrawerSheet {
+    Column(
+      modifier = Modifier
+          .padding(horizontal = 16.dp)
+          .verticalScroll(rememberScrollState())
+    ) {
+      DrawerHeader()
+      navDrawerItems.forEach {
+        NavigationDrawerItem(
+          label = {
+            Text(
+              text = it.label,
+              style = TextStyle(fontSize = 18.sp),
+            )
+          },
+          selected = currentItemId == it.id,
+          icon = {
+            Icon(
+              imageVector = it.icon,
+              contentDescription = it.contentDescription,
+            )
+          },
+          onClick = it.onClick
+        )
+      }
     }
+  }
 }
 
 @Composable
 private fun DrawerHeader() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 32.dp)
-    ) {
-        Text("Menu", fontSize = 32.sp)
-    }
+  Box(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 32.dp)
+  ) {
+    Text("Menu", fontSize = 32.sp)
+  }
 }

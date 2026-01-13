@@ -17,43 +17,52 @@ import com.jazzant.expensetracker.R
 
 @Composable
 fun CameraPermissionScreen(
-    onCameraPermissionGranted: () -> Unit,
-    onCameraPermissionDenied: () -> Unit
-){
-    var permissionGranted by remember { mutableStateOf(false) }
-    CameraPermissionHandler(
-        onPermissionGranted = { permissionGranted = true },
-        onPermissionDenied = onCameraPermissionDenied
-    )
-    if (permissionGranted)
-    { onCameraPermissionGranted() }
+  onCameraPermissionGranted: () -> Unit,
+  onCameraPermissionDenied: () -> Unit
+) {
+  var permissionGranted by remember { mutableStateOf(false) }
+  CameraPermissionHandler(
+    onPermissionGranted = { permissionGranted = true },
+    onPermissionDenied = onCameraPermissionDenied
+  )
+  if (permissionGranted) {
+    onCameraPermissionGranted()
+  }
 }
 
 @Composable
 fun CameraPermissionHandler(
-    onPermissionGranted: () -> Unit,
-    onPermissionDenied: () -> Unit
-){
-    val cameraPermission = Manifest.permission.CAMERA
-    val context = LocalContext.current
+  onPermissionGranted: () -> Unit,
+  onPermissionDenied: () -> Unit
+) {
+  val cameraPermission = Manifest.permission.CAMERA
+  val context = LocalContext.current
 
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            if (isGranted)
-            { onPermissionGranted() }
-            else
-            {
-                Toast.makeText(context, context.getString(R.string.cameraPermissionDeniedToast), Toast.LENGTH_SHORT).show()
-                onPermissionDenied()
-            }
-        }
-    )
-
-    LaunchedEffect(key1 = true) {
-        if (ContextCompat.checkSelfPermission(context,cameraPermission) == PackageManager.PERMISSION_GRANTED)
-        { onPermissionGranted() }
-        else
-        { permissionLauncher.launch(cameraPermission) }
+  val permissionLauncher = rememberLauncherForActivityResult(
+    contract = ActivityResultContracts.RequestPermission(),
+    onResult = { isGranted ->
+      if (isGranted) {
+        onPermissionGranted()
+      } else {
+        Toast.makeText(
+          context,
+          context.getString(R.string.cameraPermissionDeniedToast),
+          Toast.LENGTH_SHORT
+        ).show()
+        onPermissionDenied()
+      }
     }
+  )
+
+  LaunchedEffect(key1 = true) {
+    if (ContextCompat.checkSelfPermission(
+        context,
+        cameraPermission
+      ) == PackageManager.PERMISSION_GRANTED
+    ) {
+      onPermissionGranted()
+    } else {
+      permissionLauncher.launch(cameraPermission)
+    }
+  }
 }

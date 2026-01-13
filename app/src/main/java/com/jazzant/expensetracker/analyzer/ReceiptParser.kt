@@ -8,32 +8,28 @@ package com.jazzant.expensetracker.analyzer
  * @return The value of the price label parsed using the strategy
  */
 fun parseReceipt(
-    strategy: Strategy,
-    priceLabels: List<Float>,
-    n: Int
-): Float
-{
-    return when (strategy)
-    {
-        Strategy.NTH_PRICE_LABEL_FROM_LAST -> nthPriceLabelFromLast(priceLabels, n)
-        Strategy.NTH_HIGHEST_PRICE_LABEL -> nthHighestPriceLabel(priceLabels, n)
-    }
+  strategy: Strategy,
+  priceLabels: List<Float>,
+  n: Int
+): Float {
+  return when (strategy) {
+    Strategy.NTH_PRICE_LABEL_FROM_LAST -> nthPriceLabelFromLast(priceLabels, n)
+    Strategy.NTH_HIGHEST_PRICE_LABEL -> nthHighestPriceLabel(priceLabels, n)
+  }
 }
 
 private fun nthPriceLabelFromLast(
-    priceLabels: List<Float>,
-    n: Int
-): Float
-{
-    val lastIndex = priceLabels.size - 1
-    return priceLabels[lastIndex - n]
+  priceLabels: List<Float>,
+  n: Int
+): Float {
+  val lastIndex = priceLabels.size - 1
+  return priceLabels[lastIndex - n]
 }
 
 private fun nthHighestPriceLabel(
-    priceLabels: List<Float>,
-    n: Int
-): Float
-{
-    val sortedList = priceLabels.sortedDescending()
-    return sortedList[n]
+  priceLabels: List<Float>,
+  n: Int
+): Float {
+  val sortedList = priceLabels.sortedDescending()
+  return sortedList[n]
 }

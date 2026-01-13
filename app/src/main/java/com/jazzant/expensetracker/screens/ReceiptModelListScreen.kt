@@ -1,8 +1,6 @@
 package com.jazzant.expensetracker.screens
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,123 +41,144 @@ import com.jazzant.expensetracker.ui.TextInput
 
 @Composable
 fun ReceiptModelListScreen(
-    list: List<ReceiptModel>,
-    onCardClick: (ReceiptModel) -> Unit,
-    currentReceiptModel: ReceiptModel?,
-    onEditorNameChange: (String) -> Unit,
-    onEditorCategoryChange: (String) -> Unit,
-    onEditorSaveChanges: () -> Unit,
-    onEditorDelete: () -> Unit,
-    categoryList: List<String>,
-){
-    Box(Modifier.fillMaxSize()
+  list: List<ReceiptModel>,
+  onCardClick: (ReceiptModel) -> Unit,
+  currentReceiptModel: ReceiptModel?,
+  onEditorNameChange: (String) -> Unit,
+  onEditorCategoryChange: (String) -> Unit,
+  onEditorSaveChanges: () -> Unit,
+  onEditorDelete: () -> Unit,
+  categoryList: List<String>,
+) {
+  Box(
+    Modifier
+        .fillMaxSize()
         .padding(horizontal = 12.dp)
-    ){
-        LazyColumn {
-            items(list){
-                    item ->
-                ReceiptModelCard(item, onCardClick)
-                StandardVerticalSpacer(multiplier = 0.5f)
-            }
-        }
-        if (currentReceiptModel != null){
-            ReceiptModelEditor(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                model = currentReceiptModel,
-                onNameChange = onEditorNameChange,
-                onCategoryChange = onEditorCategoryChange,
-                onSaveChanges = onEditorSaveChanges,
-                onDelete = onEditorDelete,
-                categoryList = categoryList,
-            )
-        }
+  ) {
+    LazyColumn {
+      items(list) { item ->
+        ReceiptModelCard(item, onCardClick)
+        StandardVerticalSpacer(multiplier = 0.5f)
+      }
     }
+    if (currentReceiptModel != null) {
+      ReceiptModelEditor(
+        modifier = Modifier.align(Alignment.BottomEnd),
+        model = currentReceiptModel,
+        onNameChange = onEditorNameChange,
+        onCategoryChange = onEditorCategoryChange,
+        onSaveChanges = onEditorSaveChanges,
+        onDelete = onEditorDelete,
+        categoryList = categoryList,
+      )
+    }
+  }
 
 
 }
 
 @Composable
-fun ReceiptModelCard(model: ReceiptModel, onCardClick: (ReceiptModel)->Unit){
-    Card (
+fun ReceiptModelCard(model: ReceiptModel, onCardClick: (ReceiptModel) -> Unit) {
+  Card(
+    modifier = Modifier
+        .fillMaxWidth()
+        .height(64.dp)
+        .background(Color.White),
+    onClick = { onCardClick(model) }
+  ) {
+    Row(
+      modifier = Modifier
+          .fillMaxWidth()
+          .padding(horizontal = 10.dp, vertical = 5.dp)
+    ) {
+      Column(
+        verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .background(Color.White),
-        onClick = {onCardClick(model)}
-    ){
-        Row (
-            modifier = Modifier.fillMaxWidth()
-                .padding(horizontal = 10.dp, vertical = 5.dp)
-        ) {
-            Column (
-                verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(0.64f)
-                    .fillMaxHeight()
+            .fillMaxWidth(0.64f)
+            .fillMaxHeight()
 
-            ){
-                Text(text = "Name: " + model.name, fontSize = TextUnit(3.6f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(text = "Keyword: " + model.keyword, fontSize = TextUnit(3f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
-            Row (
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Text("Category: " + model.category, fontSize = TextUnit(4.0f, TextUnitType.Em), maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
-        }
+      ) {
+        Text(
+          text = "Name: " + model.name,
+          fontSize = TextUnit(3.6f, TextUnitType.Em),
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis
+        )
+        Text(
+          text = "Keyword: " + model.keyword,
+          fontSize = TextUnit(3f, TextUnitType.Em),
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis
+        )
+      }
+      Row(
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+      ) {
+        Text(
+          "Category: " + model.category,
+          fontSize = TextUnit(4.0f, TextUnitType.Em),
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis
+        )
+      }
     }
+  }
 }
 
 @Composable
 fun ReceiptModelEditor(
-    model: ReceiptModel,
-    modifier: Modifier = Modifier,
-    onNameChange: (String) -> Unit,
-    onCategoryChange: (String) -> Unit,
-    onSaveChanges: () -> Unit,
-    onDelete: () -> Unit,
-    categoryList: List<String>,
-){
-    var newCategoryState by remember { mutableStateOf(false) }
-    Card(modifier
+  model: ReceiptModel,
+  modifier: Modifier = Modifier,
+  onNameChange: (String) -> Unit,
+  onCategoryChange: (String) -> Unit,
+  onSaveChanges: () -> Unit,
+  onDelete: () -> Unit,
+  categoryList: List<String>,
+) {
+  var newCategoryState by remember { mutableStateOf(false) }
+  Card(
+    modifier
         .padding(16.dp)
         .fillMaxWidth()
         .height(220.dp)
-        .shadow( elevation = 3.dp)
+        .shadow(elevation = 3.dp)
+  ) {
+    Column(
+      Modifier
+          .fillMaxSize()
+          .padding(horizontal = 6.dp)
     ) {
-        Column(Modifier.fillMaxSize()
-            .padding(horizontal = 6.dp)
-        ) {
-            TextInput(
-                label = "Name",
-                value = model.name,
-                onValueChange = onNameChange,
-            )
-            Spacer(Modifier.height(3.dp))
-            CategoryInputField(
-                newCategoryState = newCategoryState,
-                onNewCategoryStateChange = {newCategoryState = it},
-                category = model.category,
-                onCategoryChange = onCategoryChange,
-                categoryList = categoryList,
-            )
-            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-                Button(onClick = onDelete) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete Button",
-                    )
-                    Text("Delete Model")
-                }
-                Spacer(Modifier.width(20.dp))
-                Button(onClick = onSaveChanges) {
-                    Icon(
-                        imageVector = Icons.Default.Done,
-                        contentDescription = "Save Button",
-                    )
-                    Text("Save Changes")
-                }
-            }
+      TextInput(
+        label = "Name",
+        value = model.name,
+        onValueChange = onNameChange,
+      )
+      Spacer(Modifier.height(3.dp))
+      CategoryInputField(
+        newCategoryState = newCategoryState,
+        onNewCategoryStateChange = { newCategoryState = it },
+        category = model.category,
+        onCategoryChange = onCategoryChange,
+        categoryList = categoryList,
+      )
+      Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = onDelete) {
+          Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = "Delete Button",
+          )
+          Text("Delete Model")
         }
+        Spacer(Modifier.width(20.dp))
+        Button(onClick = onSaveChanges) {
+          Icon(
+            imageVector = Icons.Default.Done,
+            contentDescription = "Save Button",
+          )
+          Text("Save Changes")
+        }
+      }
     }
+  }
 }

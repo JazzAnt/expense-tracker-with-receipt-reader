@@ -21,46 +21,47 @@ import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
 fun ChooseCategoryScreen(
-    newCategorySwitch: Boolean,
-    onNewCategorySwitchChange: (Boolean) -> Unit,
-    category: String,
-    onCategoryChange: (String) -> Unit,
-    categoryList: List<String>,
-    onNextButtonPress: () -> Unit,
-    invalidInput: Boolean,
-    modifier: Modifier = Modifier,
+  newCategorySwitch: Boolean,
+  onNewCategorySwitchChange: (Boolean) -> Unit,
+  category: String,
+  onCategoryChange: (String) -> Unit,
+  categoryList: List<String>,
+  onNextButtonPress: () -> Unit,
+  invalidInput: Boolean,
+  modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(vertical = 8.dp, horizontal = 12.dp)
+  Box(
+    modifier = modifier
+        .fillMaxSize()
+        .padding(vertical = 8.dp, horizontal = 12.dp)
+  ) {
+    Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier
+          .fillMaxSize()
+          .verticalScroll(rememberScrollState())
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            HeaderText(stringResource(R.string.chooseCategory_header))
-            StandardVerticalSpacer()
-            DescriptionText(stringResource(R.string.chooseCategory_description))
-            StandardVerticalSpacer()
+      HeaderText(stringResource(R.string.chooseCategory_header))
+      StandardVerticalSpacer()
+      DescriptionText(stringResource(R.string.chooseCategory_description))
+      StandardVerticalSpacer()
 
-            CategoryInputField(
-                newCategoryState = newCategorySwitch,
-                onNewCategoryStateChange = onNewCategorySwitchChange,
-                category = category,
-                onCategoryChange = onCategoryChange,
-                categoryList = categoryList
-            )
+      CategoryInputField(
+        newCategoryState = newCategorySwitch,
+        onNewCategoryStateChange = onNewCategorySwitchChange,
+        category = category,
+        onCategoryChange = onCategoryChange,
+        categoryList = categoryList
+      )
 
-        }
-        if (invalidInput) {
-            ErrorText(stringResource(R.string.chooseCategory_invalidCategoryLabel),
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
-        else {
-            NextButton(onNextButtonPress, modifier = Modifier.align(Alignment.BottomEnd))
-        }
     }
+    if (invalidInput) {
+      ErrorText(
+        stringResource(R.string.chooseCategory_invalidCategoryLabel),
+        modifier = Modifier.align(Alignment.BottomCenter)
+      )
+    } else {
+      NextButton(onNextButtonPress, modifier = Modifier.align(Alignment.BottomEnd))
+    }
+  }
 }

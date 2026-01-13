@@ -25,40 +25,41 @@ import androidx.compose.ui.zIndex
 import com.jazzant.expensetracker.R
 import com.jazzant.expensetracker.database.expense.Expense
 import com.jazzant.expensetracker.ui.ExpenseCard
-import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
-fun ExpenseListScreen(list: List<Expense>, onCardClick: (Expense) -> Unit, sumOfExpenses: Float){
-    Box(Modifier
+fun ExpenseListScreen(list: List<Expense>, onCardClick: (Expense) -> Unit, sumOfExpenses: Float) {
+  Box(
+    Modifier
         .fillMaxSize()
         .padding(horizontal = 12.dp)
-    ){
-        LazyColumn () {
-            items(list){
-                    item ->
-                ExpenseCard(item, onCardClick)
-                Spacer(Modifier.height(4.dp))
-            }
-        }
-        ExpenseSumCard(sumOfExpenses, Modifier.align(Alignment.BottomEnd))
+  ) {
+    LazyColumn() {
+      items(list) { item ->
+        ExpenseCard(item, onCardClick)
+        Spacer(Modifier.height(4.dp))
+      }
     }
+    ExpenseSumCard(sumOfExpenses, Modifier.align(Alignment.BottomEnd))
+  }
 }
 
 @Composable
-fun ExpenseSumCard(sum: Float, modifier: Modifier = Modifier){
-    Card(modifier
+fun ExpenseSumCard(sum: Float, modifier: Modifier = Modifier) {
+  Card(
+    modifier
         .padding(10.dp)
         .fillMaxWidth()
         .height(50.dp)
         .shadow(10.dp)
-        .zIndex(1f)) {
-        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
-            Text(
-                stringResource(R.string.sumOfExpensesLabel) +": $%.2f".format(sum),
-                fontSize = TextUnit(5f, TextUnitType.Em),
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-            )
-        }
+        .zIndex(1f)
+  ) {
+    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
+      Text(
+        stringResource(R.string.sumOfExpensesLabel) + ": $%.2f".format(sum),
+        fontSize = TextUnit(5f, TextUnitType.Em),
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+      )
     }
+  }
 }

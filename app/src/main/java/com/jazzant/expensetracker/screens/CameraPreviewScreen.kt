@@ -32,65 +32,68 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.jazzant.expensetracker.R
 
 @Composable
-fun CameraPreviewScreen(modifier:Modifier = Modifier, onImageCapture: (ImageProxy)-> Unit){
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
-    val previewView = remember { PreviewView(context) }
-    var imageCapture: ImageCapture? by remember { mutableStateOf(null) }
+fun CameraPreviewScreen(modifier: Modifier = Modifier, onImageCapture: (ImageProxy) -> Unit) {
+  val lifecycleOwner = LocalLifecycleOwner.current
+  val context = LocalContext.current
+  val previewView = remember { PreviewView(context) }
+  var imageCapture: ImageCapture? by remember { mutableStateOf(null) }
 
-    Box(modifier = Modifier.padding(bottom = 50.dp)) {
-        AndroidView(
-            factory = { previewView },
-            modifier = modifier
-        ) { view -> //this is the block provided to the factory, in this case previewView
-            val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-            cameraProviderFuture.addListener({
-                val cameraProvider = cameraProviderFuture.get()
-                val preview = Preview.Builder().build()
-                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+  Box(modifier = Modifier.padding(bottom = 50.dp)) {
+    AndroidView(
+      factory = { previewView },
+      modifier = modifier
+    ) { view -> //this is the block provided to the factory, in this case previewView
+      val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+      cameraProviderFuture.addListener({
+        val cameraProvider = cameraProviderFuture.get()
+        val preview = Preview.Builder().build()
+        val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-                imageCapture = ImageCapture.Builder().build()
-                preview.surfaceProvider = view.surfaceProvider
+        imageCapture = ImageCapture.Builder().build()
+        preview.surfaceProvider = view.surfaceProvider
 
-                /* Bind the preview and imageCapture to the cameraProvider use cases
-                 * Basically tells the cameraProvider what values we want from it
-                 * In this case: Preview to show the camera view on our composable
-                 * And imageCapture to capture the image and store the value as ImageProxy
-                 */
-                try {
-                    cameraProvider.unbindAll()
-                    cameraProvider.bindToLifecycle(
-                        lifecycleOwner = lifecycleOwner,
-                        cameraSelector = cameraSelector,
-                        preview,
-                        imageCapture
-                    )
-                } catch (e: Exception) {
-                    Log.e("CameraScreen", "Camera Binding Failed: ${e.message}")
-                }
-            }, ContextCompat.getMainExecutor(context))
+        /* Bind the preview and imageCapture to the cameraProvider use cases
+         * Basically tells the cameraProvider what values we want from it
+         * In this case: Preview to show the camera view on our composable
+         * And imageCapture to capture the image and store the value as ImageProxy
+         */
+        try {
+          cameraProvider.unbindAll()
+          cameraProvider.bindToLifecycle(
+            lifecycleOwner = lifecycleOwner,
+            cameraSelector = cameraSelector,
+            preview,
+            imageCapture
+          )
+        } catch (e: Exception) {
+          Log.e("CameraScreen", "Camera Binding Failed: ${e.message}")
         }
-        ExtendedFloatingActionButton(
-            onClick = {
-                imageCapture?.takePicture(
-                    ContextCompat.getMainExecutor(context),
-                    object : ImageCapture.OnImageCapturedCallback(){
-                        override fun onCaptureSuccess(imageProxy: ImageProxy) {
-                            onImageCapture(imageProxy)
-                            imageProxy.close()
-                        }
-
-                        override fun onError(exception: ImageCaptureException) {
-                            Log.e("CameraScreen", "Image Capture Failed: ${exception.message}")
-                            Toast.makeText(context, "Image Capture Failed", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                )
-            },
-            modifier = Modifier.align(Alignment.BottomCenter)
-        ) {
-            Icon(Icons.Default.Search, contentDescription = stringResource(R.string.takePictureContentDescription))
-            Text("Capture and Analyze")
-        }
+      }, ContextCompat.getMainExecutor(context))
     }
+    ExtendedFloatingActionButton(
+      onClick = {
+        imageCapture?.takePicture(
+          ContextCompat.getMainExecutor(context),
+          object : ImageCapture.OnImageCapturedCallback() {
+            override fun onCaptureSuccess(imageProxy: ImageProxy) {
+              onImageCapture(imageProxy)
+              imageProxy.close()
+            }
+
+            override fun onError(exception: ImageCaptureException) {
+              Log.e("CameraScreen", "Image Capture Failed: ${exception.message}")
+              Toast.makeText(context, "Image Capture Failed", Toast.LENGTH_LONG).show()
+            }
+          }
+        )
+      },
+      modifier = Modifier.align(Alignment.BottomCenter)
+    ) {
+      Icon(
+        Icons.Default.Search,
+        contentDescription = stringResource(R.string.takePictureContentDescription)
+      )
+      Text("Capture and Analyze")
+    }
+  }
 }

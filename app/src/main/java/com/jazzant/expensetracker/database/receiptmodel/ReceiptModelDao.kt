@@ -9,15 +9,15 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ReceiptModelDao {
-    @Insert
-    suspend fun insert(receiptModel: ReceiptModel)
+  @Insert
+  suspend fun insert(receiptModel: ReceiptModel)
 
-    @Query("SELECT * FROM receipt_model_table ORDER BY category ASC")
-    fun getAllReceiptModels(): Flow<List<ReceiptModel>>
+  @Query("SELECT * FROM receipt_model_table ORDER BY category ASC")
+  fun getAllReceiptModels(): Flow<List<ReceiptModel>>
 
-    @Delete
-    suspend fun delete(receiptModel: ReceiptModel)
+  @Delete
+  suspend fun delete(receiptModel: ReceiptModel)
 
-    @Update
-    suspend fun update(receiptModel: ReceiptModel)
+  @Update
+  suspend fun update(receiptModel: ReceiptModel)
 }

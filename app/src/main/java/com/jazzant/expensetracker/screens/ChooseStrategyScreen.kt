@@ -26,53 +26,55 @@ import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
 fun ChooseStrategyScreen(
-    strategyList: List<Strategy>,
-    strategy: Strategy,
-    onStrategyChange: (Strategy) -> Unit,
-    invalidInput: Boolean,
-    onSaveButtonPress: () -> Unit,
-    modifier: Modifier = Modifier
+  strategyList: List<Strategy>,
+  strategy: Strategy,
+  onStrategyChange: (Strategy) -> Unit,
+  invalidInput: Boolean,
+  onSaveButtonPress: () -> Unit,
+  modifier: Modifier = Modifier
 ) {
-    val strategyNames = stringArrayResource(R.array.strategyNames)
-    val strategyDescriptions = stringArrayResource(R.array.strategyDescriptions)
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(vertical = 8.dp, horizontal = 12.dp)
+  val strategyNames = stringArrayResource(R.array.strategyNames)
+  val strategyDescriptions = stringArrayResource(R.array.strategyDescriptions)
+  Box(
+    modifier = modifier
+        .fillMaxSize()
+        .padding(vertical = 8.dp, horizontal = 12.dp)
+  ) {
+    Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier
+          .fillMaxSize()
+          .verticalScroll(rememberScrollState())
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            HeaderText(stringResource(R.string.chooseStrategy_header))
-            StandardVerticalSpacer()
-            DescriptionText(stringResource(R.string.chooseStrategy_description))
-            StandardVerticalSpacer()
-            QuestionText(stringResource(R.string.chooseStrategy_question))
-            StandardVerticalSpacer()
-            RadioButtons(
-                label = "",
-                labelFraction = 0.05f,
-                radioOptions = strategyList,
-                selectedOption = strategy,
-                onOptionChange = onStrategyChange,
-                radioText = { strategyNames[it.ordinal] },
-                radioDescription = { strategyDescriptions[it.ordinal] }
-            )
-        }
-
-        if (invalidInput) {
-            ErrorText(stringResource(R.string.chooseStrategy_invalidStrategyLabel),
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
-        else {
-            NextButton(onSaveButtonPress,
-                modifier = Modifier.align(Alignment.BottomEnd),
-                text = "Save",
-                icon = Icons.Default.Done
-            )
-        }
+      HeaderText(stringResource(R.string.chooseStrategy_header))
+      StandardVerticalSpacer()
+      DescriptionText(stringResource(R.string.chooseStrategy_description))
+      StandardVerticalSpacer()
+      QuestionText(stringResource(R.string.chooseStrategy_question))
+      StandardVerticalSpacer()
+      RadioButtons(
+        label = "",
+        labelFraction = 0.05f,
+        radioOptions = strategyList,
+        selectedOption = strategy,
+        onOptionChange = onStrategyChange,
+        radioText = { strategyNames[it.ordinal] },
+        radioDescription = { strategyDescriptions[it.ordinal] }
+      )
     }
+
+    if (invalidInput) {
+      ErrorText(
+        stringResource(R.string.chooseStrategy_invalidStrategyLabel),
+        modifier = Modifier.align(Alignment.BottomCenter)
+      )
+    } else {
+      NextButton(
+        onSaveButtonPress,
+        modifier = Modifier.align(Alignment.BottomEnd),
+        text = "Save",
+        icon = Icons.Default.Done
+      )
+    }
+  }
 }

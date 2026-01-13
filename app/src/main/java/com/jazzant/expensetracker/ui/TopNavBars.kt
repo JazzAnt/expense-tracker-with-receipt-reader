@@ -1,6 +1,5 @@
 package com.jazzant.expensetracker.ui
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -51,393 +49,404 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun myTopAppColor(): TopAppBarColors{
-    return TopAppBarColors(
-        containerColor = MaterialTheme.colorScheme.primary,
-        scrolledContainerColor = MaterialTheme.colorScheme.primary,
-        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-        titleContentColor = MaterialTheme.colorScheme.onPrimary,
-        actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
-    )
+fun myTopAppColor(): TopAppBarColors {
+  return TopAppBarColors(
+    containerColor = MaterialTheme.colorScheme.primary,
+    scrolledContainerColor = MaterialTheme.colorScheme.primary,
+    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+    actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+  )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopNavBar(
-    currentRoute: String,
-    modifier: Modifier = Modifier
-){
-    TopAppBar(
-        title = { Text(currentRoute) },
-        colors = myTopAppColor(),
-        modifier = modifier
-    )
+  currentRoute: String,
+  modifier: Modifier = Modifier
+) {
+  TopAppBar(
+    title = { Text(currentRoute) },
+    colors = myTopAppColor(),
+    modifier = modifier
+  )
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavBar(
-    onMenuButtonPress: () -> Unit,
-    titleText: String,
-    isSearching: Boolean,
-    setIsSearching: (Boolean) -> Unit,
-    searchValue: String,
-    onSearchValueChange: (String)->Unit,
-    dateRange: Pair<Long?, Long?>,
-    onDateRangeChanged: (Pair<Long?, Long?>) -> Unit,
-    categoryList: List<String>,
-    selectedCategory: String,
-    onSelectionChange: (String) -> Unit,
-){
-    var showDatePicker by remember { mutableStateOf(false) }
-    TopAppBar(
-        title = {
-            if (isSearching) {
-                TextField(
-                    value = searchValue,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    singleLine = true,
-                    onValueChange = onSearchValueChange,
-                    textStyle = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 5.dp)
-                        .clip(MaterialTheme.shapes.large)
-                        .background(MaterialTheme.colorScheme.background),
-                    trailingIcon = {
-                        IconButton(onClick = { onSearchValueChange("") }) {
-                            Icon(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = "Clear Search",
-                                tint = MaterialTheme.colorScheme.onBackground
-                            )
-                        }
-                    }
-                )
+  onMenuButtonPress: () -> Unit,
+  titleText: String,
+  isSearching: Boolean,
+  setIsSearching: (Boolean) -> Unit,
+  searchValue: String,
+  onSearchValueChange: (String) -> Unit,
+  dateRange: Pair<Long?, Long?>,
+  onDateRangeChanged: (Pair<Long?, Long?>) -> Unit,
+  categoryList: List<String>,
+  selectedCategory: String,
+  onSelectionChange: (String) -> Unit,
+) {
+  var showDatePicker by remember { mutableStateOf(false) }
+  TopAppBar(
+    title = {
+      if (isSearching) {
+        TextField(
+          value = searchValue,
+          keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+          singleLine = true,
+          onValueChange = onSearchValueChange,
+          textStyle = MaterialTheme.typography.bodyLarge,
+          modifier = Modifier
+              .fillMaxWidth()
+              .padding(vertical = 5.dp)
+              .clip(MaterialTheme.shapes.large)
+              .background(MaterialTheme.colorScheme.background),
+          trailingIcon = {
+            IconButton(onClick = { onSearchValueChange("") }) {
+              Icon(
+                imageVector = Icons.Default.Clear,
+                contentDescription = "Clear Search",
+                tint = MaterialTheme.colorScheme.onBackground
+              )
             }
-            else {
-                Text(titleText)
-            }
-        },
-        navigationIcon = {
-            IconButton(onClick = onMenuButtonPress) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Open Menu",
-                )
-            }
-        },
-        actions = {
-            if (isSearching) {
-                IconButton(onClick = { setIsSearching(false) }) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close Search",
-                    )
-                }
-            }
-            else {
-                CategoryDropDownMenu(
-                    categoryList = categoryList,
-                    selectedCategory = selectedCategory,
-                    onSelectionChange = onSelectionChange,
-                    hasNoCategoryOption = true,
-                    labelWidth = 100.dp,
-                    labelColor = MaterialTheme.colorScheme.primaryContainer
-                )
-                if (dateRange.first == null || dateRange.second == null){
-                    IconButton(onClick = { showDatePicker = true }) {
-                        Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = "Filter by Date",
-                        )
-                    }
-                }
-                else{
-                    IconButton(onClick = { onDateRangeChanged(Pair(null,null)) }) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Reset Date",
-                        )
-                    }
-                }
-
-                IconButton(onClick = { setIsSearching(true) }) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search",
-                    )
-                }
-            }
-        },
-        colors = myTopAppColor()
-    )
-    if (showDatePicker) {
-        DateRangePickerModal(
-            dateRange = dateRange,
-            onDateRangeSelected = onDateRangeChanged,
-            onDismiss = { showDatePicker = false }
+          }
         )
-    }
+      } else {
+        Text(titleText)
+      }
+    },
+    navigationIcon = {
+      IconButton(onClick = onMenuButtonPress) {
+        Icon(
+          imageVector = Icons.Default.MoreVert,
+          contentDescription = "Open Menu",
+        )
+      }
+    },
+    actions = {
+      if (isSearching) {
+        IconButton(onClick = { setIsSearching(false) }) {
+          Icon(
+            imageVector = Icons.Default.Close,
+            contentDescription = "Close Search",
+          )
+        }
+      } else {
+        CategoryDropDownMenu(
+          categoryList = categoryList,
+          selectedCategory = selectedCategory,
+          onSelectionChange = onSelectionChange,
+          hasNoCategoryOption = true,
+          labelWidth = 100.dp,
+          labelColor = MaterialTheme.colorScheme.primaryContainer
+        )
+        if (dateRange.first == null || dateRange.second == null) {
+          IconButton(onClick = { showDatePicker = true }) {
+            Icon(
+              imageVector = Icons.Default.DateRange,
+              contentDescription = "Filter by Date",
+            )
+          }
+        } else {
+          IconButton(onClick = { onDateRangeChanged(Pair(null, null)) }) {
+            Icon(
+              imageVector = Icons.Default.Close,
+              contentDescription = "Reset Date",
+            )
+          }
+        }
+
+        IconButton(onClick = { setIsSearching(true) }) {
+          Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = "Search",
+          )
+        }
+      }
+    },
+    colors = myTopAppColor()
+  )
+  if (showDatePicker) {
+    DateRangePickerModal(
+      dateRange = dateRange,
+      onDateRangeSelected = onDateRangeChanged,
+      onDismiss = { showDatePicker = false }
+    )
+  }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingNavBar(
-    onMenuButtonPress: () -> Unit,
-    onGoHomeButtonPress: () -> Unit,
-    titleText: String,
-){
-    TopAppBar(
-        title = { Text(titleText) },
-        navigationIcon = {
-            IconButton(onClick = onMenuButtonPress) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Open Menu",
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = onGoHomeButtonPress) {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = "Go To Home Menu",
-                )
-            }
-        },
-        colors = myTopAppColor()
-    )
+  onMenuButtonPress: () -> Unit,
+  onGoHomeButtonPress: () -> Unit,
+  titleText: String,
+) {
+  TopAppBar(
+    title = { Text(titleText) },
+    navigationIcon = {
+      IconButton(onClick = onMenuButtonPress) {
+        Icon(
+          imageVector = Icons.Default.MoreVert,
+          contentDescription = "Open Menu",
+        )
+      }
+    },
+    actions = {
+      IconButton(onClick = onGoHomeButtonPress) {
+        Icon(
+          imageVector = Icons.Default.Home,
+          contentDescription = "Go To Home Menu",
+        )
+      }
+    },
+    colors = myTopAppColor()
+  )
 }
+
 @Composable
 fun CategoryDropDownMenu(
-    categoryList: List<String>,
-    selectedCategory: String,
-    onSelectionChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    hasNoCategoryOption: Boolean = false,
-    innerHorizontalPadding: Dp = 0.dp,
-    labelWidth: Dp? = null,
-    labelColor: Color = Color.Unspecified,
-){
-    var expanded by remember { mutableStateOf(false) }
-    Box(modifier) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.wrapContentWidth().padding(horizontal = innerHorizontalPadding).align(Alignment.CenterEnd)
+  categoryList: List<String>,
+  selectedCategory: String,
+  onSelectionChange: (String) -> Unit,
+  modifier: Modifier = Modifier,
+  hasNoCategoryOption: Boolean = false,
+  innerHorizontalPadding: Dp = 0.dp,
+  labelWidth: Dp? = null,
+  labelColor: Color = Color.Unspecified,
+) {
+  var expanded by remember { mutableStateOf(false) }
+  Box(modifier) {
+    Row(
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.End,
+      modifier = Modifier
+          .wrapContentWidth()
+          .padding(horizontal = innerHorizontalPadding)
+          .align(Alignment.CenterEnd)
+    ) {
+      if (labelWidth == null) {
+        Text(
+          text = selectedCategory,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+          color = labelColor,
+        )
+      } else {
+        Box(
+          contentAlignment = Alignment.CenterEnd,
+          modifier = Modifier.width(labelWidth)
         ) {
-            if ( labelWidth == null )
-            {
-                Text(
-                    text = selectedCategory,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = labelColor,
-                    )
-            }
-            else
-            {
-                Box(
-                    contentAlignment = Alignment.CenterEnd,
-                    modifier = Modifier.width(labelWidth)
-                ){
-                    Text(
-                       text = selectedCategory,
-                       maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = labelColor,
-                    )
-                }
-            }
-            Spacer(Modifier.width(2.dp))
-            IconButton( onClick = { expanded = !expanded }) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Filter by Category"
-                )
-            }
+          Text(
+            text = selectedCategory,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = labelColor,
+          )
         }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            containerColor = Color.Transparent,
-            tonalElevation = 0.dp,
-            shadowElevation = 0.dp,
-        ) {
-            if (hasNoCategoryOption)
-            {
-                DropdownMenuItem(
-                    text = {
-                        Text("No Category")
-                    },
-                    onClick = {onSelectionChange(""); expanded = false},
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Clear,
-                            contentDescription = "No Category",
-                        )
-                    },
-                    enabled = (selectedCategory != ""),
-                    modifier = modifier
-                        .padding(bottom = 1.dp)
-                        .background(color = MaterialTheme.colorScheme.errorContainer, shape = MaterialTheme.shapes.extraSmall)
-                        .border(width = 1.dp, color = MaterialTheme.colorScheme.onErrorContainer, shape = MaterialTheme.shapes.extraSmall),
-                    colors = MenuItemColors(
-                        textColor = MaterialTheme.colorScheme.onErrorContainer,
-                        leadingIconColor = MaterialTheme.colorScheme.onErrorContainer,
-                        trailingIconColor = MaterialTheme.colorScheme.onErrorContainer,
-                        disabledTextColor = MaterialTheme.colorScheme.onErrorContainer,
-                        disabledLeadingIconColor = MaterialTheme.colorScheme.onErrorContainer,
-                        disabledTrailingIconColor = MaterialTheme.colorScheme.onErrorContainer
-                    )
-                )
-            }
-
-            categoryList.forEach {
-                DropdownMenuItem(
-                    text = {
-                        Text(it)
-                    },
-                    onClick = {onSelectionChange(it); expanded = false},
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "No Category",
-                        )
-                    },
-                    enabled = (selectedCategory != it),
-                    modifier = modifier
-                        .padding(bottom = 1.dp)
-                        .background(color = (
-                                if (selectedCategory != it)
-                                    MaterialTheme.colorScheme.secondaryContainer
-                                else
-                                    MaterialTheme.colorScheme.tertiaryContainer
-                                ), shape = MaterialTheme.shapes.extraSmall)
-                        .border(width = 1.dp, color = MaterialTheme.colorScheme.onSecondaryContainer, shape = MaterialTheme.shapes.extraSmall),
-                    colors = MenuItemColors(
-                        textColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                        leadingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                        trailingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                        disabledTextColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        disabledLeadingIconColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        disabledTrailingIconColor = MaterialTheme.colorScheme.onTertiaryContainer
-                    )
-                )
-            }
-        }
+      }
+      Spacer(Modifier.width(2.dp))
+      IconButton(onClick = { expanded = !expanded }) {
+        Icon(
+          imageVector = Icons.Default.KeyboardArrowDown,
+          contentDescription = "Filter by Category"
+        )
+      }
     }
+
+    DropdownMenu(
+      expanded = expanded,
+      onDismissRequest = { expanded = false },
+      containerColor = Color.Transparent,
+      tonalElevation = 0.dp,
+      shadowElevation = 0.dp,
+    ) {
+      if (hasNoCategoryOption) {
+        DropdownMenuItem(
+          text = {
+            Text("No Category")
+          },
+          onClick = { onSelectionChange(""); expanded = false },
+          leadingIcon = {
+            Icon(
+              imageVector = Icons.Default.Clear,
+              contentDescription = "No Category",
+            )
+          },
+          enabled = (selectedCategory != ""),
+          modifier = modifier
+              .padding(bottom = 1.dp)
+              .background(
+                  color = MaterialTheme.colorScheme.errorContainer,
+                  shape = MaterialTheme.shapes.extraSmall
+              )
+              .border(
+                  width = 1.dp,
+                  color = MaterialTheme.colorScheme.onErrorContainer,
+                  shape = MaterialTheme.shapes.extraSmall
+              ),
+          colors = MenuItemColors(
+            textColor = MaterialTheme.colorScheme.onErrorContainer,
+            leadingIconColor = MaterialTheme.colorScheme.onErrorContainer,
+            trailingIconColor = MaterialTheme.colorScheme.onErrorContainer,
+            disabledTextColor = MaterialTheme.colorScheme.onErrorContainer,
+            disabledLeadingIconColor = MaterialTheme.colorScheme.onErrorContainer,
+            disabledTrailingIconColor = MaterialTheme.colorScheme.onErrorContainer
+          )
+        )
+      }
+
+      categoryList.forEach {
+        DropdownMenuItem(
+          text = {
+            Text(it)
+          },
+          onClick = { onSelectionChange(it); expanded = false },
+          leadingIcon = {
+            Icon(
+              imageVector = Icons.Default.Search,
+              contentDescription = "No Category",
+            )
+          },
+          enabled = (selectedCategory != it),
+          modifier = modifier
+              .padding(bottom = 1.dp)
+              .background(
+                  color = (
+                      if (selectedCategory != it)
+                          MaterialTheme.colorScheme.secondaryContainer
+                      else
+                          MaterialTheme.colorScheme.tertiaryContainer
+                      ), shape = MaterialTheme.shapes.extraSmall
+              )
+              .border(
+                  width = 1.dp,
+                  color = MaterialTheme.colorScheme.onSecondaryContainer,
+                  shape = MaterialTheme.shapes.extraSmall
+              ),
+          colors = MenuItemColors(
+            textColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            leadingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            trailingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            disabledTextColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            disabledLeadingIconColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            disabledTrailingIconColor = MaterialTheme.colorScheme.onTertiaryContainer
+          )
+        )
+      }
+    }
+  }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditorNavBar(
-    modifier: Modifier = Modifier,
-    isCreatingNewExpense: Boolean = true,
-    onBackButtonPress: () -> Unit,
-    onResetButtonPress: () -> Unit,
-    onDeleteButtonPress: () -> Unit,
-    onSaveButtonPress: () -> Unit
-){
-    TopAppBar(
-        title = {
-            if (isCreatingNewExpense)
-            { Text("Creating Expense") }
-            else
-            { Text("Editing Expense") }
-                },
-        modifier = modifier,
-        navigationIcon = {
-            IconButton( onClick = {onBackButtonPress()} )
-            {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                )
-            }
-        },
-        actions = {
-            if (!isCreatingNewExpense)
-            {
-                IconButton( onClick = {onDeleteButtonPress()} )
-                {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete Expense",
-                    )
-                }
-            }
-            IconButton( onClick = {onResetButtonPress()} )
-            {
-                Icon(
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = "Clear Input Values",
-                )
-            }
-            IconButton( onClick = {onSaveButtonPress()} )
-            {
-                Icon(
-                    imageVector = Icons.Default.Done,
-                    contentDescription = "Save",
-                )
-            }
-        },
-        colors = myTopAppColor()
-    )
+  modifier: Modifier = Modifier,
+  isCreatingNewExpense: Boolean = true,
+  onBackButtonPress: () -> Unit,
+  onResetButtonPress: () -> Unit,
+  onDeleteButtonPress: () -> Unit,
+  onSaveButtonPress: () -> Unit
+) {
+  TopAppBar(
+    title = {
+      if (isCreatingNewExpense) {
+        Text("Creating Expense")
+      } else {
+        Text("Editing Expense")
+      }
+    },
+    modifier = modifier,
+    navigationIcon = {
+      IconButton(onClick = { onBackButtonPress() })
+      {
+        Icon(
+          imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+          contentDescription = "Back",
+        )
+      }
+    },
+    actions = {
+      if (!isCreatingNewExpense) {
+        IconButton(onClick = { onDeleteButtonPress() })
+        {
+          Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = "Delete Expense",
+          )
+        }
+      }
+      IconButton(onClick = { onResetButtonPress() })
+      {
+        Icon(
+          imageVector = Icons.Default.Clear,
+          contentDescription = "Clear Input Values",
+        )
+      }
+      IconButton(onClick = { onSaveButtonPress() })
+      {
+        Icon(
+          imageVector = Icons.Default.Done,
+          contentDescription = "Save",
+        )
+      }
+    },
+    colors = myTopAppColor()
+  )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraNavBar(
-    modifier: Modifier = Modifier,
-    onBackButtonPress: () -> Unit,
-){
-    TopAppBar(
-        title = { Text("Using Camera To Get Receipt") },
-        modifier = modifier,
-        navigationIcon = {
-            IconButton( onClick = {onBackButtonPress()} )
-            {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                )
-            }
-        },
-        colors = myTopAppColor()
-    )
+  modifier: Modifier = Modifier,
+  onBackButtonPress: () -> Unit,
+) {
+  TopAppBar(
+    title = { Text("Using Camera To Get Receipt") },
+    modifier = modifier,
+    navigationIcon = {
+      IconButton(onClick = { onBackButtonPress() })
+      {
+        Icon(
+          imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+          contentDescription = "Back",
+        )
+      }
+    },
+    colors = myTopAppColor()
+  )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiptCreatorNavBar(
-    titleText: String,
-    modifier: Modifier = Modifier,
-    onBackButtonPress: () -> Unit,
-    onResetButtonPress: () -> Unit
-){
-    TopAppBar(
-        title = { Text(titleText) },
-        modifier = modifier,
-        navigationIcon = {
-            IconButton( onClick = {onBackButtonPress()} )
-            {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                )
-            }
-        },
-        actions = {
-            IconButton( onClick = {onResetButtonPress()} )
-            {
-                Icon(
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = "Clear Input Values",
-                )
-            }
-        },
-        colors = myTopAppColor()
-    )
+  titleText: String,
+  modifier: Modifier = Modifier,
+  onBackButtonPress: () -> Unit,
+  onResetButtonPress: () -> Unit
+) {
+  TopAppBar(
+    title = { Text(titleText) },
+    modifier = modifier,
+    navigationIcon = {
+      IconButton(onClick = { onBackButtonPress() })
+      {
+        Icon(
+          imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+          contentDescription = "Back",
+        )
+      }
+    },
+    actions = {
+      IconButton(onClick = { onResetButtonPress() })
+      {
+        Icon(
+          imageVector = Icons.Default.Clear,
+          contentDescription = "Clear Input Values",
+        )
+      }
+    },
+    colors = myTopAppColor()
+  )
 }

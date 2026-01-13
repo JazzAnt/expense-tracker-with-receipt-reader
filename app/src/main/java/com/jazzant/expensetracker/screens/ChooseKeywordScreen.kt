@@ -34,85 +34,88 @@ import com.jazzant.expensetracker.ui.TextInput
 
 @Composable
 fun ChooseKeywordScreen(
-    switchState: Boolean,
-    onSwitchStateChanged: (Boolean) -> Unit,
-    textBlockList: List<String>,
-    receiptDisplay: AnnotatedString,
-    keyword: String,
-    onKeywordChange: (String) -> Unit,
-    invalidInput: Boolean,
-    onNextButtonPress: () -> Unit,
-    modifier: Modifier = Modifier
+  switchState: Boolean,
+  onSwitchStateChanged: (Boolean) -> Unit,
+  textBlockList: List<String>,
+  receiptDisplay: AnnotatedString,
+  keyword: String,
+  onKeywordChange: (String) -> Unit,
+  invalidInput: Boolean,
+  onNextButtonPress: () -> Unit,
+  modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(vertical = 8.dp, horizontal = 12.dp)
+  Box(
+    modifier = modifier
+        .fillMaxSize()
+        .padding(vertical = 8.dp, horizontal = 12.dp)
+  ) {
+    Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier
+          .fillMaxSize()
+          .verticalScroll(rememberScrollState())
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            HeaderText(stringResource(R.string.chooseKeyword_header))
-            StandardVerticalSpacer()
-            DescriptionText(stringResource(R.string.chooseKeyword_description))
-            StandardVerticalSpacer()
+      HeaderText(stringResource(R.string.chooseKeyword_header))
+      StandardVerticalSpacer()
+      DescriptionText(stringResource(R.string.chooseKeyword_description))
+      StandardVerticalSpacer()
 
-            QuestionText(stringResource(R.string.chooseKeyword_radioButtonLabel))
-            StandardVerticalSpacer()
-            SwitchField(
-                stringResource(R.string.chooseKeyword_switchLabel),
-                state = switchState,
-                onStateChanged = onSwitchStateChanged,
-                leftSpacerFraction = 0.05f
-            )
-            StandardVerticalSpacer()
-            if (switchState) {
-                TextInput(
-                    stringResource(R.string.chooseKeyword_textInputLabel),
-                    value = keyword,
-                    onValueChange = onKeywordChange,
-                    labelFraction = 0.25f
-                )
-                StandardVerticalSpacer(multiplier = 1.5f)
-                DisplayReceipt(receiptDisplay, modifier = Modifier.padding(horizontal = 12.dp))
-                StandardVerticalSpacer(multiplier = 2.5f)
-            } else {
-                RadioButtons(
-                    "",
-                    textBlockList,
-                    selectedOption = keyword,
-                    onOptionChange = onKeywordChange,
-                    labelFraction = 0.05f
-                )
-            }
-        }
-        if (invalidInput) {
-            ErrorText(stringResource(R.string.chooseKeyword_invalidKeywordText),
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
-        else {
-            NextButton(onNextButtonPress, modifier = Modifier.align(Alignment.BottomEnd))
-        }
+      QuestionText(stringResource(R.string.chooseKeyword_radioButtonLabel))
+      StandardVerticalSpacer()
+      SwitchField(
+        stringResource(R.string.chooseKeyword_switchLabel),
+        state = switchState,
+        onStateChanged = onSwitchStateChanged,
+        leftSpacerFraction = 0.05f
+      )
+      StandardVerticalSpacer()
+      if (switchState) {
+        TextInput(
+          stringResource(R.string.chooseKeyword_textInputLabel),
+          value = keyword,
+          onValueChange = onKeywordChange,
+          labelFraction = 0.25f
+        )
+        StandardVerticalSpacer(multiplier = 1.5f)
+        DisplayReceipt(receiptDisplay, modifier = Modifier.padding(horizontal = 12.dp))
+        StandardVerticalSpacer(multiplier = 2.5f)
+      } else {
+        RadioButtons(
+          "",
+          textBlockList,
+          selectedOption = keyword,
+          onOptionChange = onKeywordChange,
+          labelFraction = 0.05f
+        )
+      }
     }
+    if (invalidInput) {
+      ErrorText(
+        stringResource(R.string.chooseKeyword_invalidKeywordText),
+        modifier = Modifier.align(Alignment.BottomCenter)
+      )
+    } else {
+      NextButton(onNextButtonPress, modifier = Modifier.align(Alignment.BottomEnd))
+    }
+  }
 }
 
 @Composable
-fun DisplayReceipt(receipt: AnnotatedString, modifier: Modifier = Modifier){
-    Box(
-        modifier = modifier
-            .wrapContentSize()
-            .background(Color.White)
-            .border(2.dp, Color.Black)
-    ) {
-        Text(
-            text = receipt,
-            fontSize = TextUnit(18f, TextUnitType.Sp),
-            textAlign = TextAlign.Justify,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.fillMaxSize().padding(5.dp),
-        )
-    }
+fun DisplayReceipt(receipt: AnnotatedString, modifier: Modifier = Modifier) {
+  Box(
+    modifier = modifier
+        .wrapContentSize()
+        .background(Color.White)
+        .border(2.dp, Color.Black)
+  ) {
+    Text(
+      text = receipt,
+      fontSize = TextUnit(18f, TextUnitType.Sp),
+      textAlign = TextAlign.Justify,
+      overflow = TextOverflow.Ellipsis,
+      modifier = Modifier
+          .fillMaxSize()
+          .padding(5.dp),
+    )
+  }
 }

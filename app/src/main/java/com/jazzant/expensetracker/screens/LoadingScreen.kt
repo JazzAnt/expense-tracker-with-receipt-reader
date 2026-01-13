@@ -12,24 +12,21 @@ import androidx.compose.ui.unit.TextUnitType
 
 @Composable
 fun LoadingScreen(
-    loadingText: String,
-    isLoading: Boolean,
-    onLoadingComplete: () -> Unit,
-    modifier: Modifier = Modifier,
+  loadingText: String,
+  isLoading: Boolean,
+  onLoadingComplete: () -> Unit,
+  modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier.fillMaxSize()){
-        if (isLoading)
-        {
-            Text(
-                text = loadingText,
-                fontSize = TextUnit(40f, TextUnitType.Sp),
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
-        else
-        { onLoadingComplete() }
-
+  Box(modifier = modifier.fillMaxSize()) {
+    if (isLoading) {
+      Text(
+        text = loadingText,
+        fontSize = TextUnit(40f, TextUnitType.Sp),
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.align(Alignment.Center)
+      )
+    } else {
+      onLoadingComplete()
     }
-
+  }
 }

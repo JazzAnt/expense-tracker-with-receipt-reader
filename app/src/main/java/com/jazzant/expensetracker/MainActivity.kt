@@ -9,15 +9,15 @@ import androidx.compose.ui.unit.dp
 import com.jazzant.expensetracker.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            AppTheme(dynamicColor = false) {
-                Surface(tonalElevation = 3.dp) {
-                    ExpenseApp()
-                }
-            }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    enableEdgeToEdge()
+    setContent {
+      AppTheme(dynamicColor = false) {
+        Surface(tonalElevation = 3.dp) {
+          ExpenseApp()
         }
+      }
     }
+  }
 }

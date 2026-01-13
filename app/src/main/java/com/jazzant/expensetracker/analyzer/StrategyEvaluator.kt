@@ -8,21 +8,19 @@ package com.jazzant.expensetracker.analyzer
  * @return a Map of all the Strategies that returns the desired price label and their respective N value
  */
 fun evaluateAllPossibleStrategies(
-    priceLabels: List<Float>,
-    desiredPriceLabel: Float
-): Map<Strategy, Int>
-{
-    val map = mutableMapOf<Strategy, Int>()
-    val maximumN = priceLabels.size - 1
-    Strategy.entries.forEach{
-        for (n in 0..maximumN){
-            val parsedPriceLabel = parseReceipt(it, priceLabels, n)
-            if (parsedPriceLabel == desiredPriceLabel)
-            {
-                map.put(it, n)
-                break
-            }
-        }
+  priceLabels: List<Float>,
+  desiredPriceLabel: Float
+): Map<Strategy, Int> {
+  val map = mutableMapOf<Strategy, Int>()
+  val maximumN = priceLabels.size - 1
+  Strategy.entries.forEach {
+    for (n in 0..maximumN) {
+      val parsedPriceLabel = parseReceipt(it, priceLabels, n)
+      if (parsedPriceLabel == desiredPriceLabel) {
+        map.put(it, n)
+        break
+      }
     }
-    return map
+  }
+  return map
 }

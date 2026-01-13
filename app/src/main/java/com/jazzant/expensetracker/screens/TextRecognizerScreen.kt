@@ -30,68 +30,69 @@ import com.jazzant.expensetracker.ui.StandardVerticalSpacer
 
 @Composable
 fun TextRecognizerScreen(
-    recognizedText: Text?,
-    bitmap: Bitmap,
-    onTextRecognized:() -> Unit,
-    onRetakeImageButtonPress: () -> Unit,
-    onCancelButtonPress: () -> Unit,
-    modifier: Modifier = Modifier,
-    receiptNotFoundOnImage: Boolean = false,
-){
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(vertical = 8.dp, horizontal = 12.dp)
-    ) {
-        if (recognizedText == null){
-            Text(
-                text = stringResource(R.string.analyzingImageText),
-                fontSize = TextUnit(40f, TextUnitType.Sp),
-                fontWeight = FontWeight.Bold
-            )
-        } else {
-            Text(
-                text = stringResource(R.string.imageAnalyzedText),
-                fontSize = TextUnit(40f, TextUnitType.Sp),
-                fontWeight = FontWeight.Bold
-            )
-        }
-        StandardVerticalSpacer()
-        Image(
-            bitmap = bitmap.asImageBitmap(),
-            contentDescription = stringResource(R.string.capturedImageBitmapContentDescription),
-            modifier = Modifier.border(4.dp, Color.Black)
-                .fillMaxHeight(0.40f)
-        )
-        StandardVerticalSpacer()
-        if (recognizedText == null)
-        { Text(stringResource(R.string.noTextRecognizedText)) }
-        else if (receiptNotFoundOnImage)
-        {
-            Icon(
-                Icons.Default.Warning,
-                tint = Color.Red,
-                contentDescription = "Error Sign"
-            )
-            Text(text = "No Receipt Recognized on Image!",
-                color = Color.Red,
-                fontSize = TextUnit(24f, TextUnitType.Sp),
-                fontWeight = FontWeight.Bold
-            )
-        }
-        else
-        { onTextRecognized() }
-        StandardVerticalSpacer()
-        StandardButton(
-            onClick = onRetakeImageButtonPress,
-            text = stringResource(R.string.retakeImageButton)
-        )
-        StandardVerticalSpacer()
-        StandardButton(
-            onClick = onCancelButtonPress,
-            text = stringResource(R.string.cancelButton)
-        )
+  recognizedText: Text?,
+  bitmap: Bitmap,
+  onTextRecognized: () -> Unit,
+  onRetakeImageButtonPress: () -> Unit,
+  onCancelButtonPress: () -> Unit,
+  modifier: Modifier = Modifier,
+  receiptNotFoundOnImage: Boolean = false,
+) {
+  Column(
+    horizontalAlignment = Alignment.CenterHorizontally,
+    modifier = modifier
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState())
+        .padding(vertical = 8.dp, horizontal = 12.dp)
+  ) {
+    if (recognizedText == null) {
+      Text(
+        text = stringResource(R.string.analyzingImageText),
+        fontSize = TextUnit(40f, TextUnitType.Sp),
+        fontWeight = FontWeight.Bold
+      )
+    } else {
+      Text(
+        text = stringResource(R.string.imageAnalyzedText),
+        fontSize = TextUnit(40f, TextUnitType.Sp),
+        fontWeight = FontWeight.Bold
+      )
     }
+    StandardVerticalSpacer()
+    Image(
+      bitmap = bitmap.asImageBitmap(),
+      contentDescription = stringResource(R.string.capturedImageBitmapContentDescription),
+      modifier = Modifier
+          .border(4.dp, Color.Black)
+          .fillMaxHeight(0.40f)
+    )
+    StandardVerticalSpacer()
+    if (recognizedText == null) {
+      Text(stringResource(R.string.noTextRecognizedText))
+    } else if (receiptNotFoundOnImage) {
+      Icon(
+        Icons.Default.Warning,
+        tint = Color.Red,
+        contentDescription = "Error Sign"
+      )
+      Text(
+        text = "No Receipt Recognized on Image!",
+        color = Color.Red,
+        fontSize = TextUnit(24f, TextUnitType.Sp),
+        fontWeight = FontWeight.Bold
+      )
+    } else {
+      onTextRecognized()
+    }
+    StandardVerticalSpacer()
+    StandardButton(
+      onClick = onRetakeImageButtonPress,
+      text = stringResource(R.string.retakeImageButton)
+    )
+    StandardVerticalSpacer()
+    StandardButton(
+      onClick = onCancelButtonPress,
+      text = stringResource(R.string.cancelButton)
+    )
+  }
 }
