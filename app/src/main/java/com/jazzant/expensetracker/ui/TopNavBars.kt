@@ -1,11 +1,14 @@
 package com.jazzant.expensetracker.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -27,6 +30,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
@@ -256,35 +260,74 @@ fun CategoryDropDownMenu(
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            containerColor = Color.Transparent,
+            tonalElevation = 0.dp,
+            shadowElevation = 0.dp,
         ) {
             if (hasNoCategoryOption)
             {
                 DropdownMenuItem(
                     text = {
-                        Text("No Category", color = Color.Red)
+                        Text("No Category")
                     },
-                    onClick = {onSelectionChange(""); expanded = false}
+                    onClick = {onSelectionChange(""); expanded = false},
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "No Category",
+                        )
+                    },
+                    enabled = (selectedCategory != ""),
+                    modifier = modifier
+                        .padding(bottom = 1.dp)
+                        .background(color = MaterialTheme.colorScheme.errorContainer, shape = MaterialTheme.shapes.extraSmall)
+                        .border(width = 1.dp, color = MaterialTheme.colorScheme.onErrorContainer, shape = MaterialTheme.shapes.extraSmall),
+                    colors = MenuItemColors(
+                        textColor = MaterialTheme.colorScheme.onErrorContainer,
+                        leadingIconColor = MaterialTheme.colorScheme.onErrorContainer,
+                        trailingIconColor = MaterialTheme.colorScheme.onErrorContainer,
+                        disabledTextColor = MaterialTheme.colorScheme.onErrorContainer,
+                        disabledLeadingIconColor = MaterialTheme.colorScheme.onErrorContainer,
+                        disabledTrailingIconColor = MaterialTheme.colorScheme.onErrorContainer
+                    )
                 )
             }
 
             categoryList.forEach {
                 DropdownMenuItem(
                     text = {
-                        Text(it, color = selectedColor(selectedCategory == it))
+                        Text(it)
                     },
-                    onClick = {onSelectionChange(it); expanded = false}
+                    onClick = {onSelectionChange(it); expanded = false},
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "No Category",
+                        )
+                    },
+                    enabled = (selectedCategory != it),
+                    modifier = modifier
+                        .padding(bottom = 1.dp)
+                        .background(color = (
+                                if (selectedCategory != it)
+                                    MaterialTheme.colorScheme.secondaryContainer
+                                else
+                                    MaterialTheme.colorScheme.tertiaryContainer
+                                ), shape = MaterialTheme.shapes.extraSmall)
+                        .border(width = 1.dp, color = MaterialTheme.colorScheme.onSecondaryContainer, shape = MaterialTheme.shapes.extraSmall),
+                    colors = MenuItemColors(
+                        textColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        leadingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        trailingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        disabledTextColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        disabledLeadingIconColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        disabledTrailingIconColor = MaterialTheme.colorScheme.onTertiaryContainer
+                    )
                 )
             }
         }
     }
-}
-
-fun selectedColor(selected: Boolean): Color {
-    return if (selected)
-        Color.Blue
-    else
-        Color.Black
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

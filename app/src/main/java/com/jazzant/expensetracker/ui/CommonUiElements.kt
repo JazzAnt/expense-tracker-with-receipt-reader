@@ -309,15 +309,16 @@ fun CategoryInputField(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(leftSpacerFraction).padding(end = 5.dp)
             )
-            CategoryDropDownMenu(
-                categoryList = categoryList,
-                selectedCategory = category,
-                onSelectionChange = onCategoryChange,
-                innerHorizontalPadding = 12.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(1.dp, Color.Gray)
-            )
+            Box(Modifier.fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.onBackground)){
+                CategoryDropDownMenu(
+                    categoryList = categoryList,
+                    selectedCategory = category,
+                    onSelectionChange = onCategoryChange,
+                    innerHorizontalPadding = 12.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
         }
     }
     Row {
