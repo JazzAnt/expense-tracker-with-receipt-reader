@@ -40,6 +40,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
@@ -74,6 +76,16 @@ import java.util.Locale
 private const val DEFAULT_FRACTION = 0.4f
 
 @Composable
+fun myTextFieldColors() : TextFieldColors{
+  return TextFieldDefaults.colors().copy(
+    focusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+    focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+    unfocusedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+    unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+  )
+}
+//TODO: Fix color of all these stuff
+@Composable
 fun NumberInput(
   label: String, value: Float,
   onValueChange: (Float) -> Unit,
@@ -90,6 +102,7 @@ fun NumberInput(
       text = label,
       textAlign = TextAlign.Center,
       fontWeight = FontWeight.Bold,
+      color = MaterialTheme.colorScheme.onSurface,
       modifier = Modifier
           .fillMaxWidth(labelFraction)
           .padding(end = 5.dp)
@@ -107,7 +120,9 @@ fun NumberInput(
           onValueChange(temp!!)
         }
       },
-      modifier = Modifier.fillMaxWidth()
+      modifier = Modifier.fillMaxWidth(),
+      shape = MaterialTheme.shapes.small,
+      colors = myTextFieldColors()
     )
   }
 }
@@ -130,6 +145,7 @@ fun TextInput(
       text = label,
       textAlign = TextAlign.Center,
       fontWeight = FontWeight.Bold,
+      color = MaterialTheme.colorScheme.onSurface,
       modifier = Modifier
           .fillMaxWidth(labelFraction)
           .padding(end = 5.dp)
@@ -140,7 +156,9 @@ fun TextInput(
       singleLine = true,
       onValueChange = onValueChange,
       enabled = enabled,
-      modifier = Modifier.fillMaxWidth()
+      modifier = Modifier.fillMaxWidth(),
+      shape = MaterialTheme.shapes.small,
+      colors = myTextFieldColors()
     )
   }
 }
